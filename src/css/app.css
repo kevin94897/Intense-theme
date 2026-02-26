@@ -1,0 +1,645 @@
+/* Tailwind v4: una directiva reemplaza las tres de v3 */
+@import "tailwindcss";
+
+/* Google Fonts — Rubik */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+
+/* HV Simplicite — fuente local (OTF) */
+@font-face {
+  font-family: "HV Simplicite";
+  src: url('../fonts/hv-simplicite-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HV Simplicite";
+  src: url('../fonts/hv-simplicite-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HV Simplicite";
+  src: url('../fonts/hv-simplicite-alternative-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HV Simplicite";
+  src: url('../fonts/hv-simplicite-alternative-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Tokens del design system — generan clases automáticamente */
+@theme {
+  /* Colores */
+  --color-primary: #B76739;
+  /* botón principal, links activos */
+  --color-hover: #776C60;
+  /* hover preferido */
+  --color-dark: #423931;
+  /* fondo oscuro, dropdown seleccionado */
+  --color-cream: #FFFCF7;
+  /* fondo principal claro */
+  --color-gold: #DC973C;
+  /* acento dorado */
+  --color-sage: #5D7F6E;
+  /* acento verde, estado success */
+  --color-neutral-black: #161616;
+  /* texto principal */
+  --color-neutral-gray: #C7C7C7;
+  /* bordes, placeholders */
+
+  /* Tipografías */
+  --font-heading: "HV Simplicite", serif;
+  --font-body: "Rubik", sans-serif;
+
+  /* Tamaños de fuente extendidos */
+  --font-size-4xl: clamp(2rem, 4vw, 2.5rem);
+  --font-size-5xl: clamp(2.5rem, 5vw, 3rem);
+  --font-size-7xl: clamp(2.5rem, 6vw, 4rem);
+}
+
+/* ==========================================
+   ESTILOS BASE
+   ========================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-neutral-black);
+  background-color: var(--color-cream);
+  line-height: 1.6;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll from AOS animations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================
+   TIPOGRAFÍA — CLASES SEMÁNTICAS
+   ========================================== */
+
+/* H1 — HV Simplicite 64px */
+.heading-1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  /* 40px → 64px */
+  line-height: 1.125;
+  /* 72px */
+  font-weight: 400;
+  color: var(--color-neutral-black);
+}
+
+/* H2 — HV Simplicite 64px */
+.heading-2 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 4rem);
+  /* 32px → 64px */
+  line-height: 1.125;
+  font-weight: 400;
+  color: var(--color-neutral-black);
+}
+
+/* H3 — HV Simplicite 48px */
+.heading-3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  /* 28px → 48px */
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--color-neutral-black);
+}
+
+/* H3 Bold — HV Simplicite 32px Bold */
+.heading-3-bold {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  /* 32px */
+  line-height: 2.5rem;
+  /* 40px */
+  font-weight: 700;
+  color: var(--color-neutral-black);
+}
+
+/* H3 Small — HV Simplicite 20px Bold */
+.heading-3-small {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  /* 20px */
+  line-height: 2rem;
+  /* 32px */
+  font-weight: 700;
+  /* color: var(--color-neutral-black); */
+}
+
+/* Body XL — Rubik 24px */
+.body-xl {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  /* 24px */
+  line-height: 2.5rem;
+  /* 40px */
+  font-weight: 400;
+}
+
+/* Body Large — Rubik 20px Light */
+.body-large {
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  /* 20px */
+  line-height: 2.25rem;
+  /* 36px */
+  font-weight: 300;
+}
+
+/* Body Medium — Rubik 18px Light */
+.body-medium {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  /* 18px */
+  line-height: 2rem;
+  /* 32px */
+  font-weight: 300;
+}
+
+/* Body Medium Regular — Rubik 18px Regular */
+.body-medium-r {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 2rem;
+  font-weight: 400;
+}
+
+/* Body Small — Rubik 16px Regular */
+.body-small {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  /* 16px */
+  line-height: 1.5rem;
+  /* 24px */
+  font-weight: 400;
+}
+
+/* Body Small Italic — Rubik 14px Italic */
+.body-small-it {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  /* 14px */
+  line-height: 1.25rem;
+  /* 20px */
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ==========================================
+   BOTONES ESTANDARIZADOS
+   ========================================== */
+
+/* Base compartida */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  /* 14px */
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  /* py-3 px-6 */
+  border-radius: 9999px;
+  /* rounded-full */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Botón Primario */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #C87A4F;
+}
+
+.btn-primary:disabled,
+.btn-primary[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Botón Secundario */
+.btn-secondary {
+  background-color: var(--color-neutral-gray);
+  color: #ffffff;
+}
+
+.btn-secondary:hover {
+  background-color: #D9D9D9;
+}
+
+/* Botón Outline */
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-neutral-black);
+  border: 1.5px solid var(--color-neutral-black);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-neutral-black);
+  color: #ffffff;
+}
+
+/* Botón Outline Primary */
+.btn-outline-primary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+/* Botón Dark */
+.btn-dark {
+  background-color: var(--color-dark);
+  color: #ffffff;
+}
+
+.btn-dark:hover {
+  background-color: var(--color-hover);
+}
+
+/* ==========================================
+   INPUTS ESTANDARIZADOS (floating label)
+   ========================================== */
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-field {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid var(--color-neutral-gray);
+  background: transparent;
+  padding-top: 1.25rem;
+  /* pt-5 */
+  padding-bottom: 0.25rem;
+  /* pb-1 */
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-neutral-black);
+  transition: border-color 0.2s ease;
+  outline: none;
+}
+
+.input-field:hover {
+  border-bottom-color: var(--color-neutral-black);
+}
+
+.input-field:focus {
+  border-bottom-color: var(--color-neutral-black);
+}
+
+.input-label {
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-neutral-gray);
+  pointer-events: none;
+  transition: top 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+}
+
+/* Floating label cuando el input tiene contenido o está en foco */
+.input-field:focus~.input-label,
+.input-field:not(:placeholder-shown)~.input-label {
+  top: 0;
+  font-size: 0.75rem;
+  color: var(--color-neutral-black);
+}
+
+/* Estado Error */
+.input-wrapper.has-error .input-field {
+  border-bottom-color: #ef4444;
+  color: #ef4444;
+}
+
+.input-wrapper.has-error .input-label {
+  top: 0;
+  font-size: 0.75rem;
+  color: #ef4444;
+}
+
+.input-error-msg {
+  margin-top: 0.25rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: #ef4444;
+}
+
+/* Estado Success */
+.input-wrapper.has-success .input-field {
+  border-bottom-color: var(--color-sage);
+  color: var(--color-sage);
+}
+
+.input-wrapper.has-success .input-label {
+  top: 0;
+  font-size: 0.75rem;
+  color: var(--color-sage);
+}
+
+/* Textarea dentro de input-wrapper */
+textarea.input-field {
+  resize: none;
+  min-height: 6rem;
+}
+
+/* ==========================================
+   CARDS ESTANDARIZADAS
+   ========================================== */
+
+.card {
+  background-color: #ffffff;
+  border: 1.5px solid var(--color-neutral-gray);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.card-img {
+  width: 100%;
+  height: 12rem;
+  /* h-48 */
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+  color: var(--color-neutral-black);
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  line-height: 2rem;
+  font-weight: 300;
+  color: var(--color-neutral-gray);
+}
+
+/* ==========================================
+   DROPDOWN ESTANDARIZADO
+   ========================================== */
+
+.dropdown-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  border-bottom: 1.5px solid var(--color-neutral-gray);
+  padding-bottom: 0.25rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-neutral-black);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.dropdown-btn:hover {
+  border-bottom-color: var(--color-neutral-black);
+}
+
+.dropdown-menu {
+  position: absolute;
+  z-index: 20;
+  width: 100%;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-neutral-gray);
+  margin-top: 0.25rem;
+}
+
+.dropdown-option {
+  padding: 0.5rem 1rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  color: var(--color-neutral-black);
+}
+
+.dropdown-option:hover {
+  background-color: var(--color-cream);
+}
+
+.dropdown-option.is-selected {
+  background-color: var(--color-dark);
+  color: #ffffff;
+}
+
+/* ==========================================
+   WHATSAPP BOTÓN FLOTANTE
+   ========================================== */
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 999;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.whatsapp-float:hover {
+  background-color: #C87A4F;
+  transform: scale(1.05);
+}
+
+.whatsapp-float svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: #ffffff;
+}
+
+/* ==========================================
+   NAVEGACIÓN
+   ========================================== */
+
+.site-header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  /* border-bottom: 1px solid var(--color-neutral-gray); */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.main-header {
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.site-header.scrolled {
+  position: fixed;
+  background: rgb(101 101 101 / 79%);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  /* Fondo sólido para legibilidad */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Transiciones para Top Header */
+.top-header {
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+  max-height: 50px;
+  /* Alto aproximado */
+  opacity: 1;
+  overflow: hidden;
+  background: transparent;
+}
+
+.site-header.scrolled .top-header {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu a {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu .current-menu-item>a {
+  color: var(--color-primary);
+}
+
+/* ==========================================
+   UTILIDADES GLOBALES
+   ========================================== */
+
+.container-site {
+  width: 100%;
+  max-width: 80rem;
+  /* max-w-7xl */
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-site {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-site {
+    padding-inline: 3rem;
+  }
+}
+
+/* Overlay oscuro para modales */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+}
+
+/* Link con estilo del design system */
+.link-primary {
+  color: var(--color-primary);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.link-primary:hover {
+  color: var(--color-hover);
+}
+
+/* Divisor */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-neutral-gray);
+  margin: 2rem 0;
+}
+
+/* AOS — asegurar visibilidad antes de que cargue */
+[data-aos] {
+  opacity: 0;
+}
+
+[data-aos].aos-animate {
+  opacity: 1;
+}

@@ -1,0 +1,17 @@
+/*
+Theme Name:  Intense Nerd Theme
+Theme URI:   https://intensenerd.com
+Description: Tema WordPress personalizado con Vite, Tailwind CSS v4, Alpine.js, AOS y ACF. Design system con tipografías HV Simplicite + Rubik y paleta de colores definida.
+Author:      Intense Nerd
+Author URI:  https://intensenerd.com
+Version:     1.0.0
+License:     GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: intense-nerd-theme
+Tags:        custom-menu, featured-images, threaded-comments, translation-ready
+*/
+
+/*
+ * Este archivo solo contiene los metadatos del tema para WordPress.
+ * Los estilos reales se generan con Vite y se encuentran en /dist/app.css
+ */

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.DS_Store
+npm-debug.log*
+.env
+.parcel-cache
+.cache
+backend/vendor/
+vendor/
+.github/
+.vscode/
+package-lock.json
+*.log
