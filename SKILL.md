@@ -248,8 +248,8 @@ add_action('wp_enqueue_scripts', 'mi_tema_scripts');
 | H1             | HV Simplicite   | 64px | 72px   | Regular | `font-heading text-[64px] leading-[72px]`        |
 | H2             | HV Simplicite   | 64px | 72px   | Regular | `font-heading text-[64px] leading-[72px]`        |
 | H3             | HV Simplicite   | 48px | 72px   | Regular | `font-heading text-5xl leading-[72px]`           |
-| H3 Bold        | HV Simplicite   | 32px | 40px   | Bold    | `font-heading text-[32px] leading-10 font-bold`  |
-| H3 Small       | HV Simplicite   | 20px | 32px   | Bold    | `font-heading text-xl leading-8 font-bold`       |
+| H3 Bold        | HV Simplicite   | 32px | 40px   | Bold    | `font-heading text-[32px] leading-10 font-medium`  |
+| H3 Small       | HV Simplicite   | 20px | 32px   | Bold    | `font-heading text-xl leading-8 font-medium`       |
 | Body XL        | Rubik           | 24px | 40px   | Regular | `font-body text-2xl leading-10`                  |
 | Body Large     | Rubik           | 20px | 36px   | Light   | `font-body text-xl leading-9 font-light`         |
 | Body Medium    | Rubik           | 18px | 32px   | Light   | `font-body text-lg leading-8 font-light`         |
@@ -416,7 +416,7 @@ AOS se inicializa en `main.js`. En los templates PHP solo se usan atributos `dat
                   hover:border-primary transition-colors duration-200"
            data-aos="fade-up"
            data-aos-delay="<?= $delay ?>">
-        <h3 class="font-heading text-[32px] leading-10 font-bold text-neutral-black mb-2">
+        <h3 class="font-heading text-[32px] leading-10 font-medium text-neutral-black mb-2">
           <?= esc_html(get_sub_field('titulo')); ?>
         </h3>
         <p class="font-body text-lg leading-8 font-light text-neutral-gray">
@@ -707,7 +707,7 @@ $query = new WP_Query([
                class="w-full h-48 object-cover" loading="lazy">
         <?php endif; ?>
         <div class="p-5">
-          <h4 class="font-heading text-[32px] leading-10 font-bold text-neutral-black">
+          <h4 class="font-heading text-[32px] leading-10 font-medium text-neutral-black">
             <?= esc_html(get_the_title()); ?>
           </h4>
         </div>

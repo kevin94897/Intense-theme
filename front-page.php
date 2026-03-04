@@ -14,7 +14,7 @@ get_header();
     <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20" data-aos="fade-in">
         <!-- Background Image -->
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=2076&auto=format&fit=crop" alt="Machu Picchu" class="w-full h-full object-cover">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_banner_home.webp" alt="Machu Picchu" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 
@@ -33,7 +33,7 @@ get_header();
                 <?php get_template_part('template-parts/components/btn-outline', null, [
                     'text' => 'Design my trip',
                     'href' => '#design',
-                    'class_extra' => 'border-white text-white hover:bg-white hover:text-neutral-black'
+                    'color' => 'light'
                 ]); ?>
             </div>
         </div>
@@ -55,36 +55,36 @@ get_header();
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
                 <!-- Item 1 (Span 2 cols, 2 rows) -->
                 <div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-lg cursor-pointer" data-aos="fade-up" data-aos-delay="200">
-                    <img src="https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=2070&auto=format&fit=crop" alt="Cusco" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_01.webp" alt="Cusco" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 text-left">
-                        <h3 class="font-heading text-white text-3xl font-bold">Cusco</h3>
+                        <h3 class="font-heading text-white text-3xl font-medium">Cusco</h3>
                         <p class="font-body text-white/80 text-sm">The Imperial City</p>
                     </div>
                 </div>
                 <!-- Item 2 -->
                 <div class="md:col-span-2 relative group overflow-hidden rounded-lg cursor-pointer" data-aos="fade-up" data-aos-delay="300">
-                    <img src="https://images.unsplash.com/photo-1588523315626-d6216dd191bf?q=80&w=2076&auto=format&fit=crop" alt="Machu Picchu" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_02.webp" alt="Machu Picchu" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 text-left">
-                        <h3 class="font-heading text-white text-2xl font-bold">Machu Picchu</h3>
+                        <h3 class="font-heading text-white text-2xl font-medium">Machu Picchu</h3>
                         <p class="font-body text-white/80 text-sm">The Lost City</p>
                     </div>
                 </div>
                 <!-- Item 3 -->
                 <div class="relative group overflow-hidden rounded-lg cursor-pointer" data-aos="fade-up" data-aos-delay="400">
-                    <img src="https://images.unsplash.com/photo-1533036665790-25e4ec7014b0?q=80&w=2070&auto=format&fit=crop" alt="Sacred Valley" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_03.webp" alt="Sacred Valley" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 text-left">
-                        <h3 class="font-heading text-white text-xl font-bold">Sacred Valley</h3>
+                        <h3 class="font-heading text-white text-xl font-medium">Sacred Valley</h3>
                     </div>
                 </div>
                 <!-- Item 4 -->
                 <div class="relative group overflow-hidden rounded-lg cursor-pointer" data-aos="fade-up" data-aos-delay="500">
-                    <img src="https://images.unsplash.com/photo-1629853920235-cbfe4017efad?q=80&w=2070&auto=format&fit=crop" alt="Arequipa" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_04.webp" alt="Arequipa" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                     <div class="absolute bottom-6 left-6 text-left">
-                        <h3 class="font-heading text-white text-xl font-bold">Arequipa</h3>
+                        <h3 class="font-heading text-white text-xl font-medium">Arequipa</h3>
                     </div>
                 </div>
             </div>
@@ -94,31 +94,65 @@ get_header();
     <!-- C. Authentic Itineraries -->
     <section id="itineraries" class="py-20 bg-cream">
         <div class="container-site text-center">
-            <span class="font-body text-sm italic text-primary uppercase tracking-wide mb-2 block" data-aos="fade-up">Journeys</span>
-            <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12" data-aos="fade-up" data-aos-delay="100">Our Authentic Itineraries</h2>
+            <div class="flex flex-col items-center gap-4">
+                <svg width="65" height="41" viewBox="0 0 65 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z" stroke="#7B4424" stroke-width="1.12281" />
+                    <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z" fill="#B76739" stroke="#B76739" stroke-width="1.12281" />
+                    <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="#7B4424" stroke-width="1.12281" />
+                    <path d="M54.7339 40.3481L31.997 27.4359L9.26017 40.3481" stroke="#7B4424" stroke-width="1.12281" />
+                    <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="#7B4424" stroke-width="1.12281" />
+                    <path d="M54.7339 40.3481L31.997 27.4359L9.26017 40.3481" stroke="#7B4424" stroke-width="1.12281" />
+                    <path d="M23.2954 3.29541L32.2779 8.90945L41.2603 3.29541" stroke="#B76739" stroke-width="1.12281" />
+                    <path d="M41.2603 37.541L32.2778 31.927L23.2953 37.541" stroke="#B76739" stroke-width="1.12281" />
+                    <path d="M64.2779 8.90942L44.0674 20.4182L64.2779 31.927" stroke="#B76739" stroke-width="1.12281" />
+                    <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="#B76739" stroke-width="1.12281" />
+                </svg>
+                <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12" data-aos="fade-up" data-aos-delay="100">Authentic Itineraries</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
-                <?php
-                $itineraries = [
-                    ['title' => 'The Essential Peru', 'days' => '8 Days', 'price' => '$1,299', 'img' => 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=800&auto=format&fit=crop'],
-                    ['title' => 'Inca Trail Discovery', 'days' => '5 Days', 'price' => '$899', 'img' => 'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=800&auto=format&fit=crop'],
-                    ['title' => 'Amazon & Andes', 'days' => '12 Days', 'price' => '$2,499', 'img' => 'https://images.unsplash.com/photo-1533036665790-25e4ec7014b0?q=80&w=800&auto=format&fit=crop'],
-                ];
-                foreach ($itineraries as $index => $itin):
-                ?>
-                    <?php get_template_part('template-parts/components/card', null, [
-                        'image'       => $itin['img'],
-                        'image_alt'   => $itin['title'],
-                        'category'    => $itin['days'],
-                        'title'       => $itin['title'],
-                        'description' => 'A beautifully curated experience designed to connect you deeply with the culture and landscapes of Peru.',
-                        'link'        => '#',
-                        'link_text'   => 'View itinerary',
-                        'aos_delay'   => ($index * 100) + 200,
-                    ]); ?>
-                <?php endforeach; ?>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-left">
+                    <?php
+                    $itineraries = [
+                        [
+                            'title'        => '14D Grand discovery',
+                            'days'         => '14 Days',
+                            'price'        => 'USD 2,059',
+                            'destinations' => 'Lima • Paracas • Nazca • Arequipa • Colca Canyon • Lake Titicaca • Sacred Valley • Machu Picchu & Cusco',
+                            'img'          => get_template_directory_uri() . '/assets/images/intense_02.webp',
+                            'badges'       => ['New', 'Top seller']
+                        ],
+                        [
+                            'title'        => 'Inca Trail Discovery',
+                            'days'         => '5 Days',
+                            'price'        => 'USD 899',
+                            'destinations' => 'Cusco • Wayllabamba • Pacaymayo • Wiñay Wayna • Machu Picchu',
+                            'img'          => get_template_directory_uri() . '/assets/images/intense_03.webp',
+                            'badges'       => ['Top seller']
+                        ],
+                        [
+                            'title'        => 'Amazon & Andes',
+                            'days'         => '12 Days',
+                            'price'        => 'USD 2,499',
+                            'destinations' => 'Lima • Puerto Maldonado • Amazon Basin • Cusco • Sacred Valley • Machu Picchu',
+                            'img'          => get_template_directory_uri() . '/assets/images/intense_04.webp',
+                            'badges'       => []
+                        ],
+                    ];
+                    foreach ($itineraries as $index => $itin):
+                    ?>
+                        <?php get_template_part('template-parts/components/card-itinerary', null, [
+                            'image'        => $itin['img'],
+                            'title'        => $itin['title'],
+                            'price'        => $itin['price'],
+                            'duration'     => $itin['days'],
+                            'destinations' => $itin['destinations'],
+                            'link'         => '#',
+                            'link_text'    => 'Explore itineraries',
+                            'aos_delay'    => ($index * 100) + 200,
+                            'badges'       => $itin['badges'],
+                        ]); ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
     </section>
 
     <!-- D. Venture Beyond (Why Choose Us) -->
@@ -126,39 +160,45 @@ get_header();
         <div class="container-site">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div data-aos="fade-right">
-                    <img src="https://images.unsplash.com/photo-1508680197779-11ba183be121?q=80&w=2070&auto=format&fit=crop" alt="Local Culture" class="w-full h-auto rounded-lg shadow-xl object-cover aspect-[4/3]">
+                    <div class="flex items-center gap-4 mb-12">
+                        <svg width="51" height="51" viewBox="0 0 51 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.707031 12.0156L38.3976 49.7062" stroke="white" stroke-width="2" />
+                            <path d="M12.0146 0.70752L49.7053 38.3981" stroke="white" stroke-width="2" />
+                            <path d="M0.707031 12.0156L38.3976 49.7062" stroke="white" stroke-width="2" />
+                            <path d="M12.0146 0.70752L49.7053 38.3981" stroke="white" stroke-width="2" />
+                            <path d="M12.0161 49.7056L49.7067 12.015" stroke="white" stroke-width="2" />
+                            <path d="M0.707031 38.3979L38.3976 0.707343" stroke="white" stroke-width="2" />
+                            <path d="M12.0161 49.7056L49.7067 12.015" stroke="white" stroke-width="2" />
+                            <path d="M0.707031 38.3979L38.3976 0.707343" stroke="white" stroke-width="2" />
+                            <rect x="23.3062" y="23.8213" width="3.76914" height="3.76914" fill="white" />
+                        </svg>
+
+                        <h2 class="font-heading text-4xl md:text-5xl font-medium">What Moves Us</h2>
+                    </div>
+
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_01.webp" alt="Local Culture" class="w-full h-auto rounded-lg shadow-xl object-cover aspect-[4/3]">
                 </div>
                 <div data-aos="fade-left">
-                    <span class="font-body text-sm italic text-cream/80 uppercase tracking-wide mb-2 block">Why Choose Us</span>
-                    <h2 class="font-heading text-4xl md:text-5xl font-bold mb-8">Venture Beyond</h2>
+                    <!-- <span class="font-body text-sm italic text-cream/80 uppercase tracking-wide mb-2 block">Why Choose Us</span> -->
+                    <div class="mb-12">
+                        <h2 class="font-heading text-4xl md:text-5xl font-medium mb-6">Travel with Purpose</h2>
 
-                    <div class="space-y-6">
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 mt-1">
-                                <span class="text-white font-bold">1</span>
-                            </div>
-                            <div>
-                                <h3 class="font-heading text-2xl font-bold mb-2">Expert Local Guides</h3>
-                                <p class="font-body text-cream/80 font-light">Deeply knowledgeable locals who are passionate about sharing their heritage and stories.</p>
-                            </div>
+                        <div class="space-y-6">
+                            <p class="font-body text-cream/80 font-light">Deeply knowledgeable locals who are passionate about sharing their heritage and stories.</p>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 mt-1">
-                                <span class="text-white font-bold">2</span>
-                            </div>
-                            <div>
-                                <h3 class="font-heading text-2xl font-bold mb-2">Tailor-Made Experiences</h3>
-                                <p class="font-body text-cream/80 font-light">Every itinerary is customized to match your pace, interests, and travel style perfectly.</p>
-                            </div>
+                    </div>
+                    <div class="mb-12">
+                        <h2 class="font-heading text-4xl md:text-5xl font-medium mb-6">Venture Beyond</h2>
+
+                        <div class="space-y-6">
+                            <p class="font-body text-cream/80 font-light">Deeply knowledgeable locals who are passionate about sharing their heritage and stories.</p>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0 mt-1">
-                                <span class="text-white font-bold">3</span>
-                            </div>
-                            <div>
-                                <h3 class="font-heading text-2xl font-bold mb-2">Sustainable Tourism</h3>
-                                <p class="font-body text-cream/80 font-light">We are deeply committed to protecting the environments and communities we visit.</p>
-                            </div>
+                    </div>
+                    <div class="mb-12">
+                        <h2 class="font-heading text-4xl md:text-5xl font-medium mb-6">Venture Beyond</h2>
+
+                        <div class="space-y-6">
+                            <p class="font-body text-cream/80 font-light">Deeply knowledgeable locals who are passionate about sharing their heritage and stories.</p>
                         </div>
                     </div>
                 </div>
@@ -168,27 +208,49 @@ get_header();
 
     <!-- E. Gallery (Need again to scroll?) -->
     <section class="py-20 bg-cream">
+        <div class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-12 mb-10 overflow-hidden">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt="" class="mx-auto md:mb-10">
+            <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit" data-aos="fade-up">Need a journey spark?</h2>
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt="" class="mx-auto mb-10 hidden md:block">
+        </div>
         <div class="container-site text-center">
-            <h2 class="font-heading text-3xl md:text-4xl text-dark mb-10" data-aos="fade-up">Need a reason to pack your bags?</h2>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                <?php for ($i = 1; $i <= 8; $i++):
-                    // Random images related to travel/peru
-                    $images = [
-                        'https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=600&auto=format&fit=crop',
-                        'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=600&auto=format&fit=crop',
-                        'https://images.unsplash.com/photo-1533036665790-25e4ec7014b0?q=80&w=600&auto=format&fit=crop',
-                        'https://images.unsplash.com/photo-1629853920235-cbfe4017efad?q=80&w=600&auto=format&fit=crop',
-                        'https://images.unsplash.com/photo-1508680197779-11ba183be121?q=80&w=600&auto=format&fit=crop',
-                        'https://images.unsplash.com/photo-1588523315626-d6216dd191bf?q=80&w=600&auto=format&fit=crop',
-                        'https://images.unsplash.com/photo-1596423735880-5a3d70659a72?q=80&w=600&auto=format&fit=crop',
-                        'https://images.unsplash.com/photo-1626084687537-8854dc6eb5dc?q=80&w=600&auto=format&fit=crop',
-                    ];
-                ?>
-                    <a href="#" class="block aspect-square overflow-hidden group" data-aos="fade-up" data-aos-delay="<?php echo ($i % 4) * 100; ?>">
-                        <img src="<?php echo $images[$i - 1]; ?>" alt="Gallery Image <?php echo $i; ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                    </a>
-                <?php endfor; ?>
+            <?php
+            $images = [
+                get_template_directory_uri() . '/assets/images/intense_gallery_01.webp', // 0
+                get_template_directory_uri() . '/assets/images/intense_gallery_02.webp', // 1
+                get_template_directory_uri() . '/assets/images/intense_gallery_03.webp', // 2
+                get_template_directory_uri() . '/assets/images/intense_gallery_04.webp', // 3
+                get_template_directory_uri() . '/assets/images/intense_gallery_05.webp', // 4
+                get_template_directory_uri() . '/assets/images/intense_gallery_06.webp', // 5
+                get_template_directory_uri() . '/assets/images/intense_gallery_07.webp', // 6
+                get_template_directory_uri() . '/assets/images/intense_gallery_08.webp', // 7
+            ];
+            $gallery_cols = [
+                // Col 1
+                [['img' => $images[0], 'h' => '55%'], ['img' => $images[1], 'h' => '45%']],
+                // Col 2
+                [['img' => $images[2], 'h' => '45%'], ['img' => $images[3], 'h' => '55%']],
+                // Col 3
+                [['img' => $images[4], 'h' => '60%'], ['img' => $images[5], 'h' => '40%']],
+                // Col 4
+                [['img' => $images[6], 'h' => '45%'], ['img' => $images[7], 'h' => '55%']],
+            ];
+            ?>
+            <!-- Use a responsive explicit height so percentage flex items work perfectly with gap -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-[1100px] md:h-[500px] lg:h-[600px] xl:h-[700px] w-full">
+                <?php foreach ($gallery_cols as $colIndex => $col): ?>
+                    <div class="flex flex-col gap-4 h-full w-full">
+                        <?php foreach ($col as $itemIndex => $item): ?>
+                            <!-- calc(h - 0.5rem) perfectly adjusts for the gap-4 (1rem / 2) between the 2 items -->
+                            <a href="#" class="block w-full relative group overflow-hidden rounded-sm"
+                                style="height: calc(<?php echo $item['h']; ?> - 0.5rem);"
+                                data-aos="fade-up" data-aos-delay="<?php echo ($colIndex * 150) + ($itemIndex * 100); ?>">
+                                <img src="<?php echo $item['img']; ?>" alt="Gallery Image" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
@@ -196,30 +258,124 @@ get_header();
     <!-- F. Our Travelers Say -->
     <section class="py-24 bg-cream border-t border-neutral-gray/20">
         <div class="container-site">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <!-- Text / Testimonial -->
-                <div class="order-2 lg:order-1" data-aos="fade-right">
-                    <span class="font-body text-sm italic text-primary uppercase tracking-wide mb-4 block">Our Travelers Say</span>
-                    <div class="flex text-gold mb-6">
-                        <!-- 5 Stars -->
-                        <?php for ($s = 0; $s < 5; $s++): ?>
-                            <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                        <?php endfor; ?>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 md:mb-10">
+                <h2 class="font-heading text-3xl md:text-5xl text-dark min-w-fit mb-4 md:mb-0" data-aos="fade-up">Our Travelers Say</h2>
+                <span class="font-body text-sm text-neutral-black font-medium mb-1 md:max-w-xs italic">
+                    Authentic stories from travelers who chose us to "Celebrate Life in Peru".
+                </span>
+            </div>
+
+            <?php
+            // Sample Testimonials Data
+            $testimonials = [
+                [
+                    'img'    => get_template_directory_uri() . '/assets/images/intense_05.webp',
+                    'quote'  => 'This was truly the trip of a lifetime. The attention to detail from Intense Nerd Theme travel made every step of our journey magical and absolutely seamless from start to finish.',
+                    'author' => 'Sarah & Michael J.',
+                    'date'   => 'Traveled in October 2023',
+                ],
+                [
+                    'img'    => get_template_directory_uri() . '/assets/images/intense_05.webp',
+                    'quote'  => 'I’ve always dreamed of hiking the Inca Trail, but doing it with such knowledgeable and passionate guides made all the difference. Their deep love for Peru’s history was contagious.',
+                    'author' => 'David R.',
+                    'date'   => 'Traveled in May 2024',
+                ],
+                [
+                    'img'    => get_template_directory_uri() . '/assets/images/intense_05.webp',
+                    'quote'  => 'From the vibrant streets of Cusco to the breathtaking views of the Sacred Valley, every moment felt tailored to our interests. We felt like VIP guests exploring a hidden world.',
+                    'author' => 'Emily & Thomas K.',
+                    'date'   => 'Traveled in August 2023',
+                ],
+            ];
+            ?>
+
+            <!-- Embla Carousel Wrapper -->
+            <div class="relative embla-testimonials">
+                <!-- Viewport -->
+                <div class="embla overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <div class="embla__container flex">
+                        <?php foreach ($testimonials as $index => $testimonal) : ?>
+                            <div class="embla__slide flex-[0_0_100%] min-w-0">
+                                <div class="grid grid-cols-1 lg:grid-cols-[40%_60%] gap-8 items-center p-2">
+                                    <!-- Image -->
+                                    <div class="order-1 lg:order-1">
+                                        <div class="relative rounded-lg overflow-hidden max-w-lg aspect-[4/3] lg:aspect-auto h-full">
+                                            <img src="<?php echo esc_url($testimonal['img']); ?>" alt="Testimonial Photo" class="w-full h-full object-cover absolute inset-0 lg:static">
+                                        </div>
+                                    </div>
+                                    <!-- Text / Testimonial -->
+                                    <div class="order-2 lg:order-2">
+                                        <div class="p-8 bg-white h-full flex flex-col justify-center">
+                                            <div class="flex text-gold mb-6">
+                                                <!-- 5 Stars -->
+                                                <?php for ($s = 0; $s < 5; $s++) : ?>
+                                                    <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                    </svg>
+                                                <?php endfor; ?>
+                                            </div>
+                                            <blockquote class="font-heading text-xl md:text-4xl text-dark leading-snug mb-8">
+                                                "<?php echo esc_html($testimonal['quote']); ?>"
+                                            </blockquote>
+                                            <p class="font-body text-lg text-neutral-black font-medium mb-1"><?php echo esc_html($testimonal['author']); ?></p>
+                                            <p class="font-body text-sm text-neutral-gray"><?php echo esc_html($testimonal['date']); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                    <blockquote class="font-heading text-3xl md:text-4xl text-dark leading-snug mb-8">
-                        "This was truly the trip of a lifetime. The attention to detail from Intense Nerd Theme travel made every step of our journey magical and absolutely seamless from start to finish."
-                    </blockquote>
-                    <p class="font-body text-lg text-neutral-black font-bold mb-1">Sarah & Michael J.</p>
-                    <p class="font-body text-sm text-neutral-gray">Traveled in October 2023</p>
                 </div>
-                <!-- Image -->
-                <div class="order-1 lg:order-2" data-aos="fade-left">
-                    <div class="relative rounded-lg overflow-hidden shadow-2xl aspect-[4/3] max-w-lg mx-auto lg:ml-auto">
-                        <img src="https://images.unsplash.com/photo-1570535924719-f06b6f007cb4?q=80&w=2070&auto=format&fit=crop" alt="Llama in Machu Picchu" class="w-full h-full object-cover">
-                    </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center gap-4 mt-8 lg:mt-0 lg:absolute lg:bottom-8 lg:right-12 z-10 justify-center lg:justify-end"
+                    data-aos="fade-up"
+                    data-aos-delay="200">
+
+                    <!-- Prev -->
+                    <button
+                        class="embla__prev group cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                        aria-label="Anterior">
+
+                        <svg class="w-20 h-6"
+                            viewBox="0 0 100 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <line x1="95" y1="12" x2="10" y2="12"
+                                class="transition-all duration-300 group-hover:x2-[0]" />
+                            <polyline points="20 4 10 12 20 20"
+                                class="transition-all duration-300 group-hover:-translate-x-1" />
+                        </svg>
+
+                    </button>
+
+                    <!-- Next -->
+                    <button
+                        class="embla__next group cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                        aria-label="Siguiente">
+
+                        <svg class="w-20 h-6"
+                            viewBox="0 0 100 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <line x1="5" y1="12" x2="90" y2="12"
+                                class="transition-all duration-300 group-hover:x2-[100]" />
+                            <polyline points="80 4 90 12 80 20"
+                                class="transition-all duration-300 group-hover:translate-x-1" />
+                        </svg>
+
+                    </button>
+
                 </div>
+
             </div>
         </div>
     </section>
@@ -227,16 +383,18 @@ get_header();
     <!-- G. Banner CTA -->
     <section class="relative py-32 flex items-center justify-center text-center" data-aos="fade-in">
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1444154865181-a75cb57ce19c?q=80&w=2050&auto=format&fit=crop" alt="Sunset Landscape" class="w-full h-full object-cover">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_cta_bolivia.webp" alt="Sunset Landscape" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-dark/60"></div>
         </div>
         <div class="container-site relative z-10 px-4" data-aos="fade-up" data-aos-delay="100">
-            <h2 class="font-heading text-4xl md:text-5xl lg:text-[64px] leading-tight text-white mb-8 max-w-4xl mx-auto">
-                Ready to explore the soul of the Incan Empire?
+            <h2 class="font-heading text-3xl md:text-4xl lg:text-5xl leading-tight text-white mb-8 max-w-6xl mx-auto">
+                Looking for a deeper Andean and Altiplano experience?
             </h2>
-            <?php get_template_part('template-parts/components/btn-primary', null, [
-                'text'        => 'Plan my trip',
+            <p class="font-body text-lg text-white mb-8 max-w-4xl mx-auto">Discover Bolivia with us — from the breathtaking Uyuni Salt Flats to vibrant La Paz and beyond.</p>
+            <?php get_template_part('template-parts/components/btn-outline', null, [
+                'text'        => 'Go to Intense Bolivia',
                 'href'        => '#',
+                'color'       => 'light',
                 'class_extra' => 'px-10 py-4 text-base'
             ]); ?>
         </div>
@@ -245,32 +403,47 @@ get_header();
     <!-- H. Journal & Stories -->
     <section class="py-20 bg-cream">
         <div class="container-site">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-                <div>
-                    <h2 class="font-heading text-4xl md:text-5xl text-dark" data-aos="fade-up">Journal & Stories</h2>
-                </div>
-                <div data-aos="fade-up" data-aos-delay="100">
-                    <a href="#" class="font-body text-sm text-primary uppercase tracking-wide hover:text-hover transition-colors font-medium">Read all stories →</a>
-                </div>
+            <div class="text-center mb-12">
+                <h2 class="font-heading text-4xl md:text-5xl text-dark" data-aos="fade-up">Journal & Stories</h2>
+            </div>
+            <div class="text-right" data-aos="fade-up" data-aos-delay="100">
+                <a href="#" class="font-body text-sm text-dark uppercase tracking-wide hover:text-hover transition-colors font-medium flex items-center gap-2">See All <svg class="w-12 h-6 text-dark transition-transform duration-300 group-hover:translate-x-2" viewBox="0 0 40 10" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <line x1="0" y1="5" x2="38" y2="5"></line>
+                        <polyline points="34 1 39 5 34 9"></polyline>
+                    </svg></a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-4">
                 <?php
                 $posts = [
-                    ['title' => 'The Best Time to Visit Machu Picchu in 2024', 'cat' => 'Travel Tips', 'img' => 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=600&auto=format&fit=crop'],
-                    ['title' => 'A Culinary Guide to the Streets of Cusco', 'cat' => 'Food & Culture', 'img' => 'https://images.unsplash.com/photo-1629853920235-cbfe4017efad?q=80&w=600&auto=format&fit=crop'],
-                    ['title' => 'Top 5 Lesser-Known Ruins in the Sacred Valley', 'cat' => 'Exploration', 'img' => 'https://images.unsplash.com/photo-1533036665790-25e4ec7014b0?q=80&w=600&auto=format&fit=crop'],
+                    [
+                        'title' => 'Celebration of Love: A Magical Proposal in the Land of the Incas.',
+                        'read_time' => '5-minute read',
+                        'date' => '20 Dec 2023',
+                        'img' => get_template_directory_uri() . '/assets/images/intense_journal_01.webp'
+                    ],
+                    [
+                        'title' => 'A Culinary Guide to the Streets of Cusco',
+                        'read_time' => '6-minute read',
+                        'date' => '10 Feb 2024',
+                        'img' => get_template_directory_uri() . '/assets/images/intense_journal_02.webp'
+                    ],
+                    [
+                        'title' => 'Top 5 Lesser-Known Ruins in the Sacred Valley',
+                        'read_time' => '4-minute read',
+                        'date' => '05 Jan 2024',
+                        'img' => get_template_directory_uri() . '/assets/images/intense_journal_03.webp'
+                    ],
                 ];
                 foreach ($posts as $index => $post):
                 ?>
-                    <?php get_template_part('template-parts/components/card', null, [
+                    <?php get_template_part('template-parts/components/card-story', null, [
                         'image'       => $post['img'],
                         'image_alt'   => $post['title'],
-                        'category'    => $post['cat'],
                         'title'       => $post['title'],
-                        'description' => 'Discover the incredible secrets hidden within the ancient passages and vibrant modern life...',
+                        'read_time'   => $post['read_time'],
+                        'date'        => $post['date'],
                         'link'        => '#',
-                        'link_text'   => 'Read story',
                         'aos_delay'   => $index * 100,
                     ]); ?>
                 <?php endforeach; ?>
@@ -281,38 +454,22 @@ get_header();
     <!-- I. Newsletter Pre-Footer -->
     <section class="py-20 bg-white border-t border-neutral-gray/20">
         <div class="container-site">
-            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+            <div class="flex flex-col md:flex-row items-center gap-12">
                 <!-- Image Booklet -->
-                <div class="w-full md:w-1/3" data-aos="fade-right">
-                    <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=600&auto=format&fit=crop" alt="Travel Booklet" class="w-full h-auto rounded-lg shadow-lg rotate-3">
+                <div class="w-full md:w-1/2" data-aos="fade-right">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_peru_travel.webp" alt="Travel Booklet" class="w-full h-auto">
                 </div>
                 <!-- Form -->
-                <div class="w-full md:w-2/3 text-center md:text-left" data-aos="fade-left">
-                    <h3 class="font-heading text-3xl font-bold text-dark mb-4">Get our Insider's Guide</h3>
-                    <p class="font-body text-neutral-gray text-lg mb-8">Sign up to receive our exclusive e-book with the best tips and hidden gems of Peru, plus updates on new itineraries.</p>
+                <div class="w-full md:w-1/2 text-center md:text-left" data-aos="fade-left">
+                    <h3 class="font-heading text-3xl font-semibold text-dark mb-4">Intense Peru Travel Guides</h3>
+                    <p class="font-body text-dark text-lg mb-8 font-light">Select a brochure and get one step closer to your dream trip to Peru: exclusive, authentic and personalized.</p>
 
-                    <form class="flex flex-col sm:flex-row gap-4" @submit.prevent>
-                        <!-- Using the floating input structure from SKILL.md -->
-                        <div class="relative w-full sm:flex-1">
-                            <input type="email" id="nl_email" placeholder=" " required
-                                class="peer w-full border-b border-neutral-gray bg-transparent
-                                        pt-5 pb-1 font-body text-base text-neutral-black
-                                        hover:border-neutral-black
-                                        focus:outline-none focus:border-neutral-black
-                                        transition-colors duration-200">
-                            <label for="nl_email"
-                                class="absolute left-0 top-4 font-body text-base text-neutral-gray
-                                        pointer-events-none transition-all duration-200
-                                        peer-focus:top-0 peer-focus:text-xs peer-focus:text-neutral-black
-                                        peer-[:not(:placeholder-shown)]:top-0
-                                        peer-[:not(:placeholder-shown)]:text-xs">
-                                Email address
-                            </label>
-                        </div>
-                        <button type="submit" class="bg-primary hover:bg-hover text-white font-body text-sm font-medium px-8 py-3 rounded-full transition-colors duration-200 cursor-pointer shrink-0">
-                            Subscribe
-                        </button>
-                    </form>
+                    <?php get_template_part('template-parts/components/btn-outline', null, [
+                        'text'        => 'Choose a Brochure',
+                        'href'        => '#',
+                        'color'       => 'dark',
+                        'class_extra' => 'px-10 py-4 text-base'
+                    ]); ?>
                 </div>
             </div>
         </div>

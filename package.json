@@ -9,6 +9,7 @@
   "dependencies": {
     "alpinejs": "^3.14.0",
     "aos": "^2.3.4",
+    "embla-carousel": "^8.6.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {

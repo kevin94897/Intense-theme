@@ -6,6 +6,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 import { initFormularios } from './modules/formularios.js'
+import { initSliders } from './modules/slider.js'
 
 // ── AOS — Inicializar una sola vez ───────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,10 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
         duration: 600,
         easing: 'ease-out',
         once: true,   // animar solo la primera vez
-        offset: 80,     // px antes del viewport
+        offset: 80,   // px antes del viewport
     })
 
     initFormularios()
+    initSliders()
 
     // Header scroll effect
     const header = document.querySelector('.site-header')

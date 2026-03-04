@@ -1,8 +1,8 @@
 /* Tailwind v4: una directiva reemplaza las tres de v3 */
 @import "tailwindcss";
 
-/* Google Fonts — Rubik */
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+/* Google Fonts — Rubik + Inter (backup for UI) */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap');
 
 /* HV Simplicite — fuente local (OTF) */
 @font-face {
@@ -83,8 +83,13 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   /* Prevent horizontal scroll from AOS animations */
+
+  /* Font Smoothing & Quality */
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-variant-ligatures: common-ligatures;
 }
 
 /* ==========================================
@@ -255,15 +260,28 @@ body {
 }
 
 /* Botón Outline */
-.btn-outline {
+.btn-outline,
+.btn-outline-dark {
   background-color: transparent;
   color: var(--color-neutral-black);
   border: 1.5px solid var(--color-neutral-black);
 }
 
-.btn-outline:hover {
+.btn-outline:hover,
+.btn-outline-dark:hover {
   background-color: var(--color-neutral-black);
   color: #ffffff;
+}
+
+.btn-outline-light {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1.5px solid #ffffff;
+}
+
+.btn-outline-light:hover {
+  background-color: #ffffff;
+  color: var(--color-neutral-black);
 }
 
 /* Botón Outline Primary */
@@ -573,7 +591,7 @@ textarea.input-field {
 
 .nav-menu a {
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 16px;
   font-weight: 400;
   color: #ffffff;
   text-decoration: none;

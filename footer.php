@@ -12,7 +12,7 @@
                         <?php the_custom_logo(); ?>
                     </div>
                 <?php else : ?>
-                    <p class="font-heading text-2xl text-cream font-bold mb-6">
+                    <p class="font-heading text-2xl text-cream font-medium mb-6">
                         <?php bloginfo('name'); ?>
                     </p>
                 <?php endif; ?>

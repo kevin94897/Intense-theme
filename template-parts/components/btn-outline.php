@@ -18,10 +18,12 @@
 $text        = $args['text']        ?? __('Acción', 'intense-nerd-theme');
 $href        = $args['href']        ?? '';
 $type        = $args['type']        ?? 'button';
+$color       = $args['color']       ?? 'dark'; // 'dark' or 'light'
 $class_extra = $args['class_extra'] ?? '';
 $attrs       = $args['attrs']       ?? '';
 
-$base_class = 'btn btn-outline ' . $class_extra;
+$outline_class = ($color === 'light') ? 'btn-outline-light' : 'btn-outline-dark';
+$base_class = 'btn ' . $outline_class . ' ' . $class_extra;
 ?>
 
 <?php if ($href) : ?>
