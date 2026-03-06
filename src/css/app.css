@@ -1,9 +1,8 @@
-/* Tailwind v4: una directiva reemplaza las tres de v3 */
-@import "tailwindcss";
-
-/* Google Fonts — Rubik + Inter (backup for UI) */
+/* Google Fonts — Rubik (debe ir antes de cualquier @layer o @import con layers) */
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap');
 
+/* Tailwind v4: una directiva reemplaza las tres de v3 */
+@import "tailwindcss";
 /* HV Simplicite — fuente local (OTF) */
 @font-face {
   font-family: "HV Simplicite";
@@ -70,9 +69,10 @@
 /* ==========================================
    ESTILOS BASE
    ========================================== */
-*,
-*::before,
-*::after {
+@layer base {
+  *,
+  *::before,
+  *::after {
   box-sizing: border-box;
 }
 
@@ -91,13 +91,15 @@ body {
   font-optical-sizing: auto;
   font-variant-ligatures: common-ligatures;
 }
+} /* Cierre de @layer base */
 
 /* ==========================================
-   TIPOGRAFÍA — CLASES SEMÁNTICAS
+   TIPOGRAFÍA Y COMPONENTES — CLASES SEMÁNTICAS
    ========================================== */
 
-/* H1 — HV Simplicite 64px */
-.heading-1 {
+@layer components {
+  /* H1 — HV Simplicite 64px */
+  .heading-1 {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 6vw, 4rem);
   /* 40px → 64px */
@@ -602,62 +604,85 @@ textarea.input-field {
 .nav-menu .current-menu-item>a {
   color: var(--color-primary);
 }
+} /* Cierre de @layer components */
 
 /* ==========================================
    UTILIDADES GLOBALES
    ========================================== */
+@layer utilities {
 
-.container-site {
-  width: 100%;
-  max-width: 80rem;
-  /* max-w-7xl */
-  margin-inline: auto;
-  padding-inline: 1.5rem;
-}
-
-@media (min-width: 768px) {
   .container-site {
-    padding-inline: 2rem;
+    width: 100%;
+    max-width: 80rem;
+    /* max-w-7xl */
+    margin-inline: auto;
+    padding-inline: 1.5rem;
   }
-}
 
-@media (min-width: 1280px) {
-  .container-site {
-    padding-inline: 3rem;
+  @media (min-width: 768px) {
+    .container-site {
+      padding-inline: 2rem;
+    }
   }
-}
 
-/* Overlay oscuro para modales */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 50;
-}
+  @media (min-width: 1280px) {
+    .container-site {
+      padding-inline: 3rem;
+    }
+  }
 
-/* Link con estilo del design system */
-.link-primary {
-  color: var(--color-primary);
-  text-decoration: underline;
-  transition: color 0.2s ease;
-}
+  /* Contenedor más ancho — max-w-8xl (96rem / 1536px) */
+  .container-site-wide {
+    width: 100%;
+    max-width: 96rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
 
-.link-primary:hover {
-  color: var(--color-hover);
-}
+  @media (min-width: 768px) {
+    .container-site-wide {
+      padding-inline: 2rem;
+    }
+  }
 
-/* Divisor */
-.divider {
-  border: none;
-  border-top: 1px solid var(--color-neutral-gray);
-  margin: 2rem 0;
-}
+  @media (min-width: 1280px) {
+    .container-site-wide {
+      padding-inline: 3rem;
+    }
+  }
 
-/* AOS — asegurar visibilidad antes de que cargue */
-[data-aos] {
-  opacity: 0;
-}
+  /* Overlay oscuro para modales */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+  }
 
-[data-aos].aos-animate {
-  opacity: 1;
+  /* Link con estilo del design system */
+  .link-primary {
+    color: var(--color-primary);
+    text-decoration: underline;
+    transition: color 0.2s ease;
+  }
+
+  .link-primary:hover {
+    color: var(--color-hover);
+  }
+
+  /* Divisor */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--color-neutral-gray);
+    margin: 2rem 0;
+  }
+
+  /* AOS — asegurar visibilidad antes de que cargue */
+  [data-aos] {
+    opacity: 0;
+  }
+
+  [data-aos].aos-animate {
+    opacity: 1;
+  }
 }

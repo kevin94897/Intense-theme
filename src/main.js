@@ -7,6 +7,7 @@ import 'aos/dist/aos.css'
 
 import { initFormularios } from './modules/formularios.js'
 import { initSliders } from './modules/slider.js'
+import bookingForm from './modules/bookingForm.js'
 
 // ── AOS — Inicializar una sola vez ───────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,4 +46,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Alpine.js ─────────────────────────────────────────────────────────────────
 window.Alpine = Alpine
+Alpine.data('bookingForm', bookingForm)
 Alpine.start()

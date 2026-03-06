@@ -31,29 +31,29 @@ function intense_nerd_setup()
 
     // Soporte de logotipo personalizado
     add_theme_support('custom-logo', [
-        'height'      => 60,
-        'width'       => 200,
+        'height' => 60,
+        'width' => 200,
         'flex-height' => true,
-        'flex-width'  => true,
+        'flex-width' => true,
     ]);
 
     // Registrar menús de navegación
     register_nav_menus([
         'primary-menu' => __('Menú Principal', 'intense-nerd-theme'),
-        'footer-menu'  => __('Menú Footer', 'intense-nerd-theme'),
+        'footer-menu' => __('Menú Footer', 'intense-nerd-theme'),
     ]);
 
     // Tamaños de imagen adicionales
-    add_image_size('card-thumb',   600, 400, true);
+    add_image_size('card-thumb', 600, 400, true);
     add_image_size('hero-banner', 1920, 800, true);
-    add_image_size('gallery-sq',   600, 600, true);
+    add_image_size('gallery-sq', 600, 600, true);
 }
 add_action('after_setup_theme', 'intense_nerd_setup');
 
 // ── Enqueue de Assets Vite ────────────────────────────────────────────────────
 function intense_nerd_scripts()
 {
-    $dist   = get_template_directory_uri() . '/dist';
+    $dist = get_template_directory_uri() . '/dist';
     $is_dev = defined('VITE_DEV') && VITE_DEV;
 
     if ($is_dev) {
@@ -65,13 +65,13 @@ function intense_nerd_scripts()
 
     // Modo producción — leer manifest generado por Vite
     $manifest_path = get_template_directory() . '/dist/.vite/manifest.json';
-    if (! file_exists($manifest_path)) {
+    if (!file_exists($manifest_path)) {
         return;
     }
 
     $manifest = json_decode(file_get_contents($manifest_path), true);
-    $entry    = $manifest['src/main.js'] ?? null;
-    if (! $entry) {
+    $entry = $manifest['src/main.js'] ?? null;
+    if (!$entry) {
         return;
     }
 
@@ -107,23 +107,23 @@ add_action('wp_enqueue_scripts', 'intense_nerd_scripts');
 function intense_nerd_widgets_init()
 {
     register_sidebar([
-        'name'          => __('Sidebar Principal', 'intense-nerd-theme'),
-        'id'            => 'sidebar-1',
-        'description'   => __('Sidebar visible en páginas de blog.', 'intense-nerd-theme'),
+        'name' => __('Sidebar Principal', 'intense-nerd-theme'),
+        'id' => 'sidebar-1',
+        'description' => __('Sidebar visible en páginas de blog.', 'intense-nerd-theme'),
         'before_widget' => '<section id="%1$s" class="widget %2$s mb-8">',
-        'after_widget'  => '</section>',
-        'before_title'  => '<h3 class="heading-3-small text-dark mb-4">',
-        'after_title'   => '</h3>',
+        'after_widget' => '</section>',
+        'before_title' => '<h3 class="heading-3-small text-dark mb-4">',
+        'after_title' => '</h3>',
     ]);
 
     register_sidebar([
-        'name'          => __('Footer Widgets', 'intense-nerd-theme'),
-        'id'            => 'footer-1',
-        'description'   => __('Widgets en el footer del sitio.', 'intense-nerd-theme'),
+        'name' => __('Footer Widgets', 'intense-nerd-theme'),
+        'id' => 'footer-1',
+        'description' => __('Widgets en el footer del sitio.', 'intense-nerd-theme'),
         'before_widget' => '<div id="%1$s" class="widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h4 class="heading-3-small text-cream mb-4">',
-        'after_title'   => '</h4>',
+        'after_widget' => '</div>',
+        'before_title' => '<h4 class="heading-3-small text-cream mb-4">',
+        'after_title' => '</h4>',
     ]);
 }
 add_action('widgets_init', 'intense_nerd_widgets_init');
@@ -148,7 +148,7 @@ function intense_nerd_get_thumbnail($post_id = null, $size = 'large')
 // ── Permitir SVG en la librería de medios ─────────────────────────────────────
 function intense_nerd_allow_svg($mimes)
 {
-    $mimes['svg']  = 'image/svg+xml';
+    $mimes['svg'] = 'image/svg+xml';
     $mimes['svgz'] = 'image/svg+xml';
     return $mimes;
 }
