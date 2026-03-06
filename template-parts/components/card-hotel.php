@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Hotel Card Component
  *
@@ -12,6 +13,7 @@
  *     @type string $location    Location string (e.g. Máncora, Piura).
  *     @type string $description Short description of the hotel.
  *     @type string $video_link  URL to the hotel video.
+ *     @type array  $web_ratings Array of ratings from the rating_web repeater [['web_name' => 'Booking', 'rating_number' => '9.5']].
  *     @type array  $amenities   Array of amenities, e.g. [['icon' => 'svg', 'text' => 'Beachfront']].
  * }
  */
@@ -20,11 +22,10 @@ $image = $args['image'] ?? '';
 $title = $args['title'] ?? 'Hotel Name';
 $stars = intval($args['stars'] ?? 5);
 $type = $args['type'] ?? 'Hotel';
-$expedia = $args['expedia'] ?? '';
-$booking = $args['booking'] ?? '';
 $location = $args['location'] ?? 'Location';
 $description = $args['description'] ?? 'Description of the hotel.';
 $video_link = $args['video_link'] ?? '#';
+$web_ratings = $args['web_ratings'] ?? [];
 $amenities = $args['amenities'] ?? [];
 ?>
 
@@ -56,23 +57,23 @@ $amenities = $args['amenities'] ?? [];
                 <?php endfor; ?>
             </div>
 
-            <span class="text-neutral-gray/50">|</span>
+            <!-- <span class="text-neutral-gray/50">|</span>
             <span>
                 <?php echo esc_html($type); ?>
-            </span>
+            </span> -->
 
-            <?php if ($expedia): ?>
-                <span class="text-neutral-gray/50">|</span>
-                <span>Expedia
-                    <?php echo esc_html($expedia); ?>
-                </span>
-            <?php endif; ?>
-
-            <?php if ($booking): ?>
-                <span class="text-neutral-gray/50">|</span>
-                <span>Booking
-                    <?php echo esc_html($booking); ?>
-                </span>
+            <?php if (!empty($web_ratings)) : ?>
+                <?php foreach ($web_ratings as $rating_item) :
+                    $web_name = $rating_item['web_name'] ?? '';
+                    $score = $rating_item['rating_number'] ?? '';
+                    if ($web_name && $score) :
+                ?>
+                        <span class="text-neutral-gray/50">|</span>
+                        <span><?php echo esc_html($web_name); ?>
+                            <?php echo esc_html($score); ?>
+                        </span>
+                <?php endif;
+                endforeach; ?>
             <?php endif; ?>
         </div>
 
@@ -94,18 +95,18 @@ $amenities = $args['amenities'] ?? [];
 
         <!-- Video Link -->
         <!-- <?php if ($video_link && $video_link !== '#'): ?> -->
-            <a href="<?php echo esc_url($video_link); ?>"
-                class="inline-flex items-center gap-2 font-body text-sm transition-colors italic mb-8" target="_blank">
-                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
-                    </path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Watch hotel video
-            </a>
-            <!-- <?php endif; ?> -->
+        <a href="<?php echo esc_url($video_link); ?>"
+            class="inline-flex items-center gap-2 font-body text-sm transition-colors italic mb-8" target="_blank">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+                </path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Watch hotel video
+        </a>
+        <!-- <?php endif; ?> -->
 
         <!-- Amenities -->
         <?php if (!empty($amenities)): ?>
@@ -113,7 +114,8 @@ $amenities = $args['amenities'] ?? [];
                 <?php foreach ($amenities as $amenity): ?>
                     <div class="flex items-center gap-3 font-body text-sm font-light">
                         <span class="w-5 h-5 flex items-center justify-center shrink-0">
-                            <?php echo $amenity['icon']; // Assuming trusted SVG markup ?>
+                            <?php echo $amenity['icon']; // Assuming trusted SVG markup 
+                            ?>
                         </span>
                         <?php echo esc_html($amenity['text']); ?>
                     </div>

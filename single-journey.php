@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template Name: Single Journey Page
  * Template Post Type: journey
@@ -8,213 +9,187 @@
 
 get_header();
 
-// Mock data for the layout
-$journey_title = "4D Deep Mangora Beach";
-$journey_subtitle = "From Machu Picchu to the Amazon. Each intense journey is designed to be a unique experience.";
-$journey_price = "USD 1,499";
+// Fetch common ACF groups to use throughout the template
+$information = get_field('information');
+$feature_group = get_field('features');
+$journey_gallery = get_field('journey_gallery');
+$itinerary_group = get_field('itinerary');
+$faq_group = get_field('frequently_asked_questions');
 
-// Mock Gallery
-$gallery_images = [
-    get_template_directory_uri() . '/assets/images/intense_journey_gallery_slider_01.webp',
-    get_template_directory_uri() . '/assets/images/intense_journey_gallery_slider_02.webp',
-    get_template_directory_uri() . '/assets/images/intense_journey_gallery_slider_03.webp',
-    get_template_directory_uri() . '/assets/images/intense_journey_gallery_slider_02.webp',
-];
+// Nested fields within the itinerary group
+$prices_group = $itinerary_group['prices_per_person'] ?? null;
+$selected_hotels = $itinerary_group['hotels'] ?? null;
+$selected_activities = $itinerary_group['activities'] ?? [];
+
+// Ensure $selected_activities is always an array for the loop
+if (!is_array($selected_activities)) {
+    $selected_activities = $selected_activities ? [$selected_activities] : [];
+}
+$selected_activities = array_filter($selected_activities);
 ?>
 
 <main id="primary" class="site-main">
 
-    <!-- 1. Hero Section -->
-    <section class="relative h-[60vh] md:h-[80vh] flex items-end justify-start pb-20">
-        <!-- Background Image -->
-        <div class="absolute inset-0 z-0">
-            <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" alt="Journey Hero"
-                class="w-full h-full object-cover">
-            <!-- Add a gradient overlay for text readability -->
-            <div class="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-transparent"></div>
-        </div>
-
-        <!-- Content -->
-        <div class="container-site relative z-10 w-full" data-aos="fade-up">
-            <div class="max-w-4xl text-white">
-                <h1 class="font-heading text-4xl md:text-6xl mb-4 leading-tight">
-                    <?php echo esc_html($journey_title); ?>
-                </h1>
-                <p class="font-body text-lg md:text-xl font-light mb-8 max-w-2xl">
-                    <?php echo esc_html($journey_subtitle); ?>
-                </p>
-                <?php get_template_part('template-parts/components/btn-outline', null, [
-                    'text' => 'Talk to us',
-                    'href' => '#booking-form',
-                    'color' => 'light',
-                    'class_extra' => 'px-10 py-3 text-sm'
-                ]); ?>
+    <?php if ($information) :
+        $hero_img = $information['background_hero_image'] ?: get_the_post_thumbnail_url(get_the_ID(), 'full');
+        $subtitle = $information['short_description'];
+        $btn = $information['button_request'];
+    ?>
+        <!-- 1. Hero Section -->
+        <section class="relative h-[60vh] md:h-[80vh] flex items-end justify-start pb-20">
+            <!-- Background Image -->
+            <div class="absolute inset-0 z-0">
+                <?php if ($hero_img) : ?>
+                    <img src="<?php echo esc_url(is_array($hero_img) ? $hero_img['url'] : $hero_img); ?>" alt="<?php echo esc_attr(is_array($hero_img) ? $hero_img['alt'] : 'Journey Hero'); ?>"
+                        class="w-full h-full object-cover">
+                <?php endif; ?>
+                <!-- Add a gradient overlay for text readability -->
+                <div class="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-transparent"></div>
             </div>
-        </div>
-    </section>
 
-    <!-- 2. Overview Section -->
-    <section class="py-24 overflow-hidden">
-        <div class="container-site max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-
-                <!-- Left: Description -->
-                <div>
-                    <!-- Eyebrow: ruta del viaje -->
-                    <!-- <div data-aos="fade-down" data-aos-duration="600" data-aos-delay="0"
-                        class="flex items-center gap-3 mb-6">
-                        <div class="h-px w-12 bg-[#bd7a4e]"></div>
-                        <span class="font-body text-xs uppercase tracking-[0.3em] text-[#bd7a4e] font-medium">Mancora ·
-                            Perú</span>
-                    </div> -->
-
-                    <h2 data-aos="fade-up" data-aos-duration="800" data-aos-delay="100"
-                        class="font-heading text-4xl md:text-5xl text-dark mb-6 leading-tight">
-                        Discover Mancora's Flavors & Coastal Bliss
-                    </h2>
-
-                    <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200"
-                        class="font-body text-neutral-black text-lg leading-relaxed font-light space-y-4 mb-10">
-                        <p>Stay at Arennas de Mancora and indulge in four days of sun-soaked relaxation, fresh seafood,
-                            craft cocktails, and the vibrant culinary traditions that make northern Peru a foodie
-                            paradise.</p>
-                    </div>
-
-                    <!-- Stats row -->
-                    <div data-aos="fade-right" data-aos-duration="700" data-aos-delay="350"
-                        class="flex items-center gap-8 pt-8 border-t border-neutral-gray/20">
-                        <div>
-                            <span class="block font-body text-3xl md:text-4xl text-dark font-light">USD $379</span>
-                            <span
-                                class="block font-body text-[10px] text-neutral-gray uppercase tracking-widest mt-1">per
-                                person</span>
-                        </div>
-                        <div class="w-px h-10 bg-neutral-gray/30"></div>
-                        <div>
-                            <span class="block font-body text-3xl md:text-4xl text-dark font-light">4</span>
-                            <span
-                                class="block font-body text-[10px] text-neutral-gray uppercase tracking-widest mt-1">days
-                                / nights</span>
-                        </div>
-                        <div class="w-px h-10 bg-neutral-gray/30"></div>
-                        <!-- Compass animation -->
-                        <div data-aos="fade-in" data-aos-delay="600">
-                            <svg class="w-9 h-9 text-[#bd7a4e] animate-[spin_25s_linear_infinite] opacity-70"
-                                viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="24" cy="24" r="20" stroke-dasharray="4 3" />
-                                <polygon points="24,8 27,24 24,28 21,24" fill="currentColor" opacity="0.7" />
-                                <polygon points="24,40 27,24 24,20 21,24" fill="currentColor" opacity="0.2" />
-                                <circle cx="24" cy="24" r="3" fill="currentColor" />
-                            </svg>
-                        </div>
-                    </div>
+            <!-- Content -->
+            <div class="container-site relative z-10 w-full" data-aos="fade-up">
+                <div class="max-w-4xl text-white">
+                    <h1 class="font-heading text-4xl md:text-6xl mb-4 leading-tight">
+                        <?php echo esc_html($information['days']) ? esc_html($information['days']) . ' - ' : ''; ?>
+                        <?php the_title(); ?>
+                    </h1>
+                    <?php if ($subtitle) : ?>
+                        <p class="font-body text-lg md:text-xl font-light mb-8 max-w-2xl">
+                            <?php echo esc_html($subtitle); ?>
+                        </p>
+                    <?php endif; ?>
+                    <?php if ($btn && is_array($btn)) :
+                        get_template_part('template-parts/components/btn-outline', null, [
+                            'text' => $btn['title'],
+                            'href' => $btn['url'],
+                            'target' => $btn['target'] ? $btn['target'] : '_self',
+                            'color' => 'light',
+                            'class_extra' => 'px-10 py-3 text-sm'
+                        ]);
+                    endif; ?>
                 </div>
-
-                <!-- Right: Highlights con stagger de olas -->
-                <div class="space-y-4">
-                    <!-- Item 1 -->
-                    <div data-aos="fade-left" data-aos-duration="700" data-aos-delay="100"
-                        class="flex items-start gap-4 md:gap-6 p-5 transition-all duration-500">
-                        <div class="text-primary">
-                            <svg viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="w-[40px] md:w-[67px] h-auto">
-
-                                <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M15.9492 0.949219L65.948 50.9473" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#38464C" stroke-width="2.68001" />
-                                <path d="M15.9492 0.949219L65.948 50.9473" stroke="#DC973C" stroke-width="2.68001" />
-                                <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#B76739" stroke-width="2.68001" />
-
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-body text-base text-dark mb-2 transition-colors duration-300">
-                                Beachfront Stay with Gourmet Touches</h3>
-                            <p class="font-body text-sm font-light text-dark leading-relaxed">Unwind at Arennas
-                                de Mancora, where elegant coastal design meets exceptional cuisine crafted with local
-                                ingredients.</p>
-                        </div>
-                    </div>
-
-                    <!-- Item 2 -->
-                    <div data-aos="fade-left" data-aos-duration="700" data-aos-delay="250"
-                        class="flex items-start gap-4 md:gap-6 p-5 transition-all duration-500">
-                        <div class="text-primary">
-                            <svg viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="w-[40px] md:w-[67px] h-auto">
-
-                                <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M15.9492 0.949219L65.948 50.9473" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#38464C" stroke-width="2.68001" />
-                                <path d="M15.9492 0.949219L65.948 50.9473" stroke="#DC973C" stroke-width="2.68001" />
-                                <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#B76739" stroke-width="2.68001" />
-
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-body text-base text-dark mb-2 transition-colors duration-300">
-                                Signature Northern Peruvian Cuisine</h3>
-                            <p class="font-body text-sm font-light text-dark leading-relaxed">Enjoy fresh
-                                ceviche, tiraditos, grilled seafood, and innovative fusion dishes—paired with refreshing
-                                pisco cocktails and ocean views.</p>
-                        </div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div data-aos="fade-left" data-aos-duration="700" data-aos-delay="400"
-                        class="flex items-start gap-4 md:gap-6 p-5 transition-all duration-500">
-                        <div class="text-primary">
-                            <svg viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                class="w-[40px] md:w-[67px] h-auto">
-
-                                <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M15.9492 0.949219L65.948 50.9473" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#38464C" stroke-width="2.68001" />
-                                <path d="M15.9492 0.949219L65.948 50.9473" stroke="#DC973C" stroke-width="2.68001" />
-                                <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
-                                <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#B76739" stroke-width="2.68001" />
-
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-body text-base text-dark mb-2 transition-colors duration-300">
-                                Seasonal Whale-Watching Encounters</h3>
-                            <p class="font-body text-sm font-light text-dark leading-relaxed">From July to
-                                October, witness majestic humpback whales migrating along the warm northern coast—an
-                                unforgettable experience available just minutes from Mancora's shores.</p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </div>
-    </section>
+        </section>
+    <?php endif; ?>
+
+    <?php if ($feature_group && (!empty($feature_group['title']) || !empty($feature_group['description']) || !empty($feature_group['features']))) :
+        $features = $feature_group['features'];
+    ?>
+        <!-- 2. Overview Section -->
+        <section class="py-24 overflow-hidden">
+            <div class="container-site max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+                    <!-- Left: Description -->
+                    <div>
+                        <?php if (!empty($feature_group['title'])) : ?>
+                            <h2 data-aos="fade-up" data-aos-duration="800" data-aos-delay="100"
+                                class="font-heading text-4xl md:text-5xl text-dark mb-6 leading-tight">
+                                <?php echo esc_html($feature_group['title']); ?>
+                            </h2>
+                        <?php endif; ?>
+
+                        <?php if (!empty($feature_group['description'])) : ?>
+                            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200"
+                                class="font-body text-neutral-black text-lg leading-relaxed font-light space-y-4 mb-10">
+                                <?php echo wp_kses_post($feature_group['description']); ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Stats row -->
+                        <div data-aos="fade-right" data-aos-duration="700" data-aos-delay="350"
+                            class="flex items-center gap-8 pt-8 border-t border-neutral-gray/20">
+                            <?php if (!empty($feature_group['price'])) : ?>
+                                <div>
+                                    <span class="block font-body text-3xl md:text-4xl text-dark font-light">USD $<?php echo esc_html($feature_group['price']); ?></span>
+                                    <span class="block font-body text-[10px] text-neutral-gray uppercase tracking-widest mt-1">per person</span>
+                                </div>
+                                <div class="w-px h-10 bg-neutral-gray/30"></div>
+                            <?php endif; ?>
+
+                            <?php if (!empty($information['days'])) : ?>
+                                <div>
+                                    <span class="block font-body text-3xl md:text-4xl text-dark font-light"><?php echo esc_html($information['days']); ?></span>
+                                    <span class="block font-body text-[10px] text-neutral-gray uppercase tracking-widest mt-1">days / nights</span>
+                                </div>
+                                <div class="w-px h-10 bg-neutral-gray/30"></div>
+                            <?php endif; ?>
+
+                            <!-- Compass animation -->
+                            <div data-aos="fade-in" data-aos-delay="600">
+                                <svg class="w-9 h-9 text-[#bd7a4e] animate-[spin_25s_linear_infinite] opacity-70"
+                                    viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="24" cy="24" r="20" stroke-dasharray="4 3" />
+                                    <polygon points="24,8 27,24 24,28 21,24" fill="currentColor" opacity="0.7" />
+                                    <polygon points="24,40 27,24 24,20 21,24" fill="currentColor" opacity="0.2" />
+                                    <circle cx="24" cy="24" r="3" fill="currentColor" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Highlights -->
+                    <?php if (!empty($features) && is_array($features)) : ?>
+                        <div class="space-y-4">
+                            <?php foreach ($features as $index => $item) :
+                                $delay = 100 + ($index * 150);
+                            ?>
+                                <div data-aos="fade-left" data-aos-duration="700" data-aos-delay="<?php echo $delay; ?>"
+                                    class="flex items-start gap-4 md:gap-6 p-5 transition-all duration-500">
+                                    <div class="text-primary">
+                                        <svg viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                            class="w-[40px] md:w-[67px] h-auto">
+                                            <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M15.9492 0.949219L65.948 50.9473" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#38464C" stroke-width="2.68001" />
+                                            <path d="M15.9492 0.949219L65.948 50.9473" stroke="#DC973C" stroke-width="2.68001" />
+                                            <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#B76739" stroke-width="2.68001" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-body text-base text-dark mb-2 transition-colors duration-300">
+                                            <?php echo esc_html($item['feature_title'] ?? ''); ?>
+                                        </h3>
+                                        <?php if (!empty($item['feature_description'])) : ?>
+                                            <p class="font-body text-sm font-light text-dark leading-relaxed">
+                                                <?php echo esc_html($item['feature_description']); ?>
+                                            </p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <!-- 3. Gallery (Embla Carousel) -->
-    <section class="pb-20" data-aos="fade-in">
-        <div class="embla-gallery w-full">
-            <div class="embla overflow-hidden cursor-grab active:cursor-grabbing">
-                <div class="embla__container flex">
-                    <?php foreach ($gallery_images as $img): ?>
-                        <div class="embla__slide flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0">
-                            <img src="<?php echo esc_url($img); ?>" alt="Gallery Image"
-                                class="w-full h-[300px] object-cover">
-                            <p class="font-body text-base text-dark mb-2 transition-colors duration-300">The
-                                Sillar Route</p>
-                        </div>
-                    <?php endforeach; ?>
+    <?php if ($journey_gallery && is_array($journey_gallery) && !empty($journey_gallery)) : ?>
+        <section class="pb-20" data-aos="fade-in">
+            <div class="embla-gallery w-full">
+                <div class="embla overflow-hidden cursor-grab active:cursor-grabbing">
+                    <div class="embla__container flex">
+                        <?php foreach ($journey_gallery as $img): ?>
+                            <div class="embla__slide flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0">
+                                <img src="<?php echo esc_url($img['url']); ?>" alt="<?php echo esc_attr($img['alt']); ?>"
+                                    class="w-full h-[300px] object-cover">
+                                <?php if (!empty($img['caption'])) : ?>
+                                    <p class="font-body text-base text-dark mb-2 transition-colors duration-300"><?php echo esc_html($img['caption']); ?></p>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    <?php endif; ?>
 
     <!-- 4. Main Body: Itinerary Layout -->
     <section class="py-20 bg-cream">
@@ -225,63 +200,94 @@ $gallery_images = [
                 <aside class="lg:col-span-3 lg:sticky lg:top-32" data-aos="fade-right">
                     <nav class="mb-8 font-body text-dark text-sm md:text-base">
                         <ul>
-                            <li class="border-b border-neutral-gray/30">
-                                <a href="#itinerary"
-                                    class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors font-semibold text-dark">
-                                    <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
-                                    </svg>
-                                    Itinerary
-                                </a>
-                            </li>
-                            <li class="border-b border-neutral-gray/30">
-                                <a href="#included"
-                                    class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                    <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Included / no included
-                                </a>
-                            </li>
-                            <li class="border-b border-neutral-gray/30">
-                                <a href="#price"
-                                    class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                    <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M12 8V7m0 1v8m0 0v1m0-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Price
-                                </a>
-                            </li>
-                            <li class="border-b border-neutral-gray/30">
-                                <a href="#hotels"
-                                    class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                    <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1">
-                                        </path>
-                                    </svg>
-                                    Hotels
-                                </a>
-                            </li>
-                            <li class="border-b border-neutral-gray/30">
-                                <a href="#activities"
-                                    class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                    <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1">
-                                        </path>
-                                    </svg>
-                                    Other Activities
-                                </a>
-                            </li>
+                            <?php if ($itinerary_group && !empty($itinerary_group['list_of_tours'])) : ?>
+                                <li class="border-b border-neutral-gray/30">
+                                    <a href="#itinerary"
+                                        class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors font-semibold text-dark">
+                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                        </svg>
+                                        Itinerary
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php
+                            $inc_not_inc = $itinerary_group['table_includednot_included'] ?? null;
+                            if ($inc_not_inc && (!empty($inc_not_inc['included_list']) || !empty($inc_not_inc['not_included_list']))) : ?>
+                                <li class="border-b border-neutral-gray/30">
+                                    <a href="#included"
+                                        class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
+                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Included / no included
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php if ($prices_group && !empty($prices_group['tables_for_prices'])) : ?>
+                                <li class="border-b border-neutral-gray/30">
+                                    <a href="#price"
+                                        class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
+                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M12 8V7m0 1v8m0 0v1m0-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        Price
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php if (!empty($selected_hotels)) : ?>
+                                <li class="border-b border-neutral-gray/30">
+                                    <a href="#hotels"
+                                        class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
+                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1">
+                                            </path>
+                                        </svg>
+                                        Hotels
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php if (!empty($selected_activities)) : ?>
+                                <li class="border-b border-neutral-gray/30">
+                                    <a href="#activities"
+                                        class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
+                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1">
+                                            </path>
+                                        </svg>
+                                        Other Activities
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php if ($faq_group && !empty($faq_group['list_of_questions'])) : ?>
+                                <li class="border-b border-neutral-gray/30">
+                                    <a href="#faq"
+                                        class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
+                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                            </path>
+                                        </svg>
+                                        FAQ
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                         </ul>
                     </nav>
 
@@ -331,444 +337,322 @@ $gallery_images = [
                 <div class="lg:col-span-9">
 
                     <!-- Itinerary Accordion -->
-                    <div id="itinerary" class="scroll-mt-32 mb-20" data-aos="fade-up">
-                        <div class="space-y-6">
-                            <?php
-                            // Mock Itinerary Days matching the design
-                            for ($i = 1; $i <= 4; $i++):
-                                $open = ($i === 1) ? 'true' : 'false';
-                                $day_title = ($i === 1) ? 'Arrival in Mancora' : 'Activities of Your Choice';
+                    <?php if ($itinerary_group && !empty($itinerary_group['list_of_tours'])) :
+                        $tours = $itinerary_group['list_of_tours'];
+                    ?>
+                        <div id="itinerary" class="scroll-mt-32 mb-20" data-aos="fade-up">
+                            <div class="space-y-6">
+                                <?php foreach ($tours as $index => $tour) :
+                                    $open = ($index === 0) ? 'true' : 'false';
                                 ?>
-                                <div x-data="{ expanded: <?php echo $open; ?> }"
-                                    class="border-b border-neutral-gray/20 pb-6 mb-6">
-                                    <button @click="expanded = !expanded"
-                                        class="w-full flex items-center justify-between text-left transition-colors hover:text-[#bd7a4e] group">
-                                        <div class="flex items-center gap-4">
-                                            <!-- Colored Icon Cross -->
-                                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M0 6.12292L19.23 25.3524" stroke="#5D7F6E" />
-                                                <path d="M5.76953 0.354126L24.9995 19.5836" stroke="#5D7F6E" />
-                                                <path d="M0 6.12292L19.23 25.3524" stroke="#38464C" />
-                                                <path d="M5.76953 0.354126L24.9995 19.5836" stroke="#DC973C" />
-                                                <path d="M5.76953 25.3517L24.9995 6.12223" stroke="#5D7F6E" />
-                                                <path d="M0 19.583L19.23 0.353548" stroke="#5D7F6E" />
-                                                <path d="M5.76953 25.3517L24.9995 6.12223" stroke="#5D7F6E" />
-                                                <path d="M0 19.583L19.23 0.353548" stroke="#B76739" />
-                                                <rect x="11.5391" y="11.8916" width="1.92279" height="1.92273"
-                                                    fill="#423931" />
-                                            </svg>
-
-                                            <h4
-                                                class="font-heading text-2xl md:text-3xl text-dark group-hover:text-[#bd7a4e] transition-colors">
-                                                Day <?php echo $i; ?>: <?php echo $day_title; ?></h4>
-                                        </div>
-                                        <svg class="w-5 h-5 transform transition-transform duration-300 shrink-0 text-neutral-gray group-hover:text-dark"
-                                            :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M19 9l-7 7-7-7"></path>
-                                        </svg>
-                                    </button>
-
-                                    <div x-show="expanded" x-collapse x-cloak>
-                                        <div class="pt-8 pl-12 pr-4"> <!-- Indented content -->
-                                            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_gallery_0<?php echo $i; ?>.webp"
-                                                alt="Day Image"
-                                                class="w-full h-auto aspect-[21/9] object-cover rounded-lg mb-8 shadow-sm">
-
-                                            <div class="flex items-center gap-3 mb-6">
-                                                <svg class="w-6 h-6 text-dark shrink-0" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                    </path>
+                                    <div x-data="{ expanded: <?php echo $open; ?> }"
+                                        x-init="$watch('expanded', value => value && setTimeout(() => { 
+                                             const headerHeight = 100;
+                                             const buffer = 24;
+                                             const rect = $el.getBoundingClientRect();
+                                             const elTop = rect.top + window.pageYOffset;
+                                             const elHeight = rect.height;
+                                             const viewHeight = window.innerHeight;
+                                             const availableHeight = viewHeight - headerHeight;
+                                             const targetTop = elHeight > availableHeight 
+                                                 ? elTop - headerHeight - buffer 
+                                                 : elTop - (availableHeight - elHeight) / 2 - headerHeight;
+                                             window.scrollTo({ top: targetTop, behavior: 'smooth' });
+                                         }, 300))"
+                                        class="border-b border-neutral-gray/20 pb-6 mb-6">
+                                        <button @click="expanded = !expanded"
+                                            class="w-full flex items-center justify-between text-left transition-colors hover:text-[#bd7a4e] group">
+                                            <div class="flex items-center gap-4">
+                                                <!-- Colored Icon Cross -->
+                                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M0 6.12292L19.23 25.3524" stroke="#5D7F6E" />
+                                                    <path d="M5.76953 0.354126L24.9995 19.5836" stroke="#5D7F6E" />
+                                                    <path d="M0 6.12292L19.23 25.3524" stroke="#38464C" />
+                                                    <path d="M5.76953 0.354126L24.9995 19.5836" stroke="#DC973C" />
+                                                    <path d="M5.76953 25.3517L24.9995 6.12223" stroke="#5D7F6E" />
+                                                    <path d="M0 19.583L19.23 0.353548" stroke="#5D7F6E" />
+                                                    <path d="M5.76953 25.3517L24.9995 6.12223" stroke="#5D7F6E" />
+                                                    <path d="M0 19.583L19.23 0.353548" stroke="#B76739" />
+                                                    <rect x="11.5391" y="11.8916" width="1.92279" height="1.92273"
+                                                        fill="#423931" />
                                                 </svg>
-                                                <h5 class="font-body text-xl text-dark font-medium">Welcome to Mancora!</h5>
-                                            </div>
 
-                                            <p
-                                                class="font-body text-neutral-black text-[15px] font-light leading-relaxed mb-6">
-                                                Upon arrival in Talara airport , Upon arrival, private transfer to Arennas
-                                                Mancora Hotel. Spend the day at leisure settling in and enjoying the
-                                                pristine beach surroundings.
-                                            </p>
-                                            <p
-                                                class="font-body text-neutral-black text-[15px] font-light leading-relaxed mb-10">
-                                                Evening at leisure
-                                            </p>
-
-                                            <div class="flex items-center gap-4 mb-4">
-                                                <div class="flex items-center gap-2 border-r border-neutral-gray/30 pr-4">
-                                                    <svg class="w-6 h-6 text-dark" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="1.5"
-                                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="1.5"
-                                                            d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z">
-                                                        </path>
-                                                    </svg>
-                                                </div>
-                                                <h6 class="font-heading text-xl md:text-2xl text-dark">Hotel & Meals</h6>
+                                                <h4
+                                                    class="font-heading text-2xl md:text-3xl text-dark group-hover:text-[#bd7a4e] transition-all duration-300"
+                                                    :class="expanded ? 'scale-[1.02] text-[#bd7a4e]' : 'scale-100'">
+                                                    Day <?php echo $index + 1; ?>: <?php echo esc_html($tour['itinerary_title']); ?></h4>
                                             </div>
-                                            <div class="font-body text-neutral-black text-sm font-light space-y-2">
-                                                <p><strong class="font-semibold text-dark">Overnight:</strong> Arennas
-                                                    Mancora
-                                                    Hotel</p>
-                                                <p><strong class="font-semibold text-dark">Meals Included:</strong> None</p>
+                                            <svg class="w-5 h-5 transform transition-transform duration-300 shrink-0 text-neutral-gray group-hover:text-dark"
+                                                :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                    d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </button>
+
+                                        <div x-show="expanded" x-collapse x-cloak>
+                                            <div class="pt-8 pl-12 pr-4"> <!-- Indented content -->
+                                                <?php if (!empty($tour['itinerary_image']) && is_array($tour['itinerary_image'])) : ?>
+                                                    <img src="<?php echo esc_url($tour['itinerary_image']['url']); ?>"
+                                                        alt="<?php echo esc_attr($tour['itinerary_image']['alt']); ?>"
+                                                        class="w-full h-auto aspect-[21/9] object-cover rounded-lg mb-8 shadow-sm">
+                                                <?php endif; ?>
+
+                                                <?php if (!empty($tour['list_of_activities']) && is_array($tour['list_of_activities'])) :
+                                                    foreach ($tour['list_of_activities'] as $activity) :
+                                                ?>
+                                                        <div class="flex items-center gap-3 mb-6 mt-8 shadow-none">
+                                                            <?php if (!empty($activity['icon']) || !empty($activity['icon_2'])) : ?>
+                                                                <div class="flex items-center gap-2">
+                                                                    <?php if (!empty($activity['icon'])) : ?>
+                                                                        <img src="<?php echo esc_url($activity['icon']['url']); ?>"
+                                                                            alt="<?php echo esc_attr($activity['icon']['alt']); ?>"
+                                                                            class="w-6 h-6 object-contain shrink-0">
+                                                                    <?php endif; ?>
+                                                                    <?php if (!empty($activity['icon_2'])) : ?>
+                                                                        <img src="<?php echo esc_url($activity['icon_2']['url']); ?>"
+                                                                            alt="<?php echo esc_attr($activity['icon_2']['alt']); ?>"
+                                                                            class="w-6 h-6 object-contain shrink-0">
+                                                                    <?php endif; ?>
+                                                                </div>
+                                                            <?php else: ?>
+                                                                <!-- <svg class="w-6 h-6 text-dark shrink-0" fill="none" stroke="currentColor"
+                                                                    viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                    </path>
+                                                                </svg> -->
+                                                            <?php endif; ?>
+                                                            <h5 class="font-body text-xl text-dark font-medium"><?php echo esc_html($activity['activity_title']); ?></h5>
+                                                        </div>
+
+                                                        <?php if (!empty($activity['activity_description'])) : ?>
+                                                            <div class="font-body text-neutral-black text-[15px] font-light leading-relaxed mb-6">
+                                                                <?php echo wp_kses_post($activity['activity_description']); ?>
+                                                            </div>
+                                                        <?php endif; ?>
+                                                <?php endforeach;
+                                                endif; ?>
+
                                             </div>
                                         </div>
                                     </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($itinerary_group && !empty($itinerary_group['table_includednot_included'])) :
+                        $inc_not_inc = $itinerary_group['table_includednot_included'];
+                        $included = isset($inc_not_inc['included_list']) ? $inc_not_inc['included_list'] : null;
+                        $not_included = isset($inc_not_inc['not_included_list']) ? $inc_not_inc['not_included_list'] : null;
+                        if (!empty($included) || !empty($not_included)) :
+                    ?>
+                            <!-- Included / Not Included -->
+                            <div id="included" class="scroll-mt-32 mb-24" data-aos="fade-up">
+                                <div class="mb-12 text-center">
+                                    <h3 class="font-heading text-3xl md:text-4xl text-dark">Included / Not Included</h3>
                                 </div>
-                            <?php endfor; ?>
-                        </div>
-                    </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
+                                    <!-- Included -->
+                                    <?php if (!empty($included) && is_array($included)) : ?>
+                                        <div>
+                                            <h4 class="font-heading italic font-semibold text-dark text-xl mb-6">Included</h4>
+                                            <ul class="space-y-3 font-body text-neutral-black font-light text-lg">
+                                                <?php foreach ($included as $item) : ?>
+                                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
+                                                        <span class="mt-[0.3em] shrink-0">
+                                                            <svg width="23" height="17" viewBox="0 0 23 17" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                                <rect x="7.30212" y="2.05615" width="3.75789" height="3.75789"
+                                                                    transform="rotate(45 7.30212 2.05615)" fill="#76A78E" />
+                                                                <path d="M0.702698 7.97068L7.5277 14.7114L21.7027 0.711426"
+                                                                    stroke="#76A78E" stroke-width="2" />
+                                                            </svg>
+                                                        </span>
+                                                        <span class="min-w-0">
+                                                            <?php echo esc_html($item['item'] ?? ''); ?>
+                                                        </span>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+                                    <?php endif; ?>
 
-                    <!-- Included / Not Included -->
-                    <div id="included" class="scroll-mt-32 mb-24" data-aos="fade-up">
-                        <div class="mb-12 text-center">
-                            <h3 class="font-heading text-3xl md:text-4xl text-dark">Included / Not Included</h3>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
-                            <!-- Included -->
-                            <div>
-                                <h4 class="font-heading italic font-semibold text-dark text-xl mb-6">Included</h4>
-                                <ul class="space-y-3 font-body text-neutral-black font-light text-lg">
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg width="23" height="17" viewBox="0 0 23 17" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                <rect x="7.30212" y="2.05615" width="3.75789" height="3.75789"
-                                                    transform="rotate(45 7.30212 2.05615)" fill="#76A78E" />
-                                                <path d="M0.702698 7.97068L7.5277 14.7114L21.7027 0.711426"
-                                                    stroke="#76A78E" stroke-width="2" />
-                                            </svg>
-                                        </span>
-
-                                        <span class="min-w-0">
-                                            Lodging accommodations according to itinerary.
-                                        </span>
-                                    </li>
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg width="23" height="17" viewBox="0 0 23 17" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                <rect x="7.30212" y="2.05615" width="3.75789" height="3.75789"
-                                                    transform="rotate(45 7.30212 2.05615)" fill="#76A78E" />
-                                                <path d="M0.702698 7.97068L7.5277 14.7114L21.7027 0.711426"
-                                                    stroke="#76A78E" stroke-width="2" />
-                                            </svg>
-                                        </span>
-
-                                        <span class="min-w-0">
-                                            Meals according to itinerary.
-                                        </span>
-                                    </li>
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg width="23" height="17" viewBox="0 0 23 17" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                <rect x="7.30212" y="2.05615" width="3.75789" height="3.75789"
-                                                    transform="rotate(45 7.30212 2.05615)" fill="#76A78E" />
-                                                <path d="M0.702698 7.97068L7.5277 14.7114L21.7027 0.711426"
-                                                    stroke="#76A78E" stroke-width="2" />
-                                            </svg>
-                                        </span>
-
-                                        <span class="min-w-0">
-                                            Airport transfers.
-                                        </span>
-                                    </li>
-                                </ul>
+                                    <!-- Not Included -->
+                                    <?php if (!empty($not_included) && is_array($not_included)) : ?>
+                                        <div>
+                                            <h4 class="font-heading italic font-semibold text-dark text-xl mb-6">Not Included</h4>
+                                            <ul class="space-y-3 font-body text-neutral-black font-light text-lg">
+                                                <?php foreach ($not_included as $item) : ?>
+                                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
+                                                        <span class="mt-[0.3em] shrink-0">
+                                                            <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 md:w-6 h-auto">
+                                                                <rect y="6.70703" width="3" height="3" fill="#C45454" />
+                                                                <rect x="19" y="6.70703" width="3" height="3" fill="#C45454" />
+                                                                <path d="M4 14.707L18 0.707031" stroke="#C25454" stroke-width="2" />
+                                                                <path d="M4 0.707031L18 14.707" stroke="#C25454" stroke-width="2" />
+                                                            </svg>
+                                                        </span>
+                                                        <span class="min-w-0">
+                                                            <?php echo esc_html($item['item'] ?? ''); ?>
+                                                        </span>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                            <!-- Not Included -->
-                            <div>
-                                <h4 class="font-heading italic font-semibold text-dark text-xl mb-6">Not Included</h4>
-                                <ul class="space-y-3 font-body text-neutral-black font-light text-lg">
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                class="w-5 md:w-6 h-auto">
-                                                <rect y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <rect x="19" y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <path d="M4 14.707L18 0.707031" stroke="#C25454" stroke-width="2" />
-                                                <path d="M4 0.707031L18 14.707" stroke="#C25454" stroke-width="2" />
-                                            </svg>
-                                        </span>
-
-                                        <span class="min-w-0">
-                                            International and domestic flights, and airport taxes.
-                                        </span>
-                                    </li>
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                class="w-5 md:w-6 h-auto">
-                                                <rect y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <rect x="19" y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <path d="M4 14.707L18 0.707031" stroke="#C25454" stroke-width="2" />
-                                                <path d="M4 0.707031L18 14.707" stroke="#C25454" stroke-width="2" />
-                                            </svg>
-                                        </span>
-
-                                        <span class="min-w-0">
-                                            International and domestic flights, and airport taxes.
-                                        </span>
-                                    </li>
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                class="w-5 md:w-6 h-auto">
-                                                <rect y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <rect x="19" y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <path d="M4 14.707L18 0.707031" stroke="#C25454" stroke-width="2" />
-                                                <path d="M4 0.707031L18 14.707" stroke="#C25454" stroke-width="2" />
-                                            </svg>
-                                        </span>
-
-                                        <span class="min-w-0">
-                                            International and domestic flights, and airport taxes.
-                                        </span>
-                                    </li>
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                class="w-5 md:w-6 h-auto">
-                                                <rect y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <rect x="19" y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <path d="M4 14.707L18 0.707031" stroke="#C25454" stroke-width="2" />
-                                                <path d="M4 0.707031L18 14.707" stroke="#C25454" stroke-width="2" />
-                                            </svg>
-                                        </span>
-                                        <span class="min-w-0">
-                                            Drinks and tips.
-                                        </span>
-                                    </li>
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                class="w-5 md:w-6 h-auto">
-                                                <rect y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <rect x="19" y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <path d="M4 14.707L18 0.707031" stroke="#C25454" stroke-width="2" />
-                                                <path d="M4 0.707031L18 14.707" stroke="#C25454" stroke-width="2" />
-                                            </svg>
-                                        </span>
-                                        <span class="min-w-0">
-                                            Transfers to/from Lima airport.
-                                        </span>
-                                    </li>
-                                    <li class="flex gap-3 text-base md:text-lg leading-relaxed">
-                                        <span class="mt-[0.3em] shrink-0">
-                                            <svg viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                class="w-6 h-auto">
-                                                <rect y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <rect x="19" y="6.70703" width="3" height="3" fill="#C45454" />
-                                                <path d="M4 14.707L18 0.707031" stroke="#C25454" stroke-width="2" />
-                                                <path d="M4 0.707031L18 14.707" stroke="#C25454" stroke-width="2" />
-                                            </svg>
-                                        </span>
-                                        <span class="min-w-0">
-                                            Processing and wire transfer fees.
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endif;
+                    endif; ?>
 
                     <!-- Pricing Options -->
-                    <div id="price" class="scroll-mt-32 mb-32" data-aos="fade-up">
-                        <div class="text-center mb-10">
-                            <h3 class="font-heading text-3xl md:text-4xl text-dark mb-4">Prices per Person</h3>
-                            <p class="font-body text-xs text-[#626262] italic max-w-md mx-auto leading-relaxed">Based
-                                on double occupancy, private tours, and selected hotels.<br>Rates may vary according to
-                                season and partner availability.</p>
+                    <?php if ($prices_group && !empty($prices_group['tables_for_prices'])) : ?>
+                        <div id="price" class="scroll-mt-32 mb-32" data-aos="fade-up">
+                            <div class="text-center mb-10">
+                                <h3 class="font-heading text-3xl md:text-4xl text-dark mb-4">Pricing Options</h3>
+                                <?php if (!empty($prices_group['description'])) : ?>
+                                    <p class="font-body text-xs text-[#626262] italic max-w-md mx-auto leading-relaxed"><?php echo esc_html($prices_group['description']); ?></p>
+                                <?php endif; ?>
+                            </div>
+                            <div class="max-w-2xl mx-auto space-y-14">
+                                <?php foreach ($prices_group['tables_for_prices'] as $table_row) :
+                                    $table = $table_row['prices_table'];
+                                    if ($table && !empty($table['body'])) :
+                                ?>
+                                        <div class="overflow-x-auto">
+                                            <table class="w-full text-left border-collapse">
+                                                <?php if (!empty($table['header'])) : ?>
+                                                    <thead>
+                                                        <tr class="border-b-2 border-dark text-dark">
+                                                            <?php foreach ($table['header'] as $index => $header) : ?>
+                                                                <th class="py-3 <?php echo $index === 0 ? 'pr-6' : 'text-right'; ?> font-normal uppercase">
+                                                                    <?php echo esc_html($header['c']); ?>
+                                                                </th>
+                                                            <?php endforeach; ?>
+                                                        </tr>
+                                                    </thead>
+                                                <?php endif; ?>
+                                                <tbody class="font-body text-[15px] font-light text-[#626262]">
+                                                    <?php foreach ($table['body'] as $row) : ?>
+                                                        <tr class="border-b border-neutral-gray/30">
+                                                            <?php foreach ($row as $index => $cell) : ?>
+                                                                <td class="py-5 <?php echo $index === 0 ? 'pr-6' : 'text-right'; ?>">
+                                                                    <?php echo esc_html($cell['c']); ?>
+                                                                </td>
+                                                            <?php endforeach; ?>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                <?php endif;
+                                endforeach; ?>
+                            </div>
                         </div>
-                        <div class="max-w-2xl mx-auto space-y-14">
-                            <!-- Low Season -->
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="border-b-2 border-dark text-dark">
-                                        <th class="py-3 pr-6 font-normal">LOW SEASON</th>
-                                        <th class="py-3 text-right font-normal">Price Per Person</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="font-body text-[15px] font-light text-[#626262]">
-                                    <tr class="border-b border-neutral-gray/30">
-                                        <td class="py-5 pr-6">Ocean Front Room (double occupancy)</td>
-                                        <td class="py-5 text-right">USD 397</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <!-- High Season -->
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="border-b-2 border-dark text-dark">
-                                        <th class="py-3 pr-6 font-normal">HIGH SEASON</th>
-                                        <th class="py-3 text-right font-normal">Price Per Person</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="font-body text-[15px] font-light text-[#626262]">
-                                    <tr class="border-b border-neutral-gray/30">
-                                        <td class="py-5 pr-6">Ocean Front Room (double occupancy)</td>
-                                        <td class="py-5 text-right">USD 505</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <?php endif; ?>
 
                     <!-- Hotels -->
-                    <div id="hotels" class="scroll-mt-32 mb-20" data-aos="fade-up">
-                        <div class="text-center mb-14">
-                            <h3 class="font-heading text-4xl md:text-5xl text-dark">Hotels</h3>
+                    <?php if (!empty($selected_hotels)) : ?>
+                        <div id="hotels" class="scroll-mt-32 mb-20" data-aos="fade-up">
+                            <div class="text-center mb-14">
+                                <h3 class="font-heading text-4xl md:text-5xl text-dark">Hotels</h3>
+                            </div>
+
+                            <div class="mb-10">
+                                <?php foreach ($selected_hotels as $hotel_post) :
+                                    $hotel_id = $hotel_post->ID;
+                                    $rating = get_field('rating', $hotel_id);
+                                    $h_location = get_field('location', $hotel_id);
+                                    $h_video = get_field('video', $hotel_id);
+                                    $h_services = get_field('list_of_services', $hotel_id);
+                                    $h_web_ratings = $rating['rating_web'] ?? [];
+
+                                    $amenities = [];
+                                    if ($h_services) {
+                                        foreach ($h_services as $service) {
+                                            $amenities[] = [
+                                                'icon' => $service['icon'] ? '<img src="' . esc_url($service['icon']['url']) . '" class="w-5 h-5" alt="' . esc_attr($service['icon']['alt']) . '">' : '',
+                                                'text' => $service['service']
+                                            ];
+                                        }
+                                    }
+
+                                    get_template_part('template-parts/components/card-hotel', null, [
+                                        'image' => get_the_post_thumbnail_url($hotel_id, 'large'),
+                                        'title' => get_the_title($hotel_id),
+                                        'stars' => $rating['stars'] ?? 5,
+                                        'type' => 'Hotel', // You might want to pull this from a taxonomy later
+                                        'web_ratings' => $h_web_ratings,
+                                        'location' => $h_location,
+                                        'description' => get_the_excerpt($hotel_id),
+                                        'video_link' => $h_video ? $h_video['url'] : '#',
+                                        'amenities' => $amenities
+                                    ]);
+                                endforeach; ?>
+                            </div>
                         </div>
-
-                        <!-- Destination Group: Máncora -->
-                        <div class="mb-10">
-                            <h4
-                                class="font-body font-semibold text-dark text-lg border-b-2 border-dark inline-block pb-0.5 mb-10">
-                                Máncora</h4>
-
-                            <?php
-                            $icon_beach = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>';
-                            $icon_spa = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>';
-                            $icon_rest = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>';
-                            $icon_bfast = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3v.01M12 3v.01M15 3v.01M21 21v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5h18z"></path></svg>';
-                            $icon_pool = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>';
-                            $icon_wifi = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>';
-                            $icon_fitness = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>';
-
-                            get_template_part('template-parts/components/card-hotel', null, [
-                                'image' => get_template_directory_uri() . '/assets/images/intense_gallery_01.webp',
-                                'title' => 'Kichic',
-                                'stars' => 4,
-                                'type' => 'Boutique',
-                                'expedia' => '9.6',
-                                'booking' => '9.7',
-                                'location' => 'Máncora, Piura',
-                                'description' => 'An adult-only boutique hotel in Las Pocitas, blending nature-inspired design with a peaceful seaside setting—ideal for relaxation, yoga, and fine dining by the Pacific.',
-                                'video_link' => '#',
-                                'amenities' => [
-                                    ['icon' => $icon_beach, 'text' => 'Beachfront Location'],
-                                    ['icon' => $icon_spa, 'text' => 'Spa services'],
-                                    ['icon' => $icon_rest, 'text' => 'Restaurant bar'],
-                                    ['icon' => $icon_bfast, 'text' => 'Free Breakfast'],
-                                    ['icon' => $icon_pool, 'text' => 'Outdoor pool'],
-                                    ['icon' => $icon_wifi, 'text' => 'Free WiFi'],
-                                ]
-                            ]);
-
-                            get_template_part('template-parts/components/card-hotel', null, [
-                                'image' => get_template_directory_uri() . '/assets/images/intense_gallery_02.webp',
-                                'title' => 'Hotel Arennas Mancora',
-                                'stars' => 5,
-                                'type' => 'Resort',
-                                'expedia' => '9.8',
-                                'booking' => '9.4',
-                                'location' => 'Máncora, Piura',
-                                'description' => 'Elegant seaside hotel offering panoramic ocean views and exceptional Peruvian cuisine. Immersed in the cloud forest, blending luxury with the natural beauty of northern Peru.',
-                                'video_link' => '#',
-                                'amenities' => [
-                                    ['icon' => $icon_beach, 'text' => 'Beachfront Location'],
-                                    ['icon' => $icon_spa, 'text' => 'Spa services'],
-                                    ['icon' => $icon_rest, 'text' => 'Restaurant bar'],
-                                    ['icon' => $icon_bfast, 'text' => 'Free Breakfast'],
-                                    ['icon' => $icon_pool, 'text' => 'Outdoor pool'],
-                                    ['icon' => $icon_fitness, 'text' => 'Fitness center'],
-                                ]
-                            ]);
-                            ?>
-                        </div>
-                    </div>
+                    <?php endif; ?>
 
                     <!-- Other Activities -->
-                    <div id="activities" class="scroll-mt-32 mb-20" data-aos="fade-up">
-                        <div
-                            class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-6 mb-10 overflow-hidden">
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp"
-                                alt="" class="mx-auto md:mb-10">
-                            <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit"
-                                data-aos="fade-up">Other Activities</h2>
-                            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp"
-                                alt="" class="mx-auto mb-10 hidden md:block">
-                        </div>
-
-                        <!-- Slider Wrapper -->
-                        <div class="embla-activities relative">
-                            <!-- Section Title & Navigation -->
-                            <div class="flex items-center justify-between mb-8">
-                                <h4 class="font-body font-semibold text-dark text-lg border-b-2 border-dark pb-0.5">Lima
-                                </h4>
-
-                                <div class="flex gap-6">
-                                    <button
-                                        class="embla__prev outline-none text-[#bd7a4e] hover:text-dark transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-8 h-8"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M15 18l-6-6 6-6" />
-                                        </svg>
-                                    </button>
-                                    <button
-                                        class="embla__next outline-none text-[#bd7a4e] hover:text-dark transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-8 h-8"
-                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M9 18l6-6-6-6" />
-                                        </svg>
-                                    </button>
-                                </div>
+                    <?php if (!empty($selected_activities)) : ?>
+                        <div id="activities" class="scroll-mt-32 mb-20" data-aos="fade-up">
+                            <div
+                                class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-6 mb-10 overflow-hidden">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp"
+                                    alt="" class="mx-auto md:mb-10">
+                                <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit"
+                                    data-aos="fade-up">Explore More</h2>
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp"
+                                    alt="" class="mx-auto mb-10 hidden md:block">
                             </div>
 
-                            <!-- Viewport Embla -->
-                            <div class="embla overflow-hidden cursor-grab active:cursor-grabbing pb-8">
-                                <div class="embla__container flex flex-row -ml-6 md:-ml-8">
-                                    <!-- Slide 1 -->
-                                    <div
-                                        class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8">
-                                        <?php get_template_part('template-parts/components/card-activity', null, [
-                                            'image' => get_template_directory_uri() . '/assets/images/intense_gallery_02.webp',
-                                            'title' => 'Lunch & Tour at Larco Café & Museum',
-                                        ]); ?>
+                            <!-- Slider Wrapper -->
+                            <div class="embla-activities relative">
+                                <!-- Section Title & Navigation -->
+                                <div class="flex items-center justify-end mb-8">
+                                    <div class="flex gap-6">
+                                        <button
+                                            class="embla__prev outline-none text-[#bd7a4e] hover:text-dark transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-8 h-8"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M15 18l-6-6 6-6" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            class="embla__next outline-none text-[#bd7a4e] hover:text-dark transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-8 h-8"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M9 18l6-6-6-6" />
+                                            </svg>
+                                        </button>
                                     </div>
-                                    <!-- Slide 2 -->
-                                    <div
-                                        class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8">
-                                        <?php get_template_part('template-parts/components/card-activity', null, [
-                                            'image' => get_template_directory_uri() . '/assets/images/intense_gallery_03.webp',
-                                            'title' => 'Tasting Tour Lima',
-                                        ]); ?>
-                                    </div>
-                                    <!-- Slide 3 -->
-                                    <div
-                                        class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8">
-                                        <?php get_template_part('template-parts/components/card-activity', null, [
-                                            'image' => get_template_directory_uri() . '/assets/images/intense_gallery_04.webp',
-                                            'title' => 'Peruvian Paso Horse Show and Lunch in Hacienda Los Ficus',
-                                            'advisor_text' => 'Ask your Travel Advisor to add this experience'
-                                        ]); ?>
-                                    </div>
-                                    <!-- Slide 4 -->
-                                    <div
-                                        class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8">
-                                        <?php get_template_part('template-parts/components/card-activity', null, [
-                                            'image' => get_template_directory_uri() . '/assets/images/intense_gallery_01.webp',
-                                            'title' => 'Private Culinary Experience in a Local Home',
-                                            'advisor_text' => 'Ask your Travel Advisor to add this experience'
-                                        ]); ?>
+                                </div>
+
+                                <!-- Viewport Embla -->
+                                <div class="embla overflow-hidden cursor-grab active:cursor-grabbing pb-8">
+                                    <div class="embla__container flex flex-row -ml-6 md:-ml-8">
+                                        <?php foreach ($selected_activities as $activity_post) :
+                                            $act_id = is_object($activity_post) ? $activity_post->ID : $activity_post;
+                                            $act_image = get_the_post_thumbnail_url($act_id, 'large');
+                                        ?>
+                                            <div class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8">
+                                                <?php get_template_part('template-parts/components/card-activity', null, [
+                                                    'image' => $act_image,
+                                                    'title' => get_the_title($act_id),
+                                                ]); ?>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
                 </div> <!-- End Main Content Col -->
 
@@ -846,7 +730,7 @@ $gallery_images = [
                 ];
 
                 foreach ($itineraries as $index => $itin):
-                    ?>
+                ?>
                     <?php get_template_part('template-parts/components/card-itinerary', null, [
                         'image' => $itin['img'],
                         'title' => $itin['title'],
@@ -864,7 +748,7 @@ $gallery_images = [
     </section>
 
     <!-- 8. Booking Form Section -->
-    <section id="booking-form" class="py-24 bg-[#FAFAFA] border-t border-neutral-gray/20">
+    <section id="booking-form" class="py-24 border-t border-neutral-gray/20">
         <div class="container-site max-w-6xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
@@ -1130,6 +1014,22 @@ $gallery_images = [
             </div>
         </div>
     </section>
+
+    <!-- 5. FAQ -->
+    <?php if ($faq_group && !empty($faq_group['list_of_questions'])) :
+        $faqs = [];
+        foreach ($faq_group['list_of_questions'] as $item) {
+            $faqs[] = [
+                'question' => $item['question'],
+                'response' => $item['response']
+            ];
+        }
+        get_template_part('template-parts/home/section-faq', null, [
+            'title' => $faq_group['title_faqs'] ?: 'FAQ',
+            'description' => $faq_group['description'] ?: '',
+            'faqs' => $faqs
+        ]);
+    endif; ?>
 
 </main>
 

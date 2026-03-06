@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template Name: Journeys Page
  *
@@ -39,17 +40,17 @@ get_header();
 
                 <!-- Mock Filters -->
                 <div class="flex flex-wrap justify-start gap-6 md:gap-12" data-aos="fade-up" data-aos-delay="100">
-                    <button class="font-body text-sm font-bold text-dark border-b-2 border-dark pb-1">All
+                    <button class="font-body text-sm font-medium text-dark border-b-2 border-dark pb-1">All
                         Journeys</button>
                     <button
                         class="font-body text-sm font-medium text-neutral-gray hover:text-dark transition-colors pb-1">Signature<br><span
                             class="text-xs normal-case text-neutral-gray/60 font-normal">15-10 days</span></button>
                     <button
-                        class="font-body text-sm font-medium text-neutral-gray hover:text-dark uppercase tracking-wide transition-colors pb-1">Design
+                        class="font-body text-sm text-neutral-gray hover:text-dark transition-colors pb-1">Design
                         it<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">9-5
                             days</span></button>
                     <button
-                        class="font-body text-sm font-medium text-neutral-gray hover:text-dark uppercase tracking-wide transition-colors pb-1">Treasures<br><span
+                        class="font-body text-sm font-medium text-neutral-gray hover:text-dark transition-colors pb-1">Treasures<br><span
                             class="text-xs normal-case text-neutral-gray/60 font-normal">4-2 days</span></button>
                 </div>
             </div>
@@ -134,7 +135,7 @@ get_header();
                 ];
 
                 foreach ($itineraries as $index => $itin):
-                    ?>
+                ?>
                     <?php get_template_part('template-parts/components/card-itinerary', null, [
                         'image' => $itin['img'],
                         'title' => $itin['title'],
