@@ -14,8 +14,10 @@ get_header();
     <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20" data-aos="fade-in">
         <!-- Background Image -->
         <div class="absolute inset-0 z-0">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_banner_home.webp"
-                alt="Machu Picchu" class="w-full h-full object-cover">
+            <!-- <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_banner_home.webp"
+                alt="Machu Picchu" class="w-full h-full object-cover"> -->
+            <video src="<?php echo get_template_directory_uri(); ?>/assets/videos/intense_video_home_hero.mp4" autoplay
+                muted loop class="w-full h-full object-cover"></video>
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 

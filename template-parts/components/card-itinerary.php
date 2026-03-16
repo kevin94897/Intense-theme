@@ -109,9 +109,11 @@ $badges       = $args['badges']       ?? [];
 
         <!-- Button -->
         <div class="mt-auto">
-            <a href="<?php echo esc_url($link); ?>" class="btn btn-outline w-full rounded-full border-neutral-black text-neutral-black hover:bg-neutral-black hover:text-white transition-colors duration-300 text-base py-3">
-                <?php echo esc_html($link_text); ?>
-            </a>
+            <?php get_template_part('template-parts/components/btn-outline', null, [
+                'text' => esc_html($link_text),
+                'href' => esc_url($link),
+                'class_extra' => 'w-full',
+            ]); ?>
         </div>
     </div>
 </article>

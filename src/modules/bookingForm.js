@@ -106,6 +106,7 @@ export default function bookingForm() {
             
             this.isSubmitting = false;
             this.submitSuccess = true;
+            window.dispatchEvent(new CustomEvent('ccp:quoteSuccess'));
             
             // clear form (opcional)
             // Object.keys(this.formData).forEach(k => this.formData[k] = (k === 'adults') ? '1' : (k === 'children' || k === 'enfants') ? '0' : '');
