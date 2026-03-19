@@ -766,46 +766,46 @@ $selected_activities = array_filter($selected_activities);
                     <form x-data="bookingForm()" @submit="submitForm" class="space-y-8 md:space-y-10">
                         <!-- Name Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            <div class="relative">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.firstName }">
                                 <input type="text" x-model="formData.firstName" @input="validateField('firstName')"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] transition-colors placeholder:text-[#88786F]"
+                                    class="input-field"
                                     placeholder="First Name">
                                 <span x-show="errors.firstName" x-text="errors.firstName"
-                                    class="absolute left-0 -bottom-5 text-xs text-red-500"></span>
+                                    class="input-error-msg"></span>
                             </div>
-                            <div class="relative">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.lastName }">
                                 <input type="text" x-model="formData.lastName" @input="validateField('lastName')"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] transition-colors placeholder:text-[#88786F]"
+                                    class="input-field"
                                     placeholder="Last Name">
                                 <span x-show="errors.lastName" x-text="errors.lastName"
-                                    class="absolute left-0 -bottom-5 text-xs text-red-500"></span>
+                                    class="input-error-msg"></span>
                             </div>
                         </div>
 
                         <!-- Email Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            <div class="relative">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.email }">
                                 <input type="email" x-model="formData.email" @input="validateField('email')"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] transition-colors placeholder:text-[#88786F]"
+                                    class="input-field"
                                     placeholder="Email">
                                 <span x-show="errors.email" x-text="errors.email"
-                                    class="absolute left-0 -bottom-5 text-xs text-red-500"></span>
+                                    class="input-error-msg"></span>
                             </div>
-                            <div class="relative">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.confirmEmail }">
                                 <input type="email" x-model="formData.confirmEmail"
                                     @input="validateField('confirmEmail')"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] transition-colors placeholder:text-[#88786F]"
+                                    class="input-field"
                                     placeholder="Confirm Email">
                                 <span x-show="errors.confirmEmail" x-text="errors.confirmEmail"
-                                    class="absolute left-0 -bottom-5 text-xs text-red-500"></span>
+                                    class="input-error-msg"></span>
                             </div>
                         </div>
 
                         <!-- Date & Trip Length Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            <div class="relative">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.startDate }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-5 h-5 text-[#88786F]" fill="none" stroke="currentColor"
+                                    <svg class="w-5 h-5 text-neutral-gray" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
                                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -814,44 +814,44 @@ $selected_activities = array_filter($selected_activities);
                                 </div>
                                 <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
                                     x-model="formData.startDate" @input="validateField('startDate')"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] transition-colors placeholder:text-[#88786F] cursor-pointer"
+                                    class="input-field cursor-pointer"
                                     placeholder="Star Date">
                                 <span x-show="errors.startDate" x-text="errors.startDate"
-                                    class="absolute left-0 -bottom-5 text-xs text-red-500"></span>
+                                    class="input-error-msg"></span>
                             </div>
-                            <div class="relative">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-[#88786F]" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </div>
                                 <select x-model="formData.tripLength" @change="validateField('tripLength')"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] appearance-none rounded-none cursor-pointer placeholder:text-[#88786F]"
-                                    :class="{'text-[#88786F]': !formData.tripLength, 'text-dark': formData.tripLength}">
+                                    class="input-field"
+                                    :class="{'text-dark/40': !formData.tripLength, 'text-dark': formData.tripLength}">
                                     <option value="" disabled selected hidden>Trip Length</option>
                                     <option value="1-4">1 to 4 days</option>
                                     <option value="5-8">5 to 8 days</option>
                                     <option value="9-14">9 to 14 days</option>
                                 </select>
                                 <span x-show="errors.tripLength" x-text="errors.tripLength"
-                                    class="absolute left-0 -bottom-5 text-xs text-red-500"></span>
+                                    class="input-error-msg"></span>
                             </div>
                         </div>
 
                         <!-- Passengers Row -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                            <div class="relative">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-[#88786F]" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </div>
                                 <select x-model="formData.adults" @change="validateField('adults')"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] appearance-none rounded-none cursor-pointer">
+                                    class="input-field">
                                     <option value="0" disabled>Adults</option>
                                     <option value="1">1 Adult</option>
                                     <option value="2">2 Adults</option>
@@ -859,18 +859,18 @@ $selected_activities = array_filter($selected_activities);
                                     <option value="4+">4+ Adults</option>
                                 </select>
                                 <span x-show="errors.adults" x-text="errors.adults"
-                                    class="absolute left-0 -bottom-5 text-xs text-red-500"></span>
+                                    class="input-error-msg"></span>
                             </div>
-                            <div class="relative">
+                            <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-[#88786F]" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </div>
                                 <select x-model="formData.children"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] appearance-none rounded-none cursor-pointer">
+                                    class="input-field">
                                     <option value="0" disabled>Children</option>
                                     <option value="none">0 Children</option>
                                     <option value="1">1 Child</option>
@@ -878,17 +878,17 @@ $selected_activities = array_filter($selected_activities);
                                     <option value="3+">3+ Children</option>
                                 </select>
                             </div>
-                            <div class="relative">
+                            <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-[#88786F]" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </div>
                                 <select x-model="formData.enfants"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] appearance-none rounded-none cursor-pointer">
-                                    <option value="0" disabled>Enfants ( < 1 )</option>
+                                    class="input-field">
+                                    <option value="0" disabled>Enfants ( &lt; 1 )</option>
                                     <option value="none">0 Enfants</option>
                                     <option value="1">1 Enfant</option>
                                     <option value="2">2 Enfants</option>
@@ -897,15 +897,15 @@ $selected_activities = array_filter($selected_activities);
                         </div>
 
                         <!-- Hotel Category Row -->
-                        <div class="pt-2 relative">
-                            <p class="font-body text-sm text-[#88786F] mb-6">Hotel Category</p>
+                        <div class="pt-2 input-wrapper" :class="{ 'has-error': errors.hotelCategory }">
+                            <p class="font-body text-sm text-neutral-gray mb-6">Hotel Category</p>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                                 <!-- Boutique -->
                                 <div class="cursor-pointer group" @click="setHotelCategory('boutique')">
                                     <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'boutique' ? 'text-dark font-medium' : 'text-[#88786F] group-hover:text-dark'">Boutique</span>
+                                        :class="formData.hotelCategory === 'boutique' ? 'text-dark font-medium' : 'text-neutral-gray group-hover:text-dark'">Boutique</span>
                                     <div class="flex justify-center gap-1.5 transition-colors"
-                                        :class="formData.hotelCategory === 'boutique' ? 'text-dark' : 'text-[#a0948c] group-hover:text-dark'">
+                                        :class="formData.hotelCategory === 'boutique' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
                                         <template x-for="i in 5"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -915,9 +915,9 @@ $selected_activities = array_filter($selected_activities);
                                 <!-- Luxury -->
                                 <div class="cursor-pointer group" @click="setHotelCategory('luxury')">
                                     <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'luxury' ? 'text-dark font-medium' : 'text-[#88786F] group-hover:text-dark'">Luxury</span>
+                                        :class="formData.hotelCategory === 'luxury' ? 'text-dark font-medium' : 'text-neutral-gray group-hover:text-dark'">Luxury</span>
                                     <div class="flex justify-center gap-1.5 transition-colors"
-                                        :class="formData.hotelCategory === 'luxury' ? 'text-dark' : 'text-[#a0948c] group-hover:text-dark'">
+                                        :class="formData.hotelCategory === 'luxury' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
                                         <template x-for="i in 5"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -927,9 +927,9 @@ $selected_activities = array_filter($selected_activities);
                                 <!-- Superior -->
                                 <div class="cursor-pointer group" @click="setHotelCategory('superior')">
                                     <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'superior' ? 'text-dark font-medium' : 'text-[#88786F] group-hover:text-dark'">Superior</span>
+                                        :class="formData.hotelCategory === 'superior' ? 'text-dark font-medium' : 'text-neutral-gray group-hover:text-dark'">Superior</span>
                                     <div class="flex justify-center gap-1.5 transition-colors"
-                                        :class="formData.hotelCategory === 'superior' ? 'text-dark' : 'text-[#a0948c] group-hover:text-dark'">
+                                        :class="formData.hotelCategory === 'superior' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
                                         <template x-for="i in 4"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -939,10 +939,10 @@ $selected_activities = array_filter($selected_activities);
                                 <!-- Best Value -->
                                 <div class="cursor-pointer group" @click="setHotelCategory('value')">
                                     <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'value' ? 'text-dark font-medium' : 'text-[#88786F] group-hover:text-dark'">Best
+                                        :class="formData.hotelCategory === 'value' ? 'text-dark font-medium' : 'text-neutral-gray group-hover:text-dark'">Best
                                         Value</span>
                                     <div class="flex justify-center gap-1.5 transition-colors"
-                                        :class="formData.hotelCategory === 'value' ? 'text-dark' : 'text-[#a0948c] group-hover:text-dark'">
+                                        :class="formData.hotelCategory === 'value' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
                                         <template x-for="i in 3"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
                                                 <path
                                                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -951,27 +951,27 @@ $selected_activities = array_filter($selected_activities);
                                 </div>
                             </div>
                             <span x-show="errors.hotelCategory" x-text="errors.hotelCategory"
-                                class="absolute left-0 -bottom-5 text-xs text-red-500"></span>
+                                class="input-error-msg"></span>
                         </div>
 
                         <!-- WhatsApp & Hear about us Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 pt-6">
-                            <div class="relative">
+                            <div class="input-wrapper">
                                 <input type="text" x-model="formData.whatsapp"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] transition-colors placeholder:text-[#88786F]"
+                                    class="input-field"
                                     placeholder="WhatsApp (optional)">
                             </div>
-                            <div class="relative">
+                            <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-[#88786F]" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </div>
                                 <select x-model="formData.hearAboutUs"
-                                    class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] appearance-none rounded-none cursor-pointer placeholder:text-[#88786F]"
-                                    :class="{'text-[#88786F]': !formData.hearAboutUs, 'text-dark': formData.hearAboutUs}">
+                                    class="input-field"
+                                    :class="{'text-dark/40': !formData.hearAboutUs, 'text-dark': formData.hearAboutUs}">
                                     <option value="" disabled selected hidden>How do you hear about us</option>
                                     <option value="google">Google Search</option>
                                     <option value="friend">Friend/Family</option>
@@ -981,19 +981,19 @@ $selected_activities = array_filter($selected_activities);
                         </div>
 
                         <!-- Mensaje Row -->
-                        <div class="pt-4 relative">
+                        <div class="pt-4 input-wrapper">
                             <textarea rows="2" x-model="formData.mensaje"
-                                class="w-full bg-transparent border-b border-[#a0948c] pb-2 font-body text-dark focus:outline-none focus:border-[#6B5A51] transition-colors placeholder:text-[#88786F] resize-none"
+                                class="input-field"
                                 placeholder="Mensaje"></textarea>
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="pt-6 md:pt-10">
+                        <div class="pt-6 md:pt-10 flex justify-center md:justify-start">
                             <button type="submit"
-                                class="w-full md:w-auto px-12 py-3 rounded-full border border-dark text-dark font-body hover:bg-[#6B5A51] hover:text-white transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="btn-submit-intense w-full md:w-auto"
                                 :disabled="isSubmitting">
                                 <span x-show="!isSubmitting">Send Request</span>
-                                <span x-show="isSubmitting" class="flex items-center gap-2" style="display: none;">
+                                <span x-show="isSubmitting" class="flex items-center gap-2">
                                     <svg class="animate-spin h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg"
                                         fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"

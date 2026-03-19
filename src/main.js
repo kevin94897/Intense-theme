@@ -4,6 +4,10 @@ import './css/app.css'
 import Alpine from 'alpinejs'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import EmblaCarousel from 'embla-carousel'
+
+window.AOS = AOS
+window.EmblaCarousel = EmblaCarousel
 
 import { initFormularios } from './modules/formularios.js'
 import { initSliders } from './modules/slider.js'

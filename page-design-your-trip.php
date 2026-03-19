@@ -66,43 +66,43 @@ get_header();
 
                     <!-- Name Row -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                        <div class="relative">
+                        <div class="input-wrapper" :class="{ 'has-error': errors.firstName }">
                             <input type="text" x-model="formData.firstName" @input="validateField('firstName')"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm text-dark focus:outline-none focus:border-primary transition-colors placeholder:text-dark/40"
+                                class="input-field"
                                 placeholder="First Name">
                             <span x-show="errors.firstName" x-text="errors.firstName"
-                                class="absolute left-0 -bottom-5 text-xs text-red-400 font-body"></span>
+                                class="input-error-msg"></span>
                         </div>
-                        <div class="relative">
+                        <div class="input-wrapper" :class="{ 'has-error': errors.lastName }">
                             <input type="text" x-model="formData.lastName" @input="validateField('lastName')"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm text-dark focus:outline-none focus:border-primary transition-colors placeholder:text-dark/40"
+                                class="input-field"
                                 placeholder="Last Name">
                             <span x-show="errors.lastName" x-text="errors.lastName"
-                                class="absolute left-0 -bottom-5 text-xs text-red-400 font-body"></span>
+                                class="input-error-msg"></span>
                         </div>
                     </div>
 
                     <!-- Email Row -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                        <div class="relative">
+                        <div class="input-wrapper" :class="{ 'has-error': errors.email }">
                             <input type="email" x-model="formData.email" @input="validateField('email')"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm text-dark focus:outline-none focus:border-primary transition-colors placeholder:text-dark/40"
+                                class="input-field"
                                 placeholder="Email">
                             <span x-show="errors.email" x-text="errors.email"
-                                class="absolute left-0 -bottom-5 text-xs text-red-400 font-body"></span>
+                                class="input-error-msg"></span>
                         </div>
-                        <div class="relative">
+                        <div class="input-wrapper" :class="{ 'has-error': errors.confirmEmail }">
                             <input type="email" x-model="formData.confirmEmail" @input="validateField('confirmEmail')"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm text-dark focus:outline-none focus:border-primary transition-colors placeholder:text-dark/40"
+                                class="input-field"
                                 placeholder="Confirm Email">
                             <span x-show="errors.confirmEmail" x-text="errors.confirmEmail"
-                                class="absolute left-0 -bottom-5 text-xs text-red-400 font-body"></span>
+                                class="input-error-msg"></span>
                         </div>
                     </div>
 
                     <!-- Date & Trip Length Row -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                        <div class="relative">
+                        <div class="input-wrapper" :class="{ 'has-error': errors.startDate }">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
@@ -112,19 +112,19 @@ get_header();
                             <input type="text"
                                 onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'"
                                 x-model="formData.startDate" @input="validateField('startDate')"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm text-dark focus:outline-none focus:border-primary transition-colors placeholder:text-dark/40 cursor-pointer"
+                                class="input-field cursor-pointer"
                                 placeholder="Start Date">
                             <span x-show="errors.startDate" x-text="errors.startDate"
-                                class="absolute left-0 -bottom-5 text-xs text-red-400 font-body"></span>
+                                class="input-error-msg"></span>
                         </div>
-                        <div class="relative">
+                        <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </div>
                             <select x-model="formData.tripLength" @change="validateField('tripLength')"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm focus:outline-none focus:border-primary appearance-none rounded-none cursor-pointer"
+                                class="input-field"
                                 :class="formData.tripLength ? 'text-dark' : 'text-dark/40'">
                                 <option value="" disabled selected hidden>Trip Length</option>
                                 <option value="1-4">1 to 4 days</option>
@@ -133,20 +133,20 @@ get_header();
                                 <option value="15+">15+ days</option>
                             </select>
                             <span x-show="errors.tripLength" x-text="errors.tripLength"
-                                class="absolute left-0 -bottom-5 text-xs text-red-400 font-body"></span>
+                                class="input-error-msg"></span>
                         </div>
                     </div>
 
                     <!-- Passengers Row -->
                     <div class="grid grid-cols-3 gap-6 md:gap-10">
-                        <div class="relative">
+                        <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </div>
                             <select x-model="formData.adults" @change="validateField('adults')"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm focus:outline-none focus:border-primary appearance-none rounded-none cursor-pointer"
+                                class="input-field"
                                 :class="(formData.adults && formData.adults !== '0') ? 'text-dark' : 'text-dark/40'">
                                 <option value="0" disabled>Adults</option>
                                 <option value="1">1 Adult</option>
@@ -155,16 +155,16 @@ get_header();
                                 <option value="4+">4+ Adults</option>
                             </select>
                             <span x-show="errors.adults" x-text="errors.adults"
-                                class="absolute left-0 -bottom-5 text-xs text-red-400 font-body"></span>
+                                class="input-error-msg"></span>
                         </div>
-                        <div class="relative">
+                        <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </div>
                             <select x-model="formData.children"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm focus:outline-none focus:border-primary appearance-none rounded-none cursor-pointer"
+                                class="input-field"
                                 :class="(formData.children && formData.children !== '0') ? 'text-dark' : 'text-dark/40'">
                                 <option value="0" disabled>Children</option>
                                 <option value="none">0 Children</option>
@@ -173,14 +173,14 @@ get_header();
                                 <option value="3+">3+ Children</option>
                             </select>
                         </div>
-                        <div class="relative">
+                        <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </div>
                             <select x-model="formData.enfants"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm focus:outline-none focus:border-primary appearance-none rounded-none cursor-pointer"
+                                class="input-field"
                                 :class="(formData.enfants && formData.enfants !== '0') ? 'text-dark' : 'text-dark/40'">
                                 <option value="0" disabled>Infants (&lt;1)</option>
                                 <option value="none">0 Infants</option>
@@ -282,19 +282,19 @@ get_header();
 
                     <!-- WhatsApp & Hear about us -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 pt-2">
-                        <div class="relative">
+                        <div class="input-wrapper">
                             <input type="text" x-model="formData.whatsapp"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm text-dark focus:outline-none focus:border-primary transition-colors placeholder:text-dark/40"
+                                class="input-field"
                                 placeholder="WhatsApp (optional)">
                         </div>
-                        <div class="relative">
+                        <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
                                 </svg>
                             </div>
                             <select x-model="formData.hearAboutUs"
-                                class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm focus:outline-none focus:border-primary appearance-none rounded-none cursor-pointer"
+                                class="input-field"
                                 :class="formData.hearAboutUs ? 'text-dark' : 'text-dark/40'">
                                 <option value="" disabled selected hidden>How did you hear about us</option>
                                 <option value="google">Google Search</option>
@@ -307,19 +307,19 @@ get_header();
                     </div>
 
                     <!-- Message -->
-                    <div class="pt-2">
+                    <div class="input-wrapper">
                         <textarea rows="2" x-model="formData.mensaje"
-                            class="w-full bg-transparent border-b border-neutral-gray pb-2 font-body text-sm text-dark focus:outline-none focus:border-primary transition-colors placeholder:text-dark/40 resize-none"
+                            class="input-field"
                             placeholder="Message (optional)"></textarea>
                     </div>
 
                     <!-- Submit -->
                     <div class="pt-4 flex justify-center">
                         <button type="submit"
-                            class="px-10 py-2.5 rounded-full border border-dark/50 text-dark font-body text-sm hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 flex items-center gap-2 disabled:opacity-40"
+                            class="btn-submit-intense"
                             :disabled="isSubmitting">
                             <span x-show="!isSubmitting">Send Request</span>
-                            <span x-show="isSubmitting" class="flex items-center gap-2" style="display:none;">
+                            <span x-show="isSubmitting" class="flex items-center gap-2">
                                 <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>

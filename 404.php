@@ -9,7 +9,7 @@ get_header();
 ?>
 
 <main id="main" class="site-main" role="main">
-    <div class="container-site py-32 text-center" data-aos="fade-up">
+    <div class="container-site py-40 text-center" data-aos="fade-up">
 
         <!-- Número 404 decorativo -->
         <p class="font-heading text-[160px] leading-none text-primary/20 select-none mb-8">

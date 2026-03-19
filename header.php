@@ -13,7 +13,7 @@
 <body <?php body_class('bg-cream'); ?>>
     <?php wp_body_open(); ?>
 
-    <?php $is_light_header = is_page_template('page-contact.php') || is_page('176'); ?>
+    <?php $is_light_header = is_page_template('page-contact.php') || is_page_template('page-blog.php') || is_page_template('page-politics.php') || is_page_template('page-faqs.php'); ?>
 
     <!-- Site Header -->
     <header class="site-header <?php echo $is_light_header ? 'is-light relative bg-white' : 'absolute top-0 left-0 right-0 z-50'; ?>" role="banner">
@@ -109,13 +109,13 @@
                         ?>
 
                         <!-- CTA en header -->
-                        <a href="<?php echo esc_url(home_url('/contacto/')); ?>" class="btn btn-primary text-sm">
+                        <a href="<?php echo esc_url(home_url('/design-your-trip/')); ?>" class="btn btn-primary text-sm">
                             <?php esc_html_e('Design your trip', 'intense-nerd-theme'); ?>
                         </a>
                     </div>
 
                     <!-- Botón CTA -->
-                    <a href="<?php echo esc_url(home_url('/contacto/')); ?>"
+                    <a href="<?php echo esc_url(home_url('/design-your-trip/')); ?>"
                         class="btn btn-primary text-sm hidden sm:block lg:hidden">
                         <?php esc_html_e('Design your trip', 'intense-nerd-theme'); ?>
                     </a>
@@ -124,9 +124,9 @@
                     <button type="button" class="lg:hidden flex flex-col gap-1 p-2 cursor-pointer" data-menu-toggle
                         aria-label="<?php esc_attr_e('Abrir menú', 'intense-nerd-theme'); ?>" aria-expanded="false"
                         aria-controls="mobile-menu">
-                        <span class="block w-6 h-[2px] <?php echo $is_light_header ? 'bg-dark' : 'bg-white'; ?> transition-all duration-200"></span>
-                        <span class="block w-6 h-[2px] <?php echo $is_light_header ? 'bg-dark' : 'bg-white'; ?> transition-all duration-200"></span>
-                        <span class="block w-6 h-[2px] <?php echo $is_light_header ? 'bg-dark' : 'bg-white'; ?> transition-all duration-200"></span>
+                        <span class="block w-6 h-[2px] bg-white transition-all duration-200"></span>
+                        <span class="block w-6 h-[2px] bg-white transition-all duration-200"></span>
+                        <span class="block w-6 h-[2px] bg-white transition-all duration-200"></span>
                     </button>
                 </nav>
 

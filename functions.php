@@ -179,3 +179,44 @@ add_filter('excerpt_more', 'intense_nerd_excerpt_more');
 
 // ── Ocultar barra de administración en el frontend ────────────────────────────
 add_filter('show_admin_bar', '__return_false');
+
+add_action('wp_ajax_load_more_posts', 'load_more_posts_handler');
+add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts_handler');
+
+function load_more_posts_handler()
+{
+    $page     = isset($_POST['page']) ? intval($_POST['page']) : 2;
+    $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+
+    $args = [
+        'post_type'      => 'post',
+        'posts_per_page' => 8,
+        'paged'          => $page,
+    ];
+
+    if ($category) {
+        $args['category_name'] = $category;
+    }
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) {
+        $count_offset = ($page - 1) * 8; // para mantener el patrón de clases
+
+        while ($query->have_posts()) : $query->the_post();
+            $count_offset++;
+            $pos = (($count_offset - 1) % 10) + 1;
+
+            $classes = 'news-card h-full';
+            if ($pos === 4)       $classes = 'news-card large large-left';
+            elseif ($pos === 5)   $classes = 'news-card pos-5';
+            elseif ($pos === 10)  $classes = 'news-card large large-right';
+
+            get_template_part('template-parts/content', 'blog-item', ['classes' => $classes]);
+        endwhile;
+
+        wp_reset_postdata();
+    }
+
+    wp_die(); // Obligatorio en handlers AJAX de WordPress
+}

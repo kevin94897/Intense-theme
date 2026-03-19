@@ -5,6 +5,9 @@ export function initSliders() {
     if (emblaNodes.length === 0) return
 
     emblaNodes.forEach(emblaNode => {
+        // Skip #teamEmbla as it has its own initialization in section-conocenos.php
+        if (emblaNode.id === 'teamEmbla') return
+
         // Obtenemos su wrapper padre para buscar sus propios botones
         const wrapper = emblaNode.closest('.embla-gallery') || emblaNode.parentElement;
         

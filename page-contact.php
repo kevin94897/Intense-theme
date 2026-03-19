@@ -12,7 +12,7 @@ get_header(); ?>
     <section class="pt-20 pb-14 md:pt-28 md:pb-16 bg-cream text-center" data-aos="fade-up">
         <div class="container-site max-w-3xl">
 
-            <h1 class="font-heading text-6xl md:text-7xl text-dark mb-6 leading-tight">
+            <h1 class="font-heading text-4xl md:text-6xl text-dark mb-6 leading-tight">
                 Contact Us
             </h1>
 
@@ -47,8 +47,8 @@ get_header(); ?>
     <!-- ══════════════════════════════════════════════
          2. CONTACT FORM  — minimal, centered, full max-w-3xl
     ══════════════════════════════════════════════ -->
-    <section class="pb-24 bg-cream">
-        <div class="container-site max-w-3xl mx-auto px-4" data-aos="fade-up" data-aos-delay="80">
+    <section class="pb-0 bg-cream">
+        <div class="container-site !max-w-3xl mx-auto px-4" data-aos="fade-up" data-aos-delay="80">
 
             <form
                 x-data="contactForm()"
@@ -56,12 +56,12 @@ get_header(); ?>
                 class="space-y-10">
 
                 <!-- First / Last Name -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                     <div class="input-wrapper" :class="{ 'has-error': errors.firstName }">
                         <input type="text"
                             x-model="formData.firstName"
                             @blur="validateField('firstName')"
-                            class="input-field" placeholder=" ">
+                            class="input-field" placeholder="First Name">
                         <label class="input-label">First Name</label>
                         <span x-show="errors.firstName" x-text="errors.firstName" class="input-error-msg"></span>
                     </div>
@@ -69,7 +69,7 @@ get_header(); ?>
                         <input type="text"
                             x-model="formData.lastName"
                             @blur="validateField('lastName')"
-                            class="input-field" placeholder=" ">
+                            class="input-field" placeholder="Last Name">
                         <label class="input-label">Last Name</label>
                         <span x-show="errors.lastName" x-text="errors.lastName" class="input-error-msg"></span>
                     </div>
@@ -79,17 +79,17 @@ get_header(); ?>
                 <div class="input-wrapper">
                     <input type="tel"
                         x-model="formData.telephone"
-                        class="input-field" placeholder=" ">
+                        class="input-field" placeholder="Telephone / Whatsapp (optional)">
                     <label class="input-label">Telephone / Whatsapp (optional)</label>
                 </div>
 
                 <!-- Email / Confirm Email -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                     <div class="input-wrapper" :class="{ 'has-error': errors.email }">
                         <input type="email"
                             x-model="formData.email"
                             @blur="validateField('email')"
-                            class="input-field" placeholder=" ">
+                            class="input-field" placeholder="Email">
                         <label class="input-label">Email</label>
                         <span x-show="errors.email" x-text="errors.email" class="input-error-msg"></span>
                     </div>
@@ -97,7 +97,7 @@ get_header(); ?>
                         <input type="email"
                             x-model="formData.confirmEmail"
                             @blur="validateField('confirmEmail')"
-                            class="input-field" placeholder=" ">
+                            class="input-field" placeholder="Confirm Email">
                         <label class="input-label">Confirm Email</label>
                         <span x-show="errors.confirmEmail" x-text="errors.confirmEmail" class="input-error-msg"></span>
                     </div>
@@ -107,20 +107,19 @@ get_header(); ?>
                 <div class="input-wrapper">
                     <textarea
                         x-model="formData.mensaje"
-                        class="input-field resize-none"
+                        class="input-field"
                         rows="2"
-                        placeholder=" "></textarea>
-                    <label class="input-label">Message</label>
+                        placeholder="Message (optional)"></textarea>
                 </div>
 
                 <!-- Submit -->
                 <div class="flex justify-center pt-2">
                     <button
                         type="submit"
-                        class="btn btn-outline px-16 py-3 rounded-full font-body body-small tracking-wider disabled:opacity-40 flex items-center gap-2"
+                        class="btn-submit-intense"
                         :disabled="isSubmitting">
                         <span x-show="!isSubmitting">Send Message</span>
-                        <span x-show="isSubmitting" style="display:none;" class="flex items-center gap-2">
+                        <span x-show="isSubmitting" class="flex items-center gap-2">
                             <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
@@ -137,15 +136,15 @@ get_header(); ?>
     <!-- ══════════════════════════════════════════════
          3. FAQ  — image left | accordion right
     ══════════════════════════════════════════════ -->
-    <section class="py-20 md:py-28 bg-cream border-t border-neutral-gray/20">
+    <section class="py-20 md:py-28 bg-cream">
         <div class="container-site">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
                 <!-- Left: Photo -->
                 <div class="relative" data-aos="fade-right">
-                    <div class="rounded-2xl overflow-hidden aspect-[4/5] shadow-xl">
+                    <div class="rounded-2xl overflow-hidden shadow-xl">
                         <img
-                            src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_faq_vicuna.webp"
+                            src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_faq_contact_img.webp"
                             alt="Vicuñas in the Peruvian highlands"
                             class="w-full h-full object-cover">
                     </div>
@@ -155,7 +154,7 @@ get_header(); ?>
                 <div data-aos="fade-left">
 
                     <!-- Title row -->
-                    <div class="flex items-center gap-4 mb-10">
+                    <div class="flex items-center gap-4 mb-10 justify-center">
                         <svg width="42" height="27" viewBox="0 0 65 41" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
                             <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z" stroke="#7B4424" stroke-width="1.12281"/>
                             <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z" fill="#B76739" stroke="#B76739" stroke-width="1.12281"/>
