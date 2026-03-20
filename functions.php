@@ -396,14 +396,13 @@ function intense_mega_journeys()
         $out = '';
         foreach ($items as $p) {
             $img = get_the_post_thumbnail_url($p->ID, 'medium');
-            $out .= '<div class="w-44 shrink-0">';
+            $out .= '<div class="w-[230px] shrink-0">';
             if ($img) {
-                $out .= '<a href="' . esc_url(get_permalink($p)) . '">'
-                    . '<img src="' . esc_url($img) . '" alt="' . esc_attr($p->post_title) . '" '
-                    . 'class="aspect-[3/4] w-full object-cover mb-2"></a>';
+                $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2 relative group">'
+                    . '<div class="w-[230px] h-[300px] shrink-0 bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden group-hover:opacity-90 transition-opacity" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>';
             } else {
-                $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
-                    . 'class="block aspect-[3/4] w-full bg-dark/10 mb-2"></a>';
+                $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2">'
+                    . '<div class="w-[230px] h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden"></div></a>';
             }
             $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
                 . 'class="text-sm font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline">'
@@ -437,18 +436,17 @@ function intense_mega_destinations()
 
     $out = '';
     foreach ($posts as $p) {
-        $img = get_the_post_thumbnail_url($p->ID, 'medium');
+        $img = get_the_post_thumbnail_url($p->ID, 'full');
         $out .= '<div>';
         if ($img) {
-            $out .= '<a href="' . esc_url(get_permalink($p)) . '">'
-                . '<img src="' . esc_url($img) . '" alt="' . esc_attr($p->post_title) . '" '
-                . 'class="aspect-[3/4] w-full object-cover mb-2"></a>';
+            $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2 relative group">'
+                . '<div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>';
         } else {
-            $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
-                . 'class="block aspect-[3/4] w-full bg-dark/10 mb-2"></a>';
+            $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2">'
+                . '<div class="w-full h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden"></div></a>';
         }
         $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
-            . 'class="text-sm font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline">'
+            . 'class="text-xs text-dark hover:text-primary transition-colors underline-offset-2 hover:underline">'
             . esc_html($p->post_title) . '</a>';
         $out .= '</div>';
     }
@@ -456,14 +454,13 @@ function intense_mega_destinations()
     // Mobile cards: 2-col image grid
     $mobile_cards = '';
     foreach ($posts as $p) {
-        $img = get_the_post_thumbnail_url($p->ID, 'medium');
+        $img = get_the_post_thumbnail_url($p->ID, 'full');
         $mobile_cards .= '<a href="' . esc_url(get_permalink($p)) . '" class="group block">';
         if ($img) {
-            $mobile_cards .= '<div class="aspect-square overflow-hidden mb-1.5">'
-                . '<img src="' . esc_url($img) . '" alt="' . esc_attr($p->post_title) . '" '
-                . 'class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"></div>';
+            $mobile_cards .= '<div class="w-full h-[200px] shrink-0 overflow-hidden rounded-lg mb-1.5 relative">'
+                . '<div class="w-full h-full bg-cover bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></div>';
         } else {
-            $mobile_cards .= '<div class="aspect-square bg-dark/10 mb-1.5"></div>';
+            $mobile_cards .= '<div class="w-full h-[200px] shrink-0 bg-dark/10 rounded-lg mb-1.5 relative overflow-hidden"></div>';
         }
         $mobile_cards .= '<span class="text-xs text-dark group-hover:text-primary transition-colors underline-offset-1 underline">'
             . esc_html($p->post_title) . '</span>';
@@ -522,15 +519,14 @@ function intense_mega_blog()
     // Render cards
     $cards_html = '';
     foreach ($featured as $p) {
-        $img = get_the_post_thumbnail_url($p->ID, 'medium');
+        $img = get_the_post_thumbnail_url($p->ID, 'full');
         $cards_html .= '<div>';
         if ($img) {
-            $cards_html .= '<a href="' . esc_url(get_permalink($p)) . '">'
-                . '<img src="' . esc_url($img) . '" alt="' . esc_attr($p->post_title) . '" '
-                . 'class="aspect-[4/3] w-full object-cover mb-2"></a>';
+            $cards_html .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2 relative group">'
+                . '<div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>';
         } else {
-            $cards_html .= '<a href="' . esc_url(get_permalink($p)) . '" '
-                . 'class="block aspect-[4/3] w-full bg-dark/10 mb-2"></a>';
+            $cards_html .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2">'
+                . '<div class="w-full h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden"></div></a>';
         }
         $cards_html .= '<a href="' . esc_url(get_permalink($p)) . '" '
             . 'class="text-sm font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline line-clamp-2 leading-snug">'

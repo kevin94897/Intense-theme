@@ -367,7 +367,7 @@
                             <div class="grid grid-cols-2 gap-3" id="mob-destination-cards">
                                 <?php for ($i = 0; $i < 6; $i++): ?>
                                     <div class="animate-pulse">
-                                        <div class="aspect-square bg-dark/10 rounded-lg mb-1.5"></div>
+                                        <div class="w-[230px] h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden mb-1.5"></div>
                                         <div class="h-3 bg-dark/10 rounded w-2/3"></div>
                                     </div>
                                 <?php endfor; ?>
@@ -500,8 +500,8 @@
                         </div>
                         <div class="flex gap-4" id="mega-journey-cards">
                             <?php for ($i = 0; $i < 3; $i++): ?>
-                                <div class="w-44 animate-pulse">
-                                    <div class="aspect-[3/4] bg-dark/10 rounded-lg mb-2"></div>
+                                <div class="w-[230px] shrink-0 animate-pulse">
+                                    <div class="w-[230px] h-[300px] bg-dark/10 rounded-lg relative overflow-hidden mb-2"></div>
                                     <div class="h-3 bg-dark/10 rounded w-3/4"></div>
                                 </div>
                             <?php endfor; ?>
@@ -540,7 +540,7 @@
                 <div class="grid grid-cols-6 gap-4" id="mega-destination-cards">
                     <?php for ($i = 0; $i < 6; $i++): ?>
                         <div class="animate-pulse">
-                            <div class="aspect-[3/4] bg-dark/10 rounded-lg mb-2"></div>
+                            <div class="w-[230px] h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden mb-2"></div>
                             <div class="h-3 bg-dark/10 rounded w-3/4"></div>
                         </div>
                     <?php endfor; ?>
@@ -586,7 +586,7 @@
                         <div class="grid grid-cols-4 gap-4" id="mega-blog-cards">
                             <?php for ($i = 0; $i < 4; $i++): ?>
                                 <div class="animate-pulse">
-                                    <div class="aspect-[4/3] bg-dark/10 rounded-lg mb-2"></div>
+                                    <div class="w-[230px] h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden mb-2"></div>
                                     <div class="h-3 bg-dark/10 rounded w-3/4"></div>
                                 </div>
                             <?php endfor; ?>
