@@ -36,7 +36,7 @@ $selected_activities = array_filter($selected_activities);
         $btn = $information['button_request'];
     ?>
         <!-- 1. Hero Section -->
-        <section class="relative h-[60vh] md:h-[80vh] flex items-end justify-start pb-20">
+        <section class="relative h-screen min-h-[600px] flex items-end justify-start pb-20">
             <!-- Background Image -->
             <div class="absolute inset-0 z-0">
                 <?php if ($hero_img) : ?>

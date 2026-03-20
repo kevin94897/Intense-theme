@@ -132,7 +132,7 @@
                     </div>
                     <div>
                         <button type="submit" class="w-full cursor-pointer btn-outline-light py-3 rounded-full text-sm font-medium transition-colors hover:bg-cream hover:text-dark">
-                            Go to Intense Bolivia
+                            Subscribe
                         </button>
                     </div>
                 </form>

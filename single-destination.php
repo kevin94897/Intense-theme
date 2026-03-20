@@ -38,8 +38,7 @@ get_header();
                     }
                     ?>
                 </div>
-                <div class="flex flex-col sm:flex-row items-center justify-start gap-4" data-aos="fade-up"
-                    data-aos-delay="300">
+                <div class="text-left" data-aos="fade-up" data-aos-delay="300">
                     <?php get_template_part('template-parts/components/btn-outline', null, [
                         'text' => 'Free Quote Request',
                         'color' => 'light',

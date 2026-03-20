@@ -26,8 +26,7 @@ get_header();
             <p class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10" data-aos="fade-up"
                 data-aos-delay="200">
                 Coast, Andes & Jungle: Peru is a land shaped by contrast and wonder, where three distinct worlds come together to create one authentic & extraordinary journey.</p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up"
-                data-aos-delay="300">
+            <div class="text-center" data-aos="fade-up" data-aos-delay="300">
                 <?php get_template_part('template-parts/components/btn-primary', null, [
                     'text' => 'Explore itineraries',
                     'href' => '#itineraries',

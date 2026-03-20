@@ -1,51 +1,64 @@
 /**
  * ══════════════════════════════════════════════════════════
- *  MEGAMENU — Alpine.js component
- *  Enqueue this file in footer via wp_enqueue_script()
- *  Depends on: Alpine.js (already loaded in theme)
+ *  MEGAMENU — Alpine.js
+ *  Los panels del megamenu desktop viven en #megamenu-portal
+ *  fuera del <header> para no interferir con el scroll.
+ *  El estado compartido se gestiona via Alpine.$store('mega').
  * ══════════════════════════════════════════════════════════
- *
- *  PHP side: localize this script with:
- *
- *  wp_localize_script('megamenu-js', 'megaMenuConfig', [
- *      'ajaxUrl' => admin_url('admin-ajax.php'),
- *  ]);
  */
 
 document.addEventListener("alpine:init", () => {
-  Alpine.data("megaMenu", () => ({
-    // ── Desktop mega ──────────────────────────────────────────
+  // ── Store compartido (header ↔ portal) ────────────────────────
+  Alpine.store("mega", {
     active: null,
-    loaded: {},
     _closeTimer: null,
 
-    // ── Mobile drawer ─────────────────────────────────────────
-    mobileOpen: false,
-    mobilePanel: null, // 'journeys' | 'destinations' | 'blog' | null
-
-    // ── Desktop: open / close ─────────────────────────────────
     toggle(key) {
-      if (this.active === key) {
-        this.closeAll();
-      } else {
-        this.active = key;
-        this.load(key, "desktop");
-      }
+      this.active = this.active === key ? null : key;
     },
 
-    closeAll() {
+    close() {
       this.active = null;
     },
 
     scheduleClose() {
-      this._closeTimer = setTimeout(() => this.closeAll(), 200);
+      this._closeTimer = setTimeout(() => this.close(), 200);
     },
 
     cancelClose() {
       clearTimeout(this._closeTimer);
     },
+  });
 
-    // ── Mobile: open drawer & slide to sub-panel ──────────────
+  // ── Componente del <header> ───────────────────────────────────
+  Alpine.data("megaMenu", () => ({
+    // Mobile
+    mobileOpen: false,
+    mobilePanel: null,
+    loaded: {},
+
+    // Getter para acceso al store desde el header
+    get active() {
+      return Alpine.store("mega").active;
+    },
+
+    // Desktop: delega al store
+    toggle(key) {
+      Alpine.store("mega").toggle(key);
+      this.load(key, "desktop");
+    },
+
+    closeAll() {
+      Alpine.store("mega").close();
+    },
+    scheduleClose() {
+      Alpine.store("mega").scheduleClose();
+    },
+    cancelClose() {
+      Alpine.store("mega").cancelClose();
+    },
+
+    // Mobile panel
     openMobilePanel(key) {
       this.mobilePanel = key;
       this.load(key, "mobile");
@@ -56,7 +69,7 @@ document.addEventListener("alpine:init", () => {
       this.mobilePanel = null;
     },
 
-    // ── Fetch via AJAX (once per key + context) ───────────────
+    // AJAX
     async load(key, context = "desktop") {
       const cacheKey = key + "_" + context;
       if (this.loaded[cacheKey]) return;
@@ -120,17 +133,43 @@ document.addEventListener("alpine:init", () => {
       }
     },
 
-    // ── Helper ────────────────────────────────────────────────
     _set(id, html) {
       const el = document.getElementById(id);
       if (el && html) el.innerHTML = html;
     },
 
-    // ── Body scroll lock ──────────────────────────────────────
     init() {
       this.$watch("mobileOpen", (val) => {
         document.body.classList.toggle("mobile-menu-open", val);
       });
     },
   }));
+
+  // ── Componente del portal (fuera del <header>) ────────────────
+  Alpine.data("megaMenuPortal", () => ({
+    get active() {
+      return Alpine.store("mega").active;
+    },
+    cancelClose() {
+      Alpine.store("mega").cancelClose();
+    },
+    scheduleClose() {
+      Alpine.store("mega").scheduleClose();
+    },
+  }));
 });
+
+// ── Posicionar panels debajo del <header> dinámicamente ──────────
+function positionMegaPanels() {
+  const header = document.querySelector(".site-header");
+  const panels = document.querySelectorAll(".mega-panel-portal");
+  if (!header || !panels.length) return;
+  const bottom = header.getBoundingClientRect().bottom;
+  panels.forEach((p) => {
+    p.style.top = bottom + "px";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", positionMegaPanels);
+window.addEventListener("scroll", positionMegaPanels, { passive: true });
+window.addEventListener("resize", positionMegaPanels, { passive: true });

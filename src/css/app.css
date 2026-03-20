@@ -76,13 +76,19 @@
     box-sizing: border-box;
   }
 
-  body {
-    font-family: var(--font-body);
-    color: var(--color-neutral-black);
-    background-color: var(--color-cream);
-    line-height: 1.6;
-    overflow-x: hidden;
-    /* Prevent horizontal scroll from AOS animations */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  /* Prevent horizontal scroll from AOS animations */
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-neutral-black);
+  background-color: var(--color-cream);
+  line-height: 1.6;
 
     /* Font Smoothing & Quality */
     text-rendering: optimizeLegibility;
@@ -773,11 +779,10 @@
   }
 
   /* AOS — asegurar visibilidad antes de que cargue */
-  [data-aos] {
+  :not(.site-header):not(.site-header *)[data-aos] {
     opacity: 0;
   }
-
-  [data-aos].aos-animate {
+  :not(.site-header):not(.site-header *)[data-aos].aos-animate {
     opacity: 1;
   }
 }

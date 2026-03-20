@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CTA Banner Component
  * Fetches data from ACF field group "Banner CTA"

@@ -12,7 +12,7 @@ get_header();
 <main id="primary" class="site-main">
 
     <!-- 1. Hero Section -->
-    <section class="relative h-[60vh] md:h-[80vh] flex items-center justify-center text-center">
+    <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20 aos-init aos-animate">
         <!-- Background Image -->
         <div class="absolute inset-0 z-0">
             <img src="<?php echo get_the_post_thumbnail_url(get_the_ID()); ?>" alt="Journeys Hero Background"
@@ -22,10 +22,10 @@ get_header();
 
         <!-- Content -->
         <div class="container-site relative z-10 px-4 mt-20 md:mt-0" data-aos="fade-up">
-            <h1 class="font-heading text-4xl md:text-6xl text-white mb-6">
+            <h1 class="font-heading text-4xl md:text-6xl text-white mb-6 text-center">
                 <?php the_title(); ?>
             </h1>
-            <div class="font-body text-sm md:text-xl text-white max-w-3xl mx-auto font-light leading-relaxed">
+            <div class="font-body text-sm md:text-xl text-white max-w-3xl mx-auto font-light leading-relaxed text-center">
                 <?php the_content(); ?>
             </div>
         </div>
