@@ -20,7 +20,7 @@ get_header();
         </div>
 
         <div class="container-site relative z-10 text-center px-4">
-            <h1 class="font-heading text-white text-5xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
+            <h1 class="font-heading text-white text-4xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
                 data-aos="fade-up" data-aos-delay="100">
                 "Weaving" Authentic Journeys since 2007
             </h1>

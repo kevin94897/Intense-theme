@@ -22,7 +22,7 @@ get_header();
         </div>
 
         <div class="container-site relative z-10 text-center px-4">
-            <h1 class="font-heading text-white text-5xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
+            <h1 class="font-heading text-white text-4xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
                 data-aos="fade-up" data-aos-delay="100">
                 Peru - A Celebration of Life
             </h1>
@@ -182,7 +182,7 @@ get_header();
                         ],
                     ];
                     foreach ($itineraries as $index => $itin):
-                        ?>
+                    ?>
                         <?php get_template_part('template-parts/components/card-itinerary', null, [
                             'image' => $itin['img'],
                             'title' => $itin['title'],
@@ -353,7 +353,7 @@ get_header();
                     ],
                 ];
                 foreach ($posts as $index => $post):
-                    ?>
+                ?>
                     <?php get_template_part('template-parts/components/card-story', null, [
                         'image' => $post['img'],
                         'image_alt' => $post['title'],

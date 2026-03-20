@@ -645,7 +645,7 @@
   .nav-menu a {
     font-family: var(--font-body);
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 300;
     color: #ffffff;
     text-decoration: none;
     transition: color 0.2s ease;
@@ -983,4 +983,75 @@
       grid-column: 1 / span 2;
     }
   }
+}
+
+footer a {
+  color: #ffffff;
+  font-weight: 300;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MEGAMENU — CSS
+   Add to your main stylesheet or enqueue separately
+══════════════════════════════════════════════════════════ */
+
+/* Ensure header stacks correctly */
+.site-header {
+  isolation: isolate;
+}
+
+/* Panels sit flush under the main-header bar */
+.mega-panel {
+  top: 100%;
+}
+
+/* Scrollable lists on very small viewports (shouldn't happen desktop-only) */
+.mega-panel .overflow-y-auto {
+  max-height: 320px;
+}
+
+/* Smooth image hover on cards */
+.mega-panel img {
+  transition:
+    transform 0.35s ease,
+    opacity 0.25s ease;
+}
+.mega-panel a:hover img {
+  transform: scale(1.04);
+  opacity: 0.92;
+}
+
+/* Overflow clip on card images */
+.mega-panel .aspect-\[3\/4\],
+.mega-panel .aspect-\[4\/3\] {
+  overflow: hidden;
+}
+
+/* Active nav trigger underline */
+.nav-link[aria-expanded="true"] {
+  opacity: 0.75;
+}
+
+/* ── Mobile drawer ───────────────────────────────────────── */
+
+/* Lock body scroll when drawer is open */
+body.mobile-menu-open {
+  overflow: hidden;
+}
+
+/* Mobile sub-panel list items — journeys */
+#mob-grand-list li a,
+#mob-compact-list li a,
+#mob-short-list li a {
+  display: flex;
+  padding: 0.85rem 0;
+  font-size: 0.9375rem;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.07);
+  color: rgba(26, 26, 26, 0.7);
+  transition: color 0.2s;
+}
+#mob-grand-list li a:hover,
+#mob-compact-list li a:hover,
+#mob-short-list li a:hover {
+  color: var(--color-primary, #a0522d);
 }

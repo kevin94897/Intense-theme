@@ -20,7 +20,7 @@ get_header();
         </div>
 
         <div class="container-site relative z-10 text-center px-4">
-            <h1 class="font-heading text-white text-5xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
+            <h1 class="font-heading text-white text-4xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
                 data-aos="fade-up" data-aos-delay="100">
                 Discover Peru,One Region at a Time </h1>
             <p class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10" data-aos="fade-up"

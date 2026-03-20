@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template Name: Design Your Trip
  *
@@ -19,7 +20,7 @@ get_header();
         </div>
 
         <div class="container-site relative z-10 text-center px-4">
-            <h1 class="font-heading text-white text-5xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
+            <h1 class="font-heading text-white text-4xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
                 data-aos="fade-up" data-aos-delay="100">
                 Let's Begin "Weaving" Your Journey
             </h1>
@@ -43,14 +44,14 @@ get_header();
             <!-- Section Header -->
             <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
                 <div
-            class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-12 mb-10 overflow-hidden">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
-                class="mx-auto md:mb-10">
-            <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit" data-aos="fade-up">Start
-                Designing Your Trip</h2>
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
-                class="mx-auto mb-10 hidden md:block">
-        </div>
+                    class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-12 mb-10 overflow-hidden">
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
+                        class="mx-auto md:mb-10">
+                    <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit" data-aos="fade-up">Start
+                        Designing Your Trip</h2>
+                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
+                        class="mx-auto mb-10 hidden md:block">
+                </div>
                 <p class="font-body text-sm md:text-[15px] text-dark/70 max-w-2xl mx-auto leading-relaxed">
                     Thank you for your interest in Intense Peru. Share a few details about your travel plans,
                     and our designers will create a personalized journey crafted with care and authenticity.
@@ -106,7 +107,7 @@ get_header();
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
                             <input type="text"
@@ -120,7 +121,7 @@ get_header();
                         <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
                             <select x-model="formData.tripLength" @change="validateField('tripLength')"
@@ -142,7 +143,7 @@ get_header();
                         <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
                             <select x-model="formData.adults" @change="validateField('adults')"
@@ -160,7 +161,7 @@ get_header();
                         <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
                             <select x-model="formData.children"
@@ -176,7 +177,7 @@ get_header();
                         <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
                             <select x-model="formData.enfants"
@@ -209,7 +210,7 @@ get_header();
                                     :class="formData.hotelCategory === 'boutique' ? 'text-primary' : 'text-neutral-gray'">
                                     <template x-for="i in 5">
                                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                     </template>
                                 </div>
@@ -229,7 +230,7 @@ get_header();
                                     :class="formData.hotelCategory === 'luxury' ? 'text-primary' : 'text-neutral-gray'">
                                     <template x-for="i in 5">
                                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                     </template>
                                 </div>
@@ -249,7 +250,7 @@ get_header();
                                     :class="formData.hotelCategory === 'superior' ? 'text-primary' : 'text-neutral-gray'">
                                     <template x-for="i in 4">
                                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                     </template>
                                 </div>
@@ -269,7 +270,7 @@ get_header();
                                     :class="formData.hotelCategory === 'value' ? 'text-primary' : 'text-neutral-gray'">
                                     <template x-for="i in 3">
                                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                     </template>
                                 </div>
@@ -290,7 +291,7 @@ get_header();
                         <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                 <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
                             <select x-model="formData.hearAboutUs"
@@ -321,8 +322,8 @@ get_header();
                             <span x-show="!isSubmitting">Send Request</span>
                             <span x-show="isSubmitting" class="flex items-center gap-2">
                                 <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                 </svg>
                                 Sending...
                             </span>
@@ -369,16 +370,16 @@ get_header();
             <div class="flex justify-center mb-6">
                 <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <!-- suitcase body -->
-                    <rect x="8" y="20" width="40" height="30" rx="3" stroke="#1a1a1a" stroke-width="1.8" fill="none"/>
+                    <rect x="8" y="20" width="40" height="30" rx="3" stroke="#1a1a1a" stroke-width="1.8" fill="none" />
                     <!-- handle -->
-                    <path d="M20 20V15a8 8 0 0116 0v5" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                    <path d="M20 20V15a8 8 0 0116 0v5" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" fill="none" />
                     <!-- center stripe -->
-                    <line x1="28" y1="20" x2="28" y2="50" stroke="#1a1a1a" stroke-width="1.4"/>
+                    <line x1="28" y1="20" x2="28" y2="50" stroke="#1a1a1a" stroke-width="1.4" />
                     <!-- horizontal strap -->
-                    <line x1="8" y1="33" x2="48" y2="33" stroke="#1a1a1a" stroke-width="1.4"/>
+                    <line x1="8" y1="33" x2="48" y2="33" stroke="#1a1a1a" stroke-width="1.4" />
                     <!-- wheels -->
-                    <circle cx="16" cy="51" r="2" fill="#1a1a1a"/>
-                    <circle cx="40" cy="51" r="2" fill="#1a1a1a"/>
+                    <circle cx="16" cy="51" r="2" fill="#1a1a1a" />
+                    <circle cx="40" cy="51" r="2" fill="#1a1a1a" />
                 </svg>
             </div>
 
@@ -413,14 +414,14 @@ get_header();
                 <!-- Left: Title -->
                 <div class="lg:col-span-3 flex items-center gap-4" data-aos="fade-right">
                     <svg width="40" height="32" viewBox="0 0 65 41" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0 opacity-80">
-                        <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z" stroke="currentColor" class="text-hover" stroke-width="1.12281"/>
-                        <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z" fill="currentColor" stroke="currentColor" class="text-primary" stroke-width="1.12281"/>
-                        <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="currentColor" class="text-hover" stroke-width="1.12281"/>
-                        <path d="M54.7339 40.3481L31.997 27.4359L9.26017 40.3481" stroke="currentColor" class="text-hover" stroke-width="1.12281"/>
-                        <path d="M23.2954 3.29541L32.2779 8.90945L41.2603 3.29541" stroke="currentColor" class="text-primary" stroke-width="1.12281"/>
-                        <path d="M41.2603 37.541L32.2778 31.927L23.2953 37.541" stroke="currentColor" class="text-primary" stroke-width="1.12281"/>
-                        <path d="M64.2779 8.90942L44.0674 20.4182L64.2779 31.927" stroke="currentColor" class="text-primary" stroke-width="1.12281"/>
-                        <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="currentColor" class="text-primary" stroke-width="1.12281"/>
+                        <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z" stroke="currentColor" class="text-hover" stroke-width="1.12281" />
+                        <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z" fill="currentColor" stroke="currentColor" class="text-primary" stroke-width="1.12281" />
+                        <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="currentColor" class="text-hover" stroke-width="1.12281" />
+                        <path d="M54.7339 40.3481L31.997 27.4359L9.26017 40.3481" stroke="currentColor" class="text-hover" stroke-width="1.12281" />
+                        <path d="M23.2954 3.29541L32.2779 8.90945L41.2603 3.29541" stroke="currentColor" class="text-primary" stroke-width="1.12281" />
+                        <path d="M41.2603 37.541L32.2778 31.927L23.2953 37.541" stroke="currentColor" class="text-primary" stroke-width="1.12281" />
+                        <path d="M64.2779 8.90942L44.0674 20.4182L64.2779 31.927" stroke="currentColor" class="text-primary" stroke-width="1.12281" />
+                        <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="currentColor" class="text-primary" stroke-width="1.12281" />
                     </svg>
                     <h2 class="font-heading text-4xl md:text-5xl font-light text-dark">FAQ</h2>
                 </div>
@@ -456,44 +457,44 @@ get_header();
 
                     <ul class="divide-y divide-neutral-gray/50">
                         <?php foreach ($faqs as $i => $faq): ?>
-                        <li>
-                            <button
-                                type="button"
-                                @click="active === <?php echo $i; ?> ? active = null : active = <?php echo $i; ?>"
-                                class="w-full flex items-center justify-between py-5 gap-6 text-left group focus:outline-none">
+                            <li>
+                                <button
+                                    type="button"
+                                    @click="active === <?php echo $i; ?> ? active = null : active = <?php echo $i; ?>"
+                                    class="w-full flex items-center justify-between py-5 gap-6 text-left group focus:outline-none">
 
-                                <span class="font-body text-sm md:text-[15px] transition-colors duration-200"
-                                    :class="active === <?php echo $i; ?> ? 'text-primary' : 'text-dark/80 group-hover:text-dark'">
-                                    <?php echo esc_html($faq['q']); ?>
-                                </span>
+                                    <span class="font-body text-sm md:text-[15px] transition-colors duration-200"
+                                        :class="active === <?php echo $i; ?> ? 'text-primary' : 'text-dark/80 group-hover:text-dark'">
+                                        <?php echo esc_html($faq['q']); ?>
+                                    </span>
 
-                                <!-- Arrow: rotates to × when open -->
-                                <span class="shrink-0 transition-transform duration-300"
-                                    :class="active === <?php echo $i; ?> ? 'rotate-90' : ''">
-                                    <svg class="w-8 h-4 transition-colors duration-200"
-                                        :class="active === <?php echo $i; ?> ? 'text-primary' : 'text-primary/70 md:text-primary'"
-                                        viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <line x1="0" y1="8" x2="26" y2="8" stroke="currentColor" stroke-width="1.2"/>
-                                        <path d="M22 3l6 5-6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                            </button>
+                                    <!-- Arrow: rotates to × when open -->
+                                    <span class="shrink-0 transition-transform duration-300"
+                                        :class="active === <?php echo $i; ?> ? 'rotate-90' : ''">
+                                        <svg class="w-8 h-4 transition-colors duration-200"
+                                            :class="active === <?php echo $i; ?> ? 'text-primary' : 'text-primary/70 md:text-primary'"
+                                            viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <line x1="0" y1="8" x2="26" y2="8" stroke="currentColor" stroke-width="1.2" />
+                                            <path d="M22 3l6 5-6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </button>
 
-                            <!-- Answer -->
-                            <div
-                                x-show="active === <?php echo $i; ?>"
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0 -translate-y-2"
-                                x-transition:enter-end="opacity-100 translate-y-0"
-                                x-transition:leave="transition ease-in duration-200"
-                                x-transition:leave-start="opacity-100 translate-y-0"
-                                x-transition:leave-end="opacity-0 -translate-y-2"
-                                class="pb-5 pr-12">
-                                <p class="font-body text-sm text-dark/60 leading-relaxed">
-                                    <?php echo esc_html($faq['a']); ?>
-                                </p>
-                            </div>
-                        </li>
+                                <!-- Answer -->
+                                <div
+                                    x-show="active === <?php echo $i; ?>"
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                    x-transition:leave="transition ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 translate-y-0"
+                                    x-transition:leave-end="opacity-0 -translate-y-2"
+                                    class="pb-5 pr-12">
+                                    <p class="font-body text-sm text-dark/60 leading-relaxed">
+                                        <?php echo esc_html($faq['a']); ?>
+                                    </p>
+                                </div>
+                            </li>
                         <?php endforeach; ?>
                     </ul>
 
