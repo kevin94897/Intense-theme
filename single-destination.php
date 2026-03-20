@@ -158,7 +158,7 @@ get_header();
         </section>
 
         <!-- G. Banner CTA -->
-        <?php get_template_part('template-parts/components/banner-cta'); ?>
+        <?php get_template_part('template-parts/components/banner-text'); ?>
 
         <!-- Testimonials -->
         <?php get_template_part('template-parts/home/section-testimonials'); ?>

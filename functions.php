@@ -440,10 +440,10 @@ function intense_mega_destinations()
         $out .= '<div>';
         if ($img) {
             $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-3 relative group">'
-                . '<div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>';
+                . '<div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat relative overflow-hidden group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>';
         } else {
             $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2">'
-                . '<div class="w-full h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden"></div></a>';
+                . '<div class="w-full h-[300px] shrink-0 bg-dark/10 relative overflow-hidden"></div></a>';
         }
         $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
             . 'class="text-xs font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline line-clamp-2 leading-snug">'
@@ -457,12 +457,12 @@ function intense_mega_destinations()
         $img = get_the_post_thumbnail_url($p->ID, 'full');
         $mobile_cards .= '<a href="' . esc_url(get_permalink($p)) . '" class="group block">';
         if ($img) {
-            $mobile_cards .= '<div class="w-full h-[200px] shrink-0 overflow-hidden rounded-lg mb-1.5 relative">'
+            $mobile_cards .= '<div class="w-full h-[200px] shrink-0 overflow-hidden rounded-lg mb-2 relative">'
                 . '<div class="w-full h-full bg-cover bg-center bg-no-repeat group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></div>';
         } else {
             $mobile_cards .= '<div class="w-full h-[200px] shrink-0 bg-dark/10 rounded-lg mb-1.5 relative overflow-hidden"></div>';
         }
-        $mobile_cards .= '<span class="text-xs text-dark group-hover:text-primary transition-colors underline-offset-1 underline">'
+        $mobile_cards .= '<span class="text-xs font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline line-clamp-2 leading-snug">'
             . esc_html($p->post_title) . '</span>';
         $mobile_cards .= '</a>';
     }
