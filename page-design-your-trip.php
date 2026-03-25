@@ -105,9 +105,11 @@ get_header();
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                         <div class="input-wrapper" :class="{ 'has-error': errors.startDate }">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
                                 </svg>
                             </div>
                             <input type="text"
@@ -120,7 +122,7 @@ get_header();
                         </div>
                         <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
@@ -142,7 +144,7 @@ get_header();
                     <div class="grid grid-cols-3 gap-6 md:gap-10">
                         <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
@@ -160,7 +162,7 @@ get_header();
                         </div>
                         <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
@@ -176,7 +178,7 @@ get_header();
                         </div>
                         <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>
@@ -201,9 +203,9 @@ get_header();
                                 class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md border transition-all duration-200"
                                 :class="formData.hotelCategory === 'boutique'
                                     ? 'border-primary bg-primary/10'
-                                    : 'border-neutral-gray hover:border-dark/40'">
+                                    : 'border-dark hover:border-dark/40'">
                                 <span class="font-body text-sm transition-colors"
-                                    :class="formData.hotelCategory === 'boutique' ? 'text-primary font-medium' : 'text-neutral-gray'">
+                                    :class="formData.hotelCategory === 'boutique' ? 'text-primary font-medium' : 'text-dark'">
                                     Boutique
                                 </span>
                                 <div class="flex gap-0.5"
@@ -221,9 +223,9 @@ get_header();
                                 class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md border transition-all duration-200"
                                 :class="formData.hotelCategory === 'luxury'
                                     ? 'border-primary bg-primary/10'
-                                    : 'border-neutral-gray hover:border-dark/40'">
+                                    : 'border-dark hover:border-dark/40'">
                                 <span class="font-body text-sm transition-colors"
-                                    :class="formData.hotelCategory === 'luxury' ? 'text-primary font-medium' : 'text-neutral-gray'">
+                                    :class="formData.hotelCategory === 'luxury' ? 'text-primary font-medium' : 'text-dark'">
                                     Luxury
                                 </span>
                                 <div class="flex gap-0.5"
@@ -241,9 +243,9 @@ get_header();
                                 class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md border transition-all duration-200"
                                 :class="formData.hotelCategory === 'superior'
                                     ? 'border-primary bg-primary/10'
-                                    : 'border-neutral-gray hover:border-dark/40'">
+                                    : 'border-dark hover:border-dark/40'">
                                 <span class="font-body text-sm transition-colors"
-                                    :class="formData.hotelCategory === 'superior' ? 'text-primary font-medium' : 'text-neutral-gray'">
+                                    :class="formData.hotelCategory === 'superior' ? 'text-primary font-medium' : 'text-dark'">
                                     Superior
                                 </span>
                                 <div class="flex gap-0.5"
@@ -261,9 +263,9 @@ get_header();
                                 class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md border transition-all duration-200"
                                 :class="formData.hotelCategory === 'value'
                                     ? 'border-primary bg-primary/10'
-                                    : 'border-neutral-gray hover:border-dark/40'">
+                                    : 'border-dark hover:border-dark/40'">
                                 <span class="font-body text-sm transition-colors"
-                                    :class="formData.hotelCategory === 'value' ? 'text-primary font-medium' : 'text-neutral-gray'">
+                                    :class="formData.hotelCategory === 'value' ? 'text-primary font-medium' : 'text-dark'">
                                     Best Value
                                 </span>
                                 <div class="flex gap-0.5"
@@ -290,7 +292,7 @@ get_header();
                         </div>
                         <div class="input-wrapper">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                <svg class="w-4 h-4 text-dark/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </div>

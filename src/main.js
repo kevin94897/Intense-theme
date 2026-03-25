@@ -11,6 +11,7 @@ window.EmblaCarousel = EmblaCarousel
 
 import { initFormularios } from './modules/formularios.js'
 import { initSliders } from './modules/slider.js'
+import { initGallerySlider } from './modules/slider-gallery.js'
 import bookingForm from './modules/bookingForm.js'
 
 // ── AOS — Inicializar una sola vez ───────────────────────────────────────────
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initFormularios()
     initSliders()
+    initGallerySlider()
 
     // Header scroll effect
     const header = document.querySelector('.site-header')

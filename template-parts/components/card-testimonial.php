@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Testimonial Card Component
  *
@@ -41,21 +42,22 @@ $stars = $args['stars'] ?? 5;
                         </svg>
                     <?php endfor; ?>
                 </div>
-                <blockquote class="font-heading text-xl md:text-3xl text-dark leading-snug mb-8">
+                <?php if ($date): ?>
+                    <p class="font-body text-md text-neutral-dark mb-2 font-light">
+                        <?php echo esc_html($date); ?>
+                    </p>
+                <?php endif; ?>
+                <blockquote class="font-body text-md md:text-xl text-dark leading-snug mb-8">
                     "
                     <?php echo esc_html($quote); ?>"
                 </blockquote>
                 <p class="font-body text-lg text-neutral-black font-medium mb-1">
                     <?php echo esc_html($author); ?>
-                    <?php if ($origin)
-                        echo ' - ' . esc_html($origin); ?>
                 </p>
-                <?php if ($date): ?>
-                    <p class="font-body text-sm text-neutral-gray">
-                        Traveled in
-                        <?php echo esc_html($date); ?>
-                    </p>
-                <?php endif; ?>
+                <p class="font-body text-md text-neutral-black font-light mb-1 italic">
+                    <?php if ($origin)
+                        echo esc_html($origin); ?>
+                </p>
             </div>
         </div>
     </div>

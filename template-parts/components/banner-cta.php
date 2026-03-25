@@ -28,7 +28,7 @@ $bg_image_url = !empty($banner_cta['background_image']['url']) ? $banner_cta['ba
     <div class="absolute inset-0 z-0">
         <img src="<?php echo esc_url($bg_image_url); ?>" alt="<?php echo esc_attr(strip_tags($title)); ?>"
             class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-dark/60"></div>
+        <!-- <div class="absolute inset-0 bg-dark/60"></div> -->
     </div>
     <div class="container-site relative z-10 px-4" data-aos="fade-up" data-aos-delay="100">
         <h2

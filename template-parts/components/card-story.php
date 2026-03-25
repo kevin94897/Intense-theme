@@ -25,7 +25,7 @@ $aos_delay   = $args['aos_delay']   ?? 0;
 
     <!-- Title -->
     <?php if ($title) : ?>
-        <h3 class="font-heading text-2xl lg:text-[28px] text-dark leading-snug group-hover:text-primary transition-colors duration-300">
+        <h3 class="font-heading text-2xl lg:text-[28px] text-dark font-bold leading-snug group-hover:text-primary transition-colors duration-300">
             <a href="<?php echo esc_url($link); ?>" class="before:absolute before:inset-0">
                 <?php echo esc_html($title); ?>
             </a>

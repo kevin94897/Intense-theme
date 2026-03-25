@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Testimonials Section Template Part
  * Used in front-page and page-journeys
@@ -30,7 +31,7 @@ $testimonials_list = get_field('list_of_testimonials', 'option');
                     <div class="embla__container flex">
                         <?php foreach ($testimonials_list as $index => $testimonial):
                             $image_url = isset($testimonial['testimony_image']['url']) && $testimonial['testimony_image']['url'] ? $testimonial['testimony_image']['url'] : get_template_directory_uri() . '/assets/images/intense_05.webp';
-                            ?>
+                        ?>
                             <?php get_template_part('template-parts/components/card-testimonial', null, [
                                 'image' => $image_url,
                                 'quote' => $testimonial['testimony'],
@@ -45,7 +46,7 @@ $testimonials_list = get_field('list_of_testimonials', 'option');
 
                 <!-- Navigation Controls -->
                 <div
-                    class="flex items-center gap-4 mt-8 lg:mt-0 lg:absolute lg:bottom-8 lg:right-12 z-10 justify-center lg:justify-end">
+                    class="flex items-center gap-4 mt-12 md:pt-12 lg:mt-0 lg:relative lg:bottom-8 lg:right-12 z-10 justify-center lg:justify-end">
 
                     <!-- Prev -->
                     <button class="embla__prev group cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"

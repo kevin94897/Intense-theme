@@ -138,17 +138,18 @@ $selected_activities = array_filter($selected_activities);
                                 <div data-aos="fade-left" data-aos-duration="700" data-aos-delay="<?php echo $delay; ?>"
                                     class="flex items-start gap-4 md:gap-6 p-5 transition-all duration-500">
                                     <div class="text-primary">
-                                        <svg viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                            class="w-[40px] md:w-[67px] h-auto">
-                                            <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#5D7F6E" stroke-width="2.68001" />
-                                            <path d="M15.9492 0.949219L65.948 50.9473" stroke="#5D7F6E" stroke-width="2.68001" />
-                                            <path d="M0.947266 15.9485L50.9461 65.9466" stroke="#38464C" stroke-width="2.68001" />
-                                            <path d="M15.9492 0.949219L65.948 50.9473" stroke="#DC973C" stroke-width="2.68001" />
-                                            <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
-                                            <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#5D7F6E" stroke-width="2.68001" />
-                                            <path d="M15.9473 65.9446L65.9461 15.9465" stroke="#5D7F6E" stroke-width="2.68001" />
-                                            <path d="M0.947266 50.9456L50.9461 0.94748" stroke="#B76739" stroke-width="2.68001" />
+                                        <svg width="67" class="w-[30px] md:w-[40px] h-auto" height="67" viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0.947266 15.9482L50.9461 65.9463" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M15.9482 0.949219L65.9471 50.9473" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M0.947266 15.9482L50.9461 65.9463" stroke="#38464C" stroke-width="2.68001" />
+                                            <path d="M15.9482 0.949219L65.9471 50.9473" stroke="#DC973C" stroke-width="2.68001" />
+                                            <path d="M15.9463 65.9443L65.9451 15.9463" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M0.947266 50.9453L50.9461 0.947236" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M15.9463 65.9443L65.9451 15.9463" stroke="#5D7F6E" stroke-width="2.68001" />
+                                            <path d="M0.947266 50.9453L50.9461 0.947236" stroke="#B76739" stroke-width="2.68001" />
+                                            <rect x="30.9521" y="30.9473" width="4.99933" height="4.99925" fill="#423931" />
                                         </svg>
+
                                     </div>
                                     <div>
                                         <h3 class="font-body text-base text-dark mb-2 transition-colors duration-300">
@@ -172,9 +173,9 @@ $selected_activities = array_filter($selected_activities);
 
     <!-- 3. Gallery (Embla Carousel) -->
     <?php if ($journey_gallery && is_array($journey_gallery) && !empty($journey_gallery)) : ?>
-        <section class="pb-20" data-aos="fade-in">
+        <section class="" data-aos="fade-in">
             <div class="embla-gallery w-full">
-                <div class="embla overflow-hidden cursor-grab active:cursor-grabbing">
+                <div class="embla journey-gallery-embla overflow-hidden cursor-grab active:cursor-grabbing">
                     <div class="embla__container flex">
                         <?php foreach ($journey_gallery as $img): ?>
                             <div class="embla__slide flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0">
@@ -192,7 +193,7 @@ $selected_activities = array_filter($selected_activities);
     <?php endif; ?>
 
     <!-- 4. Main Body: Itinerary Layout -->
-    <section class="py-20 bg-cream">
+    <section class="py-12 md:py-20 bg-cream">
         <div class="container-site-wide mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
@@ -204,10 +205,8 @@ $selected_activities = array_filter($selected_activities);
                                 <li class="border-b border-neutral-gray/30">
                                     <a href="#itinerary"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors font-semibold text-dark">
-                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="18" viewBox="0 0 25 18" fill="none">
+                                            <path d="M0 18V13.097C0.862069 12.7164 1.55651 12.1623 2.08333 11.4347C2.61015 10.7071 2.87356 9.89552 2.87356 9C2.87356 8.10448 2.61015 7.29291 2.08333 6.5653C1.55651 5.83769 0.862069 5.28358 0 4.90299V0H25V18H0ZM1.00575 17.0597H23.9943V0.940299H1.00575V4.36567C1.89176 4.85821 2.59219 5.51306 3.10704 6.33022C3.62189 7.14739 3.87931 8.03731 3.87931 9C3.87931 9.96269 3.62189 10.8526 3.10704 11.6698C2.59219 12.4869 1.89176 13.1418 1.00575 13.6343V17.0597ZM8.11782 13.5L20.546 10.4104C20.8573 10.3433 21.1087 10.1922 21.3003 9.95709C21.4919 9.72202 21.5517 9.47015 21.4799 9.20149C21.408 8.93284 21.2344 8.74813 20.9591 8.64739C20.6837 8.54664 20.4023 8.52985 20.1149 8.59702L16.4511 9.53731L10.704 4.5L9.33908 4.76866L12.7874 10.4104L8.69253 11.3507L6.89655 10.0746L6.17816 10.2761L8.11782 13.5Z" fill="#3E362F" />
                                         </svg>
                                         Itinerary
                                     </a>
@@ -220,7 +219,7 @@ $selected_activities = array_filter($selected_activities);
                                 <li class="border-b border-neutral-gray/30">
                                     <a href="#included"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                        <svg class="w-5 h-5 shrink-0 text-dark" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -233,12 +232,11 @@ $selected_activities = array_filter($selected_activities);
                             <?php if ($prices_group && !empty($prices_group['tables_for_prices'])) : ?>
                                 <li class="border-b border-neutral-gray/30">
                                     <a href="#price"
-                                        class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M12 8V7m0 1v8m0 0v1m0-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        class="flex items-center gap-6 py-4 hover:text-[#bd7a4e] transition-colors">
+                                        <svg width="10" height="21" viewBox="0 0 10 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4.37348 21V18.4868C3.32703 18.3505 2.42801 17.9838 1.67643 17.3868C0.924842 16.7897 0.366032 15.9638 0 14.9091L1.13073 14.4103C1.48274 15.3351 1.96651 16.047 2.58205 16.5458C3.1976 17.0447 4.03256 17.2941 5.08693 17.2941C6.01442 17.2941 6.86178 17.0601 7.62903 16.5922C8.39627 16.1242 8.77989 15.3699 8.77989 14.3294C8.77989 13.4505 8.49754 12.7445 7.93283 12.2115C7.36813 11.6787 6.31151 11.1605 4.76299 10.6569C3.18621 10.1484 2.07642 9.56746 1.43363 8.91419C0.79063 8.26093 0.469131 7.41012 0.469131 6.36176C0.469131 5.21356 0.903999 4.29656 1.77373 3.61076C2.64347 2.92518 3.51005 2.55459 4.37348 2.499V0H5.59358V2.499C6.4383 2.58465 7.16376 2.82182 7.76995 3.21053C8.37614 3.59944 8.87862 4.15254 9.27739 4.86984L8.19333 5.43066C7.90233 4.89846 7.50193 4.46765 6.99213 4.13824C6.48213 3.80882 5.83293 3.64412 5.04453 3.64412C4.10281 3.64412 3.30822 3.89632 2.66075 4.40074C2.01308 4.90515 1.68924 5.55882 1.68924 6.36176C1.68924 7.12044 1.95522 7.7349 2.48719 8.20513C3.01895 8.67557 4.08411 9.1665 5.68265 9.67791C7.16406 10.1531 8.25403 10.7632 8.95254 11.5083C9.65085 12.2536 10 13.1892 10 14.3152C10 15.5552 9.5691 16.5403 8.7073 17.2703C7.84529 18.0004 6.80739 18.4106 5.59358 18.501V21H4.37348Z" fill="#161616" />
                                         </svg>
+
                                         Price
                                     </a>
                                 </li>
@@ -248,7 +246,7 @@ $selected_activities = array_filter($selected_activities);
                                 <li class="border-b border-neutral-gray/30">
                                     <a href="#hotels"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                        <svg class="w-5 h-5 shrink-0 text-dark" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1">
@@ -263,7 +261,7 @@ $selected_activities = array_filter($selected_activities);
                                 <li class="border-b border-neutral-gray/30">
                                     <a href="#activities"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                        <svg class="w-5 h-5 shrink-0 text-dark" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1">
@@ -278,7 +276,7 @@ $selected_activities = array_filter($selected_activities);
                                 <li class="border-b border-neutral-gray/30">
                                     <a href="#faq"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                        <svg class="w-5 h-5 shrink-0 text-neutral-gray" fill="none" stroke="currentColor"
+                                        <svg class="w-5 h-5 shrink-0 text-dark" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -383,7 +381,7 @@ $selected_activities = array_filter($selected_activities);
                                                     :class="expanded ? 'scale-[1.02] text-[#bd7a4e]' : 'scale-100'">
                                                     Day <?php echo $index + 1; ?>: <?php echo esc_html($tour['itinerary_title']); ?></h4>
                                             </div>
-                                            <svg class="w-5 h-5 transform transition-transform duration-300 shrink-0 text-neutral-gray group-hover:text-dark"
+                                            <svg class="w-5 h-5 transform transition-transform duration-300 shrink-0 text-neutral-dark group-hover:text-primary"
                                                 :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -392,7 +390,7 @@ $selected_activities = array_filter($selected_activities);
                                         </button>
 
                                         <div x-show="expanded" x-collapse x-cloak>
-                                            <div class="pt-8 pl-12 pr-4"> <!-- Indented content -->
+                                            <div class="pt-8 pr-4"> <!-- Indented content -->
                                                 <?php if (!empty($tour['itinerary_image']) && is_array($tour['itinerary_image'])) : ?>
                                                     <img src="<?php echo esc_url($tour['itinerary_image']['url']); ?>"
                                                         alt="<?php echo esc_attr($tour['itinerary_image']['alt']); ?>"
@@ -402,7 +400,7 @@ $selected_activities = array_filter($selected_activities);
                                                 <?php if (!empty($tour['list_of_activities']) && is_array($tour['list_of_activities'])) :
                                                     foreach ($tour['list_of_activities'] as $activity) :
                                                 ?>
-                                                        <div class="flex items-center gap-3 mb-6 mt-8 shadow-none">
+                                                        <div class="flex items-center gap-3 mb-4 mt-4 shadow-none">
                                                             <?php if (!empty($activity['icon']) || !empty($activity['icon_2'])) : ?>
                                                                 <div class="flex items-center gap-2">
                                                                     <?php if (!empty($activity['icon'])) : ?>
@@ -424,7 +422,7 @@ $selected_activities = array_filter($selected_activities);
                                                                     </path>
                                                                 </svg> -->
                                                             <?php endif; ?>
-                                                            <h5 class="font-body text-xl text-dark font-medium"><?php echo esc_html($activity['activity_title']); ?></h5>
+                                                            <h5 class="font-heading text-xl text-dark font-bold"><?php echo esc_html($activity['activity_title']); ?></h5>
                                                         </div>
 
                                                         <?php if (!empty($activity['activity_description'])) : ?>
@@ -575,7 +573,7 @@ $selected_activities = array_filter($selected_activities);
                                     if ($h_services) {
                                         foreach ($h_services as $service) {
                                             $amenities[] = [
-                                                'icon' => $service['icon'] ? '<img src="' . esc_url($service['icon']['url']) . '" class="w-5 h-5" alt="' . esc_attr($service['icon']['alt']) . '">' : '',
+                                                'icon' => $service['icon'] ? '<img src="' . esc_url($service['icon']['url']) . '" class="min-w-5 min-h-5 w-full h-full" alt="' . esc_attr($service['icon']['alt']) . '">' : '',
                                                 'text' => $service['service']
                                             ];
                                         }
@@ -670,7 +668,7 @@ $selected_activities = array_filter($selected_activities);
     <?php get_template_part('template-parts/components/banner-cta'); ?>
 
     <!-- 7. More Journeys (Related) -->
-    <section class="py-24 bg-cream">
+    <section class="py-12 md:py-24 bg-cream">
         <div class="container-site">
             <div class="text-center mb-8">
                 <div class="flex justify-center w-full mb-2">
@@ -748,7 +746,7 @@ $selected_activities = array_filter($selected_activities);
     </section>
 
     <!-- 8. Booking Form Section -->
-    <section id="booking-form" class="py-24 border-t border-neutral-gray/20">
+    <section id="booking-form" class="py-24">
         <div class="container-site max-w-6xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
@@ -805,7 +803,7 @@ $selected_activities = array_filter($selected_activities);
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                             <div class="input-wrapper" :class="{ 'has-error': errors.startDate }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-5 h-5 text-neutral-gray" fill="none" stroke="currentColor"
+                                    <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
                                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -821,7 +819,7 @@ $selected_activities = array_filter($selected_activities);
                             </div>
                             <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
@@ -844,7 +842,7 @@ $selected_activities = array_filter($selected_activities);
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                             <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
@@ -863,7 +861,7 @@ $selected_activities = array_filter($selected_activities);
                             </div>
                             <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
@@ -880,7 +878,7 @@ $selected_activities = array_filter($selected_activities);
                             </div>
                             <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
@@ -898,12 +896,12 @@ $selected_activities = array_filter($selected_activities);
 
                         <!-- Hotel Category Row -->
                         <div class="pt-2 input-wrapper" :class="{ 'has-error': errors.hotelCategory }">
-                            <p class="font-body text-sm text-neutral-gray mb-6">Hotel Category</p>
+                            <p class="font-body text-sm text-dark mb-6">Hotel Category</p>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                                 <!-- Boutique -->
                                 <div class="cursor-pointer group" @click="setHotelCategory('boutique')">
                                     <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'boutique' ? 'text-dark font-medium' : 'text-neutral-gray group-hover:text-dark'">Boutique</span>
+                                        :class="formData.hotelCategory === 'boutique' ? 'text-dark font-medium' : 'text-dark'">Boutique</span>
                                     <div class="flex justify-center gap-1.5 transition-colors"
                                         :class="formData.hotelCategory === 'boutique' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
                                         <template x-for="i in 5"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
@@ -915,7 +913,7 @@ $selected_activities = array_filter($selected_activities);
                                 <!-- Luxury -->
                                 <div class="cursor-pointer group" @click="setHotelCategory('luxury')">
                                     <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'luxury' ? 'text-dark font-medium' : 'text-neutral-gray group-hover:text-dark'">Luxury</span>
+                                        :class="formData.hotelCategory === 'luxury' ? 'text-dark font-medium' : 'text-dark'">Luxury</span>
                                     <div class="flex justify-center gap-1.5 transition-colors"
                                         :class="formData.hotelCategory === 'luxury' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
                                         <template x-for="i in 5"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
@@ -927,7 +925,7 @@ $selected_activities = array_filter($selected_activities);
                                 <!-- Superior -->
                                 <div class="cursor-pointer group" @click="setHotelCategory('superior')">
                                     <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'superior' ? 'text-dark font-medium' : 'text-neutral-gray group-hover:text-dark'">Superior</span>
+                                        :class="formData.hotelCategory === 'superior' ? 'text-dark font-medium' : 'text-dark'">Superior</span>
                                     <div class="flex justify-center gap-1.5 transition-colors"
                                         :class="formData.hotelCategory === 'superior' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
                                         <template x-for="i in 4"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
@@ -939,7 +937,7 @@ $selected_activities = array_filter($selected_activities);
                                 <!-- Best Value -->
                                 <div class="cursor-pointer group" @click="setHotelCategory('value')">
                                     <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'value' ? 'text-dark font-medium' : 'text-neutral-gray group-hover:text-dark'">Best
+                                        :class="formData.hotelCategory === 'value' ? 'text-dark font-medium' : 'text-dark'">Best
                                         Value</span>
                                     <div class="flex justify-center gap-1.5 transition-colors"
                                         :class="formData.hotelCategory === 'value' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
@@ -963,7 +961,7 @@ $selected_activities = array_filter($selected_activities);
                             </div>
                             <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-neutral-gray" fill="none" stroke="currentColor"
+                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                             d="M19 9l-7 7-7-7"></path>
@@ -1016,21 +1014,160 @@ $selected_activities = array_filter($selected_activities);
     </section>
 
     <!-- 5. FAQ -->
-    <?php if ($faq_group && !empty($faq_group['list_of_questions'])) :
-        $faqs = [];
-        foreach ($faq_group['list_of_questions'] as $item) {
-            $faqs[] = [
-                'question' => $item['question'],
-                'response' => $item['response']
-            ];
-        }
-        get_template_part('template-parts/home/section-faq', null, [
-            'title' => $faq_group['title_faqs'] ?: 'FAQ',
-            'description' => $faq_group['description'] ?: '',
-            'faqs' => $faqs
-        ]);
-    endif; ?>
+    <!-- FAQ Section -->
+    <section class="py-16 bg-cream">
+        <div class="container-site max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+
+                <!-- Left: Title -->
+                <div class="lg:col-span-3 flex items-center gap-4" data-aos="fade-right">
+                    <svg width="67" class="w-[30px] md:w-[40px] h-auto" height="67" viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0.947266 15.9482L50.9461 65.9463" stroke="#5D7F6E" stroke-width="2.68001" />
+                        <path d="M15.9482 0.949219L65.9471 50.9473" stroke="#5D7F6E" stroke-width="2.68001" />
+                        <path d="M0.947266 15.9482L50.9461 65.9463" stroke="#38464C" stroke-width="2.68001" />
+                        <path d="M15.9482 0.949219L65.9471 50.9473" stroke="#DC973C" stroke-width="2.68001" />
+                        <path d="M15.9463 65.9443L65.9451 15.9463" stroke="#5D7F6E" stroke-width="2.68001" />
+                        <path d="M0.947266 50.9453L50.9461 0.947236" stroke="#5D7F6E" stroke-width="2.68001" />
+                        <path d="M15.9463 65.9443L65.9451 15.9463" stroke="#5D7F6E" stroke-width="2.68001" />
+                        <path d="M0.947266 50.9453L50.9461 0.947236" stroke="#B76739" stroke-width="2.68001" />
+                        <rect x="30.9521" y="30.9473" width="4.99933" height="4.99925" fill="#423931" />
+                    </svg>
+
+                    <h2 class="font-heading text-4xl md:text-5xl font-light text-dark">FAQ</h2>
+                </div>
+
+                <!-- Right: Accordion -->
+                <div class="lg:col-span-9" data-aos="fade-left"
+                    x-data="{ active: null }">
+
+                    <?php
+                    $faqs = [
+                        [
+                            'q' => 'How do I book a trip with Intense Peru?',
+                            'a' => 'Simply fill out our quote request form above with your travel dates, group size, and preferences. One of our travel designers will reach out within 24 hours to begin crafting your personalized itinerary.'
+                        ],
+                        [
+                            'q' => 'What is included in the quoted price?',
+                            'a' => 'Our quotes typically include accommodation, private transportation, guided tours, and entrance fees to all listed sites. International flights and personal expenses are generally not included unless specified. We will clearly outline every inclusion in your custom proposal.'
+                        ],
+                        [
+                            'q' => 'Can I customize my itinerary after receiving the quote?',
+                            'a' => 'Absolutely. Every journey we design is fully flexible. After reviewing your initial proposal, you can adjust destinations, pace, hotel categories, or activities as many times as needed until the itinerary feels exactly right for you.'
+                        ],
+                        [
+                            'q' => 'How far in advance should I book?',
+                            'a' => 'We recommend booking at least 2–3 months in advance, especially for peak season (June–August) and popular routes like the Inca Trail to Machu Picchu, which requires permits that sell out quickly. That said, we can often accommodate last-minute requests.'
+                        ],
+                        [
+                            'q' => 'Do you offer private tours only?',
+                            'a' => 'Yes. All Intense Peru experiences are exclusively private, ensuring you travel at your own pace with a dedicated guide who adapts the journey to your interests and energy each day.'
+                        ],
+                    ];
+                    ?>
+
+                    <ul class="divide-y divide-neutral-gray/50">
+                        <?php foreach ($faqs as $i => $faq): ?>
+                            <li>
+                                <button
+                                    type="button"
+                                    @click="active === <?php echo $i; ?> ? active = null : active = <?php echo $i; ?>"
+                                    class="w-full flex items-center justify-between py-5 gap-6 text-left group focus:outline-none">
+
+                                    <span class="font-body text-sm md:text-[15px] transition-colors duration-200"
+                                        :class="active === <?php echo $i; ?> ? 'text-primary' : 'text-dark/80 group-hover:text-dark'">
+                                        <?php echo esc_html($faq['q']); ?>
+                                    </span>
+
+                                    <!-- Arrow: rotates to × when open -->
+                                    <span class="shrink-0 transition-transform duration-300"
+                                        :class="active === <?php echo $i; ?> ? 'rotate-90' : ''">
+                                        <svg class="w-8 h-4 transition-colors duration-200"
+                                            :class="active === <?php echo $i; ?> ? 'text-primary' : 'text-primary/70 md:text-primary'"
+                                            viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <line x1="0" y1="8" x2="26" y2="8" stroke="currentColor" stroke-width="1.2" />
+                                            <path d="M22 3l6 5-6 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </span>
+                                </button>
+
+                                <!-- Answer -->
+                                <div
+                                    x-show="active === <?php echo $i; ?>"
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                    x-transition:leave="transition ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 translate-y-0"
+                                    x-transition:leave-end="opacity-0 -translate-y-2"
+                                    class="pb-5 pr-12">
+                                    <p class="font-body text-sm text-dark/60 leading-relaxed">
+                                        <?php echo esc_html($faq['a']); ?>
+                                    </p>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </section>
 
 </main>
+
+<style>
+    /* ── Viewport ── */
+    .journey-gallery-embla {
+        overflow: hidden;
+        /* Fade en los bordes para efecto cinta profesional */
+        /* -webkit-mask-image: linear-gradient(to right,
+                transparent 0%,
+                black 8%,
+                black 92%,
+                transparent 100%);
+        mask-image: linear-gradient(to right,
+                transparent 0%,
+                black 8%,
+                black 92%,
+                transparent 100%); */
+    }
+
+    /* ── Container ── */
+    .journey-gallery-embla .embla__container {
+        display: flex;
+        flex-wrap: nowrap;
+        /* Sin gap — pegados */
+    }
+
+    /* ── Slides ── */
+    .journey-gallery-embla .embla__slide {
+        flex: 0 0 100%;
+        /* Mobile: 1 slide visible */
+        min-width: 0;
+        /* Padding interno para separación visual entre cards */
+        /* padding: 0 8px; */
+        box-sizing: border-box;
+    }
+
+    @media (min-width: 768px) {
+        .journey-gallery-embla .embla__slide {
+            flex: 0 0 50%;
+            /* Tablet: 2 slides visibles */
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .journey-gallery-embla .embla__slide {
+            flex: 0 0 33.333%;
+            /* Desktop: 3 slides visibles */
+        }
+    }
+
+    /* ── Card interna (ajusta a tu estructura HTML) ── */
+    .journey-gallery-embla .embla__slide>* {
+        height: 100%;
+        /* Card ocupa todo el alto del slide */
+    }
+</style>
 
 <?php get_footer(); ?>

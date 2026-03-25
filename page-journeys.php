@@ -47,10 +47,10 @@ get_header();
                         Signature<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">10+ days</span>
                     </button>
                     <button data-filter="design-it" class="filter-btn font-body text-sm text-neutral-gray hover:text-dark transition-colors pb-1 text-center cursor-pointer min-w-[80px]">
-                        Design it<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">5-9 days</span>
+                        Compact<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">5-9 days</span>
                     </button>
                     <button data-filter="treasures" class="filter-btn font-body text-sm font-medium text-neutral-gray hover:text-dark transition-colors pb-1 text-center cursor-pointer min-w-[80px]">
-                        Treasures<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">1-4 days</span>
+                        Escapes<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">1-4 days</span>
                     </button>
                 </div>
             </div>

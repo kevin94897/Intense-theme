@@ -40,12 +40,12 @@ $amenities = $args['amenities'] ?? [];
 
     <!-- Content -->
     <div class="md:col-span-7 lg:col-span-8">
-        <h4 class="font-heading text-xl md:text-2xl text-dark mb-3">
+        <h4 class="font-heading text-xl md:text-2xl text-dark mb-3 font-bold">
             <?php echo esc_html($title); ?>
         </h4>
 
         <!-- Ratings & Info Row -->
-        <div class="flex flex-wrap items-center gap-3 font-body text-neutral-black text-sm mb-3">
+        <div class="flex flex-wrap items-center gap-3 font-body text-neutral-black text-sm mb-3 font-light">
             <!-- Stars -->
             <div class="flex items-center text-[#FFC700]">
                 <?php for ($i = 0; $i < 5; $i++): ?>
@@ -78,7 +78,7 @@ $amenities = $args['amenities'] ?? [];
         </div>
 
         <!-- Location -->
-        <div class="flex items-center gap-2 font-body text-sm italic mb-6">
+        <div class="flex items-center gap-2 font-body text-sm italic mb-6 font-light">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -113,7 +113,7 @@ $amenities = $args['amenities'] ?? [];
             <div class="grid grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-6">
                 <?php foreach ($amenities as $amenity): ?>
                     <div class="flex items-center gap-3 font-body text-sm font-light">
-                        <span class="w-5 h-5 flex items-center justify-center shrink-0">
+                        <span class="flex items-center justify-center shrink-0">
                             <?php echo $amenity['icon']; // Assuming trusted SVG markup 
                             ?>
                         </span>
