@@ -8,6 +8,10 @@
 
 $banner_text = get_field('banner_text');
 
+if (empty($banner_text['text']) && empty($banner_text['background_image']['url'])) {
+    return;
+}
+
 // Fallback defaults
 $description = !empty($banner_text['text']) ? $banner_text['text'] : '';
 $bg_image_url = !empty($banner_text['background_image']['url']) ? $banner_text['background_image']['url'] : get_template_directory_uri() . '/assets/images/default_banner.jpg';

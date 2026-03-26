@@ -17,39 +17,45 @@
  *   ] )
  */
 
-$image        = $args['image']        ?? '';
-$title        = $args['title']        ?? '';
-$price        = $args['price']        ?? '';
-$duration     = $args['duration']     ?? '';
+$image = $args['image'] ?? '';
+$title = $args['title'] ?? '';
+$price = $args['price'] ?? '';
+$duration = $args['duration'] ?? '';
 $destinations = $args['destinations'] ?? '';
-$link         = $args['link']         ?? '#';
-$link_text    = $args['link_text']    ?? 'Explore itineraries';
-$aos_delay    = $args['aos_delay']    ?? 0;
-$badges       = $args['badges']       ?? [];
+$link = $args['link'] ?? '#';
+$link_text = $args['link_text'] ?? 'Explore itineraries';
+$aos_delay = $args['aos_delay'] ?? 0;
+$badges = $args['badges'] ?? [];
 ?>
 
-<article class="flex flex-col group w-full" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($aos_delay); ?>">
+<article class="flex flex-col group w-full h-full" data-aos="fade-up"
+    data-aos-delay="<?php echo esc_attr($aos_delay); ?>">
     <!-- Image Wrapper -->
     <div class="relative w-full aspect-[4/5] overflow-hidden mb-6 rounded-sm">
-        <?php if ($image) : ?>
+        <?php if ($image): ?>
             <a href="<?php echo esc_url($link); ?>" tabindex="-1" class="block w-full h-full">
-                <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($title); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+                <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($title); ?>"
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy">
             </a>
         <?php endif; ?>
 
         <!-- Badges -->
-        <?php if (!empty($badges)) : ?>
+        <?php if (!empty($badges)): ?>
             <div class="absolute top-4 left-4 flex flex-wrap gap-2 pointer-events-none">
-                <?php foreach ($badges as $badge) : ?>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-gray/50 backdrop-blur-md text-white font-body text-[13px] font-light tracking-wide shadow-sm">
-                        <?php if (strtolower($badge) === 'new') : ?>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <?php foreach ($badges as $badge): ?>
+                    <span
+                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-gray/50 backdrop-blur-md text-white font-body text-[13px] font-light tracking-wide shadow-sm">
+                        <?php if (strtolower($badge) === 'new'): ?>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M6 3h12l4 6-10 13L2 9Z" />
                                 <path d="M11 3 8 9l4 13 4-13-3-6" />
                                 <path d="M2 9h20" />
                             </svg>
-                        <?php elseif (strtolower($badge) === 'top seller') : ?>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <?php elseif (strtolower($badge) === 'top seller'): ?>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
                                 <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
                                 <path d="M4 22h16" />
@@ -83,7 +89,8 @@ $badges       = $args['badges']       ?? [];
         <div class="flex items-start gap-4 mb-8">
             <!-- Duration -->
             <div class="flex items-center gap-2 shrink-0 pt-1">
-                <svg class="text-dark/70 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="text-dark/70 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10" />
                     <path d="M12 6v6l4 2" />
                 </svg>
@@ -97,7 +104,8 @@ $badges       = $args['badges']       ?? [];
 
             <!-- Destinations -->
             <div class="flex items-start gap-2 pt-1">
-                <svg class="text-dark/70 shrink-0 mt-[3px]" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="text-dark/70 shrink-0 mt-[3px]" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                     <circle cx="12" cy="10" r="3" />
                 </svg>

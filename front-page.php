@@ -182,7 +182,7 @@ get_header();
                         ],
                     ];
                     foreach ($itineraries as $index => $itin):
-                    ?>
+                        ?>
                         <?php get_template_part('template-parts/components/card-itinerary', null, [
                             'image' => $itin['img'],
                             'title' => $itin['title'],
@@ -353,7 +353,7 @@ get_header();
                     ],
                 ];
                 foreach ($posts as $index => $post):
-                ?>
+                    ?>
                     <?php get_template_part('template-parts/components/card-story', null, [
                         'image' => $post['img'],
                         'image_alt' => $post['title'],

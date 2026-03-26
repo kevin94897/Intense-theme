@@ -39,8 +39,8 @@ function intense_nerd_setup()
 
     // Registrar menús de navegación
     register_nav_menus([
-        'primary-menu'   => __('Menú Principal', 'intense-nerd-theme'),
-        'footer-menu'    => __('Menú Footer', 'intense-nerd-theme'),
+        'primary-menu' => __('Menú Principal', 'intense-nerd-theme'),
+        'footer-menu' => __('Menú Footer', 'intense-nerd-theme'),
         'footer-explore' => __('Menú Footer Explore', 'intense-nerd-theme'),
         'footer-general' => __('Menú Footer General', 'intense-nerd-theme'),
     ]);
@@ -187,13 +187,13 @@ add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts_handler');
 
 function load_more_posts_handler()
 {
-    $page     = isset($_POST['page']) ? intval($_POST['page']) : 2;
+    $page = isset($_POST['page']) ? intval($_POST['page']) : 2;
     $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
 
     $args = [
-        'post_type'      => 'post',
+        'post_type' => 'post',
         'posts_per_page' => 8,
-        'paged'          => $page,
+        'paged' => $page,
     ];
 
     if ($category) {
@@ -205,14 +205,18 @@ function load_more_posts_handler()
     if ($query->have_posts()) {
         $count_offset = ($page - 1) * 8; // para mantener el patrón de clases
 
-        while ($query->have_posts()) : $query->the_post();
+        while ($query->have_posts()):
+            $query->the_post();
             $count_offset++;
             $pos = (($count_offset - 1) % 10) + 1;
 
             $classes = 'news-card h-full';
-            if ($pos === 4)       $classes = 'news-card large large-left';
-            elseif ($pos === 5)   $classes = 'news-card pos-5';
-            elseif ($pos === 10)  $classes = 'news-card large large-right';
+            if ($pos === 4)
+                $classes = 'news-card large large-left';
+            elseif ($pos === 5)
+                $classes = 'news-card pos-5';
+            elseif ($pos === 10)
+                $classes = 'news-card large large-right';
 
             get_template_part('template-parts/content', 'blog-item', ['classes' => $classes]);
         endwhile;
@@ -221,6 +225,63 @@ function load_more_posts_handler()
     }
 
     wp_die(); // Obligatorio en handlers AJAX de WordPress
+}
+
+add_action('wp_ajax_load_more_journeys', 'load_more_journeys_handler');
+add_action('wp_ajax_nopriv_load_more_journeys', 'load_more_journeys_handler');
+
+function load_more_journeys_handler()
+{
+    $page = isset($_POST['page']) ? intval($_POST['page']) : 2;
+
+    $args = [
+        'post_type' => 'journey',
+        'posts_per_page' => 9,
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'paged' => $page,
+    ];
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) {
+        $index = ($page - 1) * 9;
+        while ($query->have_posts()):
+            $query->the_post();
+            $information = get_field('information');
+            $features = get_field('features');
+
+            $image = get_the_post_thumbnail_url(get_the_ID(), 'large');
+            $title = get_the_title();
+            $days_val = (int) ($information['days'] ?? 0);
+            $duration = $days_val ? $days_val . ' Days' : '';
+            $price_val = $features['price'] ?? '';
+            $price = $price_val ? 'USD ' . number_format($price_val) : '';
+            $destinations = $information['short_description'] ?? '';
+            $link = get_permalink();
+            ?>
+            <div class="journey-card" data-days="<?php echo esc_attr($days_val); ?>">
+                <?php
+                get_template_part('template-parts/components/card-itinerary', null, [
+                    'image' => $image,
+                    'title' => $title,
+                    'price' => $price,
+                    'duration' => $duration,
+                    'destinations' => $destinations,
+                    'link' => $link,
+                    'link_text' => 'Explore itinerary',
+                    'aos_delay' => ($index % 3) * 100,
+                    'badges' => [],
+                ]);
+                ?>
+            </div>
+            <?php
+            $index++;
+        endwhile;
+        wp_reset_postdata();
+    }
+    wp_die();
 }
 
 
@@ -290,10 +351,10 @@ function theme_customize_social_links($wp_customize)
     ]);
 
     $socials = [
-        'facebook'  => 'Facebook',
+        'facebook' => 'Facebook',
         'instagram' => 'Instagram',
-        'twitter'   => 'Twitter / X',
-        'linkedin'  => 'LinkedIn',
+        'twitter' => 'Twitter / X',
+        'linkedin' => 'LinkedIn',
     ];
 
     foreach ($socials as $key => $label) {
@@ -336,22 +397,22 @@ add_action('wp_enqueue_scripts', function () {
  */
 
 // ── 1. Journeys megamenu ──────────────────────────────────────────────────
-add_action('wp_ajax_mega_journeys',        'intense_mega_journeys');
+add_action('wp_ajax_mega_journeys', 'intense_mega_journeys');
 add_action('wp_ajax_nopriv_mega_journeys', 'intense_mega_journeys');
 
 function intense_mega_journeys()
 {
     // Lists: all journeys grouped by days ACF field
     $all = get_posts([
-        'post_type'      => 'journey',   // ← change to your CPT slug
+        'post_type' => 'journey',   // ← change to your CPT slug
         'posts_per_page' => -1,
-        'orderby'        => 'date',
-        'order'          => 'ASC',
+        'orderby' => 'date',
+        'order' => 'ASC',
     ]);
 
-    $grand   = [];  // 10–15 days
+    $grand = [];  // 10–15 days
     $compact = [];  // 5–9 days
-    $short   = [];  // 2–4 days
+    $short = [];  // 2–4 days
 
     foreach ($all as $post) {
         $days = (int) get_field('information_days', $post->ID); // ACF: information.days
@@ -360,20 +421,20 @@ function intense_mega_journeys()
             $days = (int) get_post_meta($post->ID, 'days', true);
         }
         if ($days >= 10) {
-            $grand[]   = $post;
+            $grand[] = $post;
         } elseif ($days >= 5) {
             $compact[] = $post;
         } elseif ($days >= 2) {
-            $short[]   = $post;
+            $short[] = $post;
         }
     }
 
     // Recent 3 cards
     $recent = get_posts([
-        'post_type'      => 'journey',
+        'post_type' => 'journey',
         'posts_per_page' => 3,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
+        'orderby' => 'date',
+        'order' => 'DESC',
     ]);
 
     $render_list = function (array $items) {
@@ -382,7 +443,8 @@ function intense_mega_journeys()
             return '<li><span class="text-dark/30 text-sm italic">—</span></li>';
         }
         foreach ($items as $p) {
-            $days = (int) get_field('information_days', $p->ID) ?: (int) get_post_meta($p->ID, 'days', true);
+            // $days = (int) get_field('information_days', $p->ID) ?: (int) get_post_meta($p->ID, 'days', true);
+            $days = '';
             $out .= '<li>';
             $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
                 . 'class="text-sm font-body text-dark/70 hover:text-primary transition-colors underline-offset-2 hover:underline">'
@@ -413,25 +475,25 @@ function intense_mega_journeys()
     };
 
     wp_send_json_success([
-        'grand'   => $render_list($grand),
+        'grand' => $render_list($grand),
         'compact' => $render_list($compact),
-        'short'   => $render_list($short),
-        'cards'   => $render_cards($recent),
+        'short' => $render_list($short),
+        'cards' => $render_cards($recent),
     ]);
 }
 
 
 // ── 2. Destinations megamenu ──────────────────────────────────────────────
-add_action('wp_ajax_mega_destinations',        'intense_mega_destinations');
+add_action('wp_ajax_mega_destinations', 'intense_mega_destinations');
 add_action('wp_ajax_nopriv_mega_destinations', 'intense_mega_destinations');
 
 function intense_mega_destinations()
 {
     $posts = get_posts([
-        'post_type'      => 'destination',   // ← change to your CPT slug
+        'post_type' => 'destination',   // ← change to your CPT slug
         'posts_per_page' => 6,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
+        'orderby' => 'date',
+        'order' => 'DESC',
     ]);
 
     $out = '';
@@ -481,26 +543,26 @@ function intense_mega_destinations()
 
 
 // ── 3. Blog megamenu ──────────────────────────────────────────────────────
-add_action('wp_ajax_mega_blog',        'intense_mega_blog');
+add_action('wp_ajax_mega_blog', 'intense_mega_blog');
 add_action('wp_ajax_nopriv_mega_blog', 'intense_mega_blog');
 
 function intense_mega_blog()
 {
     // Left list: 4 most recent posts ordered by date
     $list_posts = get_posts([
-        'post_type'      => 'post',
+        'post_type' => 'post',
         'posts_per_page' => 4,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
+        'orderby' => 'date',
+        'order' => 'DESC',
     ]);
 
     // Right cards: posts marked as "featured" (sticky) or fallback to latest 4
     $featured = get_posts([
-        'post_type'      => 'post',
+        'post_type' => 'post',
         'posts_per_page' => 4,
-        'post__in'       => get_option('sticky_posts') ?: [0],
-        'orderby'        => 'date',
-        'order'          => 'DESC',
+        'post__in' => get_option('sticky_posts') ?: [0],
+        'orderby' => 'date',
+        'order' => 'DESC',
     ]);
     if (empty($featured)) {
         $featured = $list_posts;
@@ -544,8 +606,8 @@ function intense_mega_blog()
     }
 
     wp_send_json_success([
-        'list'        => $list_html,
-        'cards'       => $cards_html,
+        'list' => $list_html,
+        'cards' => $cards_html,
         'mobile_list' => $mobile_list,
     ]);
 }

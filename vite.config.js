@@ -2,12 +2,25 @@ import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'path'
 
+function phpHMR() {
+  return {
+    name: 'php-hmr',
+    handleHotUpdate({ file, server }) {
+      if (file.endsWith('.php')) {
+        server.ws.send({ type: 'full-reload' })
+        return []
+      }
+    },
+  }
+}
+
 export default defineConfig(({ command }) => ({
   // En desarrollo (serve), usamos base '/' para que las rutas asuman el host (que configuraremos con origin).
   // En producción (build), usamos './' para rutas relativas dentro de la carpeta dist.
   base: command === 'serve' ? '/' : './',
   plugins: [
     tailwindcss(), // integración nativa Tailwind v4
+    phpHMR(),
   ],
   build: {
     outDir: 'dist',
