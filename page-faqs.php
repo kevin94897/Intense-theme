@@ -10,7 +10,7 @@
  *     ├── description      (text)
  *     └── list_of_questions (repeater)
  *           ├── question   (text)
- *           └── response   (textarea)
+ *           └── response   (wysiwyg)
  *
  * Requiere: ACF Pro + Options Page registrada como 'faqs'
  */
@@ -101,7 +101,7 @@ $questions    = $faqs_group['list_of_questions'] ?? [];
                                     @click="open = !open"
                                     :aria-expanded="open"
                                     class="faq-trigger w-full flex items-start justify-between gap-6 py-5 text-left group">
-                                    <span class="faq-question text-sm font-body font-medium text-dark leading-snug group-hover:text-dark/70 transition-colors">
+                                    <span class="faq-question text-[15px] font-body font-medium text-dark leading-snug group-hover:text-dark/70 transition-colors">
                                         <?php echo esc_html($q_text); ?>
                                     </span>
                                     <!-- Icono +/- -->
@@ -117,9 +117,9 @@ $questions    = $faqs_group['list_of_questions'] ?? [];
                                     x-show="open"
                                     x-collapse
                                     class="faq-answer">
-                                    <p class="pb-5 pr-10 text-sm font-body text-dark/55 leading-relaxed">
-                                        <?php echo nl2br(esc_html($a_text)); ?>
-                                    </p>
+                                    <div class="faq-wysiwyg pb-5 pr-10 text-sm font-body text-dark/55 leading-relaxed">
+                                        <?php echo wp_kses_post($a_text); ?>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -162,6 +162,17 @@ $questions    = $faqs_group['list_of_questions'] ?? [];
     .faq-icon {
         flex-shrink: 0;
     }
+
+    /* ── WYSIWYG response content ───────────────────────────────────── */
+    .faq-wysiwyg p { margin-bottom: 0.75rem; }
+    .faq-wysiwyg p:last-child { margin-bottom: 0; }
+    .faq-wysiwyg a { color: var(--color-primary, #b76739); text-decoration: underline; }
+    .faq-wysiwyg strong { font-weight: 600; color: var(--color-dark, #1a1a1a); }
+    .faq-wysiwyg ul,
+    .faq-wysiwyg ol { padding-left: 1.25rem; margin-bottom: 0.75rem; }
+    .faq-wysiwyg ul { list-style: disc; }
+    .faq-wysiwyg ol { list-style: decimal; }
+    .faq-wysiwyg li { margin-bottom: 0.25rem; }
 
     /* Animación x-collapse si no está disponible, fallback */
     [x-cloak] {

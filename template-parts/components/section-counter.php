@@ -1,39 +1,61 @@
 <?php
 
-$stats = [
-    [
-        'value'    => '2015–2025',
-        'label'    => "Tripadvisor Travelers'\nChoice Award",
-        'type'     => 'text',  // 'text' | 'number'
-    ],
-    [
-        'value'    => '4.9',
-        'suffix'   => '/ 5',
-        'label'    => 'Average Rating on Tripadvisor (+550 reviews)',
-        'type'     => 'number',
-        'decimals' => 1,
-    ],
-    [
-        'value'    => '10000',
-        'prefix'   => '+',
-        'label'    => 'Satisfied Clients',
-        'type'     => 'number',
-        'decimals' => 0,
-    ],
-    [
-        'value'    => '50',
-        'prefix'   => '+',
-        'suffix'   => '%',
-        'label'    => 'Women Workforce',
-        'type'     => 'number',
-        'decimals' => 0,
-    ],
-    [
-        'value'    => '2015–2025',
-        'label'    => "Tripadvisor Travelers'\nChoice Award",
-        'type'     => 'text',
-    ],
-];
+/**
+ * Component: Section Counter
+ * Accepts $args['list_of_values'] (repeater from ACF)
+ */
+
+$stats = [];
+
+if (!empty($args['list_of_values'])) {
+    foreach ($args['list_of_values'] as $item) {
+        $value = $item['value'] ?? '';
+        // Basic heuristic to check if it's a number for animation
+        // Handles: "4.9", "+550", "10,000"
+        $numeric_value = preg_replace('/[^0-9.]/', '', $value);
+        $is_numeric = is_numeric($numeric_value) && strlen($numeric_value) > 0;
+
+        $stats[] = [
+            'value'    => $is_numeric ? $numeric_value : $value,
+            'label'    => $item['text'] ?? '',
+            'type'     => $is_numeric ? 'number' : 'text',
+            'prefix'   => strpos($value, '+') === 0 ? '+' : '',
+            'suffix'   => strpos($value, '%') !== false ? '%' : (strpos($value, '/') !== false ? substr($value, strpos($value, '/')) : ''),
+            'decimals' => (strpos($numeric_value, '.') !== false) ? strlen(substr($numeric_value, strpos($numeric_value, '.') + 1)) : 0,
+        ];
+    }
+} else {
+    // Fallback static data
+    $stats = [
+        [
+            'value'    => '2015–2025',
+            'label'    => "Tripadvisor Travelers'\nChoice Award",
+            'type'     => 'text',
+        ],
+        [
+            'value'    => '4.9',
+            'suffix'   => '/ 5',
+            'label'    => 'Average Rating on Tripadvisor (+550 reviews)',
+            'type'     => 'number',
+            'decimals' => 1,
+        ],
+        [
+            'value'    => '10000',
+            'prefix'   => '+',
+            'label'    => 'Satisfied Clients',
+            'type'     => 'number',
+            'decimals' => 0,
+        ],
+        [
+            'value'    => '50',
+            'prefix'   => '+',
+            'suffix'   => '%',
+            'label'    => 'Women Workforce',
+            'type'     => 'number',
+            'decimals' => 0,
+        ],
+    ];
+}
 
 ?>
 

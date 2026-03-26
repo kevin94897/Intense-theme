@@ -62,7 +62,7 @@ $blog_query = new WP_Query($args);
         maxPages: <?php echo $blog_query->max_num_pages; ?>,
         category: '<?php echo $current_cat; ?>',
         ajaxUrl: '<?php echo admin_url('admin-ajax.php'); ?>'
-    })" class="container mx-auto px-4 pb-20">
+    })" class="container-site-wide px-4 pb-20">
 
         <div id="blog-posts-container" class="news-grid">
             <?php

@@ -58,7 +58,7 @@ if (!$reading_time) $reading_time = '5-minute read';
                     <?php the_title(); ?>
                 </a>
             </h3>
-            <div class="card-meta flex items-center gap-3 text-xs text-ink/50 font-body mt-auto">
+            <div class="card-meta flex items-center gap-3 text-sm text-ink/50 font-body mt-auto">
                 <span class="flex items-center gap-1">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="10" />
@@ -66,6 +66,7 @@ if (!$reading_time) $reading_time = '5-minute read';
                     </svg>
                     <?php echo esc_html($reading_time); ?>
                 </span>
+                <span class="text-sm text-ink/50">|</span>
                 <span class="flex items-center gap-1">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                         <rect x="3" y="4" width="18" height="18" rx="2" />

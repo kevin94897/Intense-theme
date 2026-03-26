@@ -16,18 +16,19 @@ get_header();
         <!-- Background Image -->
         <div class="absolute inset-0 z-0">
             <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_banner_destinations.webp"
-                alt="Machu Picchu" class="w-full h-full object-cover">
+                alt="Discover Peru" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 
         <div class="container-site relative z-10 text-center px-4">
             <h1 class="font-heading text-white text-4xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
                 data-aos="fade-up" data-aos-delay="100">
-                Discover Peru,One Region at a Time </h1>
-            <p class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10" data-aos="fade-up"
+                <?php echo get_the_title(); ?>
+            </h1>
+            <p class="font-body text-white/90 text-lg md:text-xl font-light max-w-3xl mx-auto mb-10" data-aos="fade-up"
                 data-aos-delay="200">
-                Coast, Andes & Jungle: Peru is a land shaped by contrast and wonder, where three distinct worlds come
-                together to create one authentic & extraordinary journey.</p>
+                <?php echo wp_strip_all_tags(get_the_content()); ?>
+            </p>
             <div class="text-center" data-aos="fade-up" data-aos-delay="300">
                 <?php get_template_part('template-parts/components/btn-primary', null, [
                     'text' => 'Explore itineraries',
@@ -37,16 +38,16 @@ get_header();
         </div>
     </section>
 
-    <section class="py-20">
-        <div class="container-site">
-            <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center" data-aos="fade-up"
-                data-aos-delay="200">
-                Savor the rich flavors and colonial heritage of the coast, explore the timeless Inca culture and
-                majestic Machu Picchu in the Andes, and lose yourself in the lush biodiversity and vibrant wildlife of
-                the Amazon. Three regions, one authentic, extraordinary & unforgettable journey.
-            </p>
-        </div>
-    </section>
+    <?php if (get_field('message')) : ?>
+        <section class="py-20">
+            <div class="container-site">
+                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center" data-aos="fade-up"
+                    data-aos-delay="200">
+                    <?php echo get_field('message'); ?>
+                </p>
+            </div>
+        </section>
+    <?php endif; ?>
 
 
     <!-- C. Destinations -->
@@ -76,193 +77,110 @@ get_header();
             </div>
 
             <!--
-            LAYOUT PATTERN (mirrors the screenshot exactly):
-            Col LEFT  → tall (360px) | short (240px) | tall (360px)
-            Col RIGHT → short (240px) | tall (360px) | short (240px)
-            Gap between cols + rows: 12px
-            Both columns are equal width (grid-cols-2).
-            On mobile the same 2-col layout is kept but heights shrink.
+            LAYOUT PATTERN (mirrors the original layout):
+            Col LEFT  → tall | short | tall
+            Col RIGHT → short | tall | short
         -->
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <?php
+                $args = [
+                    'post_type' => 'destination',
+                    'posts_per_page' => -1,
+                    'post_status' => 'publish',
+                    'orderby' => 'menu_order',
+                    'order' => 'ASC',
+                ];
+                $destinations_query = new WP_Query($args);
 
-                <!-- ── LEFT COLUMN ── -->
-                <div class="flex flex-col gap-3">
+                if ($destinations_query->have_posts()) :
+                    $all_destinations = $destinations_query->posts;
+                    $left_col = [];
+                    $right_col = [];
 
-                    <!-- 1. Lima — TALL -->
-                    <!-- 1. Lima — TALL -->
-                    <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
-                        style="height: clamp(260px, 38vw, 480px);" data-aos="fade-up" data-aos-delay="200"
-                        onclick="window.location.href='#'">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_01.webp" alt="Lima"
-                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                        <div
-                            class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6 z-10 w-full h-full">
-                            <h3
-                                class="font-heading text-white text-xl md:text-3xl font-medium mb-3 md:mb-4 drop-shadow">
-                                Lima
-                            </h3>
-                            <div>
-                                <?php get_template_part('template-parts/components/btn-outline', null, [
-                                    'text' => 'Explore Destination',
-                                    'href' => '#',
-                                    'color' => 'light',
-                                    'class_extra' => 'text-xs md:text-sm px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
-                                ]); ?>
+                    foreach ($all_destinations as $i => $post) {
+                        if ($i % 2 === 0) {
+                            $left_col[] = $post;
+                        } else {
+                            $right_col[] = $post;
+                        }
+                    }
+                ?>
+                    <!-- ── LEFT COLUMN ── -->
+                    <div class="flex flex-col gap-3">
+                        <?php foreach ($left_col as $index => $post) :
+                            setup_postdata($post);
+                            $is_tall = ($index % 2 === 0);
+                            $height = $is_tall ? 'clamp(260px, 38vw, 480px)' : 'clamp(180px, 26vw, 340px)';
+                            $delay = 200 + ($index * 150);
+                        ?>
+                            <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
+                                style="height: <?php echo $height; ?>;" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>"
+                                onclick="window.location.href='<?php the_permalink(); ?>'">
+                                <?php if (has_post_thumbnail()) : ?>
+                                    <img src="<?php the_post_thumbnail_url('large'); ?>" alt="<?php the_title_attribute(); ?>"
+                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                                <?php endif; ?>
+                                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6 z-10 w-full h-full">
+                                    <h3 class="font-heading text-white text-xl md:text-3xl font-medium mb-3 md:mb-4 drop-shadow">
+                                        <?php the_title(); ?>
+                                    </h3>
+                                    <div>
+                                        <?php get_template_part('template-parts/components/btn-outline', null, [
+                                            'text' => 'Explore Destination',
+                                            'href' => get_permalink(),
+                                            'color' => 'light',
+                                            'class_extra' => 'text-xs md:text-sm px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
+                                        ]); ?>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        <?php endforeach;
+                        wp_reset_postdata(); ?>
                     </div>
 
-                    <!-- 2. Nazca Lines — SHORT -->
-                    <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
-                        style="height: clamp(180px, 26vw, 340px);" data-aos="fade-up" data-aos-delay="350"
-                        onclick="window.location.href='#'">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_03.webp"
-                            alt="Nazca Lines & Paracas"
-                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                        <div
-                            class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex flex-col items-center justify-center text-center p-3 md:p-5 z-10 w-full h-full">
-                            <h3
-                                class="font-heading text-white text-base md:text-2xl font-medium mb-2 md:mb-3 drop-shadow">
-                                Nazca Lines &amp; Paracas
-                            </h3>
-                            <div>
-                                <?php get_template_part('template-parts/components/btn-outline', null, [
-                                    'text' => 'Explore Destination',
-                                    'href' => '#',
-                                    'color' => 'light',
-                                    'class_extra' => 'text-[10px] md:text-xs px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
-                                ]); ?>
+                    <!-- ── RIGHT COLUMN ── -->
+                    <div class="flex flex-col gap-3">
+                        <?php foreach ($right_col as $index => $post) :
+                            setup_postdata($post);
+                            $is_tall = ($index % 2 !== 0);
+                            $height = $is_tall ? 'clamp(200px, 28vw, 340px)' : 'clamp(180px, 26vw, 340px)';
+                            $delay = 275 + ($index * 150);
+                        ?>
+                            <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
+                                style="height: <?php echo $height; ?>;" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>"
+                                onclick="window.location.href='<?php the_permalink(); ?>'">
+                                <?php if (has_post_thumbnail()) : ?>
+                                    <img src="<?php the_post_thumbnail_url('large'); ?>" alt="<?php the_title_attribute(); ?>"
+                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                                <?php endif; ?>
+                                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6 z-10 w-full h-full">
+                                    <h3 class="font-heading text-white text-base md:text-2xl font-medium mb-2 md:mb-3 drop-shadow">
+                                        <?php the_title(); ?>
+                                    </h3>
+                                    <div>
+                                        <?php get_template_part('template-parts/components/btn-outline', null, [
+                                            'text' => 'Explore Destination',
+                                            'href' => get_permalink(),
+                                            'color' => 'light',
+                                            'class_extra' => 'text-[10px] md:text-xs px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
+                                        ]); ?>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        <?php endforeach;
+                        wp_reset_postdata(); ?>
                     </div>
-
-                    <!-- 3. Amazon — TALL -->
-                    <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
-                        style="height: clamp(260px, 38vw, 480px);" data-aos="fade-up" data-aos-delay="500"
-                        onclick="window.location.href='#'">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_05.webp"
-                            alt="Amazon Rainforest"
-                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                        <div
-                            class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6 z-10 w-full h-full">
-                            <h3
-                                class="font-heading text-white text-xl md:text-3xl font-medium mb-3 md:mb-4 drop-shadow">
-                                Amazon Rainforest
-                            </h3>
-                            <div>
-                                <?php get_template_part('template-parts/components/btn-outline', null, [
-                                    'text' => 'Explore Destination',
-                                    'href' => '#',
-                                    'color' => 'light',
-                                    'class_extra' => 'text-[10px] md:text-xs px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
-                                ]); ?>
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!-- /LEFT COLUMN -->
-
-                <!-- ── RIGHT COLUMN ── (inverted rhythm: short → tall → short) -->
-                <div class="flex flex-col gap-3">
-
-                    <!-- 1. Arequipa — SHORT -->
-                    <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
-                        style="height: clamp(180px, 26vw, 340px);" data-aos="fade-up" data-aos-delay="275"
-                        onclick="window.location.href='#'">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_04.webp"
-                            alt="Arequipa & Colca Canyon"
-                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                        <div
-                            class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex flex-col items-center justify-center text-center p-3 md:p-5 z-10 w-full h-full">
-                            <h3
-                                class="font-heading text-white text-base md:text-2xl font-medium mb-2 md:mb-3 drop-shadow">
-                                Arequipa &amp; Colca Canyon
-                            </h3>
-                            <div>
-                                <?php get_template_part('template-parts/components/btn-outline', null, [
-                                    'text' => 'Explore Destination',
-                                    'href' => '#',
-                                    'color' => 'light',
-                                    'class_extra' => 'text-[10px] md:text-xs px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
-                                ]); ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2. Machu Picchu — TALL -->
-                    <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
-                        style="height: clamp(200px, 28vw, 340px);" data-aos="fade-up" data-aos-delay="425"
-                        onclick="window.location.href='#'">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_02.webp"
-                            alt="Machu Picchu & Cusco"
-                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                        <div
-                            class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6 z-10 w-full h-full">
-                            <h3
-                                class="font-heading text-white text-xl md:text-3xl font-medium mb-3 md:mb-4 drop-shadow">
-                                Machu Picchu &amp; Cusco
-                            </h3>
-                            <div>
-                                <?php get_template_part('template-parts/components/btn-outline', null, [
-                                    'text' => 'Explore Destination',
-                                    'href' => '#',
-                                    'color' => 'light',
-                                    'class_extra' => 'text-[10px] md:text-xs px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
-                                ]); ?>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 3. Lake Titicaca — SHORT -->
-                    <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
-                        style="height: clamp(180px, 26vw, 340px);" data-aos="fade-up" data-aos-delay="575"
-                        onclick="window.location.href='#'">
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_06.webp"
-                            alt="Lake Titicaca"
-                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                        <div
-                            class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-500">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex flex-col items-center justify-center text-center p-3 md:p-5 z-10 w-full h-full">
-                            <h3
-                                class="font-heading text-white text-base md:text-2xl font-medium mb-2 md:mb-3 drop-shadow">
-                                Lake Titicaca
-                            </h3>
-                            <div>
-                                <?php get_template_part('template-parts/components/btn-outline', null, [
-                                    'text' => 'Explore Destination',
-                                    'href' => '#',
-                                    'color' => 'light',
-                                    'class_extra' => 'text-[10px] md:text-xs px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
-                                ]); ?>
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!-- /RIGHT COLUMN -->
-
+                <?php else : ?>
+                    <p class="col-span-2 text-center py-10">No destinations found.</p>
+                <?php endif; ?>
             </div><!-- /grid -->
 
         </div>
     </section>
 
-    <!-- G. Banner CTA -->
+    <!-- G. Banner Text (Uses ACF banner_text field) -->
     <?php get_template_part('template-parts/components/banner-cta'); ?>
 
     <!-- Testimonials -->

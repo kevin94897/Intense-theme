@@ -4,71 +4,95 @@
  * Component: Meet the Team
  * Slider con Embla Carousel
  *
- * Uso: get_template_part('template-parts/components/section-conocenos.php');
- *
- * Requiere un CPT "team" con campos ACF:
- *   - team_role    (text)
- *   - team_photo   (image) — opcional, fallback a featured image
- *
- * Si no usas CPT, reemplaza $team_query por un array estático de ejemplo.
+ * Accepts $args:
+ *   - title        (string)
+ *   - description  (string)
+ *   - image        (array)  — group photo
+ *   - team_members (array)  — gallery of image objects
  */
 
-$team_query = new WP_Query([
-    'post_type'      => 'team',
-    'posts_per_page' => -1,
-    'orderby'        => 'menu_order',
-    'order'          => 'ASC',
-]);
+$title       = $args['title']       ?? 'Meet the Team Behind Intense Peru';
+$description = $args['description'] ?? 'A proudly women-led workforce — over 50% local women — each bringing strong expertise and a firm commitment to supporting local communities and caring for the planet.';
+$group_img   = $args['image']       ?? [];
+$gallery     = $args['team_members'] ?? [];
 
-// Fallback: si no hay CPT "team", usar datos estáticos para preview
-$use_static = !$team_query->have_posts();
-$static_members = [
-    ['name' => 'Antonia',  'role' => 'Lead Guide',          'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_01.webp'],
-    ['name' => 'Karen',    'role' => 'Operations Manager',  'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_02.webp'],
-    ['name' => 'Karina',   'role' => 'Cultural Specialist', 'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_03.webp'],
-    ['name' => 'Lucía',    'role' => 'Travel Consultant',   'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_01.webp'],
-    ['name' => 'Valeria',  'role' => 'Guest Experience',    'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_02.webp'],
-];
+$group_photo_url = !empty($group_img) ? $group_img['url'] : get_template_directory_uri() . '/assets/images/intense_conocenos_img.webp';
+
+$team_members_data = [];
+
+if (!empty($gallery)) {
+    foreach ($gallery as $img_obj) {
+        $team_members_data[] = [
+            'name' => $img_obj['title'] ?? $img_obj['alt'],
+            'role' => $img_obj['caption'] ?? '', // Using caption as role
+            'img'  => $img_obj['url']
+        ];
+    }
+} else {
+    $team_query = new WP_Query([
+        'post_type'      => 'team',
+        'posts_per_page' => -1,
+        'orderby'        => 'menu_order',
+        'order'          => 'ASC',
+    ]);
+
+    if ($team_query->have_posts()) {
+        while ($team_query->have_posts()) {
+            $team_query->the_post();
+            $photo = get_field('team_photo');
+            $team_members_data[] = [
+                'name' => get_the_title(),
+                'role' => get_field('team_role') ?: get_post_meta(get_the_ID(), 'team_role', true),
+                'img'  => $photo['url'] ?? intense_nerd_get_thumbnail(get_the_ID(), 'card-thumb')
+            ];
+        }
+        wp_reset_postdata();
+    }
+}
+
+// Fallback if still empty
+if (empty($team_members_data)) {
+    $team_members_data = [
+        ['name' => 'Antonia',  'role' => 'Lead Guide',          'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_01.webp'],
+        ['name' => 'Karen',    'role' => 'Operations Manager',  'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_02.webp'],
+        ['name' => 'Karina',   'role' => 'Cultural Specialist', 'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_03.webp'],
+        ['name' => 'Lucía',    'role' => 'Travel Consultant',   'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_01.webp'],
+        ['name' => 'Valeria',  'role' => 'Guest Experience',    'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_02.webp'],
+    ];
+}
 ?>
 
 <!-- ═══════════════════════════════════════════════════════
      MEET THE TEAM
+     Row layout: Group image on left | Text + Carousel on right
 ════════════════════════════════════════════════════════ -->
 <section class="team-section py-12 lg:py-20 overflow-hidden bg-cream">
     <div class="container-site mx-auto px-6 lg:px-8">
 
-        <!-- Layout grid: texto izq | slider der -->
         <div class="team-layout grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-            <!-- ── Columna izquierda: imagen grupal ─────────────────────── -->
+            <!-- Group Photo -->
             <div class="team-photo-wrap relative" data-aos="fade-right">
                 <div class="team-photo-frame overflow-hidden rounded-2xl aspect-[3/4] lg:aspect-auto lg:h-[560px]">
-                    <?php
-                    // Reemplazar con la imagen real del equipo
-                    $group_photo = get_template_directory_uri() . '/assets/images/intense_conocenos_img.webp';
-                    // Si tienes el campo ACF global:
-                    // $group_photo = get_field('team_group_photo', 'option') ?: $group_photo;
-                    ?>
                     <img
-                        src="<?php echo esc_url($group_photo); ?>"
-                        alt="<?php esc_attr_e('Equipo Intense Peru', 'intense-nerd-theme'); ?>"
+                        src="<?php echo esc_url($group_photo_url); ?>"
+                        alt="<?php echo esc_attr($title); ?>"
                         class="w-full h-full object-cover object-top"
                         loading="lazy">
                 </div>
             </div>
 
-            <!-- ── Columna derecha: texto + slider ──────────────────────── -->
+            <!-- Content + Slider -->
             <div data-aos="fade-left" data-aos-delay="100">
 
-                <!-- Encabezado -->
                 <h2 class="font-heading text-4xl md:text-5xl font-medium mb-6">
-                    Meet the Team Behind Intense Peru
+                    <?php echo esc_html($title); ?>
                 </h2>
-                <p class="font-body text-dark font-light">
-                    A proudly women-led workforce — over 50% local women — each bringing strong expertise and a firm commitment to supporting local communities and caring for the planet.
-                </p>
+                <div class="font-body text-dark font-light mb-8 prose prose-neutral max-w-none">
+                    <?php echo wpautop(esc_html($description)); ?>
+                </div>
 
-                <!-- ── Embla Carousel ────────────────────────────────────── -->
+                <!-- Embla Carousel -->
                 <div class="embla team-embla" id="teamEmbla">
 
                     <!-- Controles -->
@@ -93,30 +117,23 @@ $static_members = [
                     <div class="embla__viewport overflow-hidden">
                         <div class="embla__container flex gap-4 touch-pan-y">
 
-                            <?php if ($use_static) : ?>
-                                <?php foreach ($static_members as $member) : ?>
-                                    <div class="embla__slide team-slide flex-[0_0_180px] lg:flex-[0_0_200px]">
-                                        <?php echo intense_nerd_team_card($member['name'], $member['role'], $member['img']); ?>
-                                    </div>
-                                <?php endforeach; ?>
-
-                            <?php else : ?>
-                                <?php while ($team_query->have_posts()) : $team_query->the_post(); ?>
-                                    <?php
-                                    $name  = get_the_title();
-                                    $role  = get_field('team_role') ?: get_post_meta(get_the_ID(), 'team_role', true);
-                                    $photo = get_field('team_photo');
-                                    $img   = $photo['url'] ?? intense_nerd_get_thumbnail(get_the_ID(), 'card-thumb');
-                                    ?>
-                                    <div class="embla__slide team-slide flex-[0_0_180px] lg:flex-[0_0_200px]">
-                                        <?php echo intense_nerd_team_card($name, $role, $img); ?>
-                                    </div>
-                                <?php endwhile;
-                                wp_reset_postdata(); ?>
-                            <?php endif; ?>
+                            <?php foreach ($team_members_data as $member) : ?>
+                                <div class="embla__slide team-slide flex-[0_0_180px] lg:flex-[0_0_200px]">
+                                    <?php echo intense_nerd_team_card($member['name'], $member['role'], $member['img']); ?>
+                                </div>
+                            <?php endforeach; ?>
 
                         </div>
-                    </div><!-- /.embla__viewport -->
+                    </div>
+
+                    <!-- Dots -->
+                    <div class="embla__dots flex gap-2 mt-5" id="teamEmblaDots"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
                     <!-- Dots -->
                     <div class="embla__dots flex gap-2 mt-5" id="teamEmblaDots"></div>

@@ -110,7 +110,13 @@ $badges = $args['badges'] ?? [];
                     <circle cx="12" cy="10" r="3" />
                 </svg>
                 <span class="font-body text-xs md:text-sm italic text-dark/80 leading-snug">
-                    <?php echo esc_html($destinations); ?>
+                    <?php
+                    if (is_array($destinations)) {
+                        echo esc_html(implode(' • ', array_filter($destinations)));
+                    } else {
+                        echo esc_html($destinations);
+                    }
+                    ?>
                 </span>
             </div>
         </div>

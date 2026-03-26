@@ -180,7 +180,7 @@ function intense_nerd_excerpt_more($more)
 add_filter('excerpt_more', 'intense_nerd_excerpt_more');
 
 // ── Ocultar barra de administración en el frontend ────────────────────────────
-add_filter('show_admin_bar', '__return_false');
+// add_filter('show_admin_bar', '__return_false');
 
 add_action('wp_ajax_load_more_posts', 'load_more_posts_handler');
 add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts_handler');
@@ -457,7 +457,7 @@ function intense_mega_journeys()
     $render_cards = function (array $items) {
         $out = '';
         foreach ($items as $p) {
-            $img = get_the_post_thumbnail_url($p->ID, 'medium');
+            $img = get_the_post_thumbnail_url($p->ID, 'full');
             $out .= '<div class="w-[230px] shrink-0">';
             if ($img) {
                 $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-3 relative group">'
@@ -611,3 +611,10 @@ function intense_mega_blog()
         'mobile_list' => $mobile_list,
     ]);
 }
+
+add_filter('use_block_editor_for_post_type', function($use_block_editor, $post_type) {
+    if ($post_type === 'post') {
+        return true; // Gutenberg en blog
+    }
+    return false; // Classic en todo lo demás
+}, 10, 2);

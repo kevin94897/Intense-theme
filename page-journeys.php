@@ -90,7 +90,7 @@ get_header();
                         $duration = $days_val ? $days_val . ' Days' : '';
                         $price_val = $features['price'] ?? '';
                         $price = $price_val ? 'USD ' . number_format($price_val) : '';
-                        $destinations = $information['short_description'] ?? '';
+                        $destinations = wp_get_post_tags(get_the_ID(), ['fields' => 'names']);
                         $link = get_permalink();
                         ?>
 

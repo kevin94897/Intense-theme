@@ -24,9 +24,9 @@
         @click.outside="closeAll()">
 
         <!-- ── Top Header (desktop contact bar) ──────────────────── -->
-        <div class="top-header <?php echo $is_light_header ? 'bg-cream' : ''; ?>">
-            <div class="container-site">
-                <div class="flex items-center justify-end py-2 text-sm <?php echo $is_light_header ? 'text-dark' : 'text-white'; ?> font-light tracking-wide">
+        <div class="top-header <?php echo $is_light_header ? 'bg-dark' : ''; ?>">
+            <div class="container-site-wide">
+                <div class="flex items-center justify-end py-2 text-sm <?php echo $is_light_header ? 'text-white' : 'text-white'; ?> font-light tracking-wide">
                     <div class="flex items-center divide-x divide-neutral-gray/50">
                         <a href="tel:<?php echo esc_attr(get_theme_mod('contact_phone', '18006709510')); ?>" class="pr-5 hover:text-primary transition-colors flex items-center gap-2">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,7 +61,7 @@
 
         <!-- ── Main Nav ───────────────────────────────────────────── -->
         <div class="main-header">
-            <div class="container-site">
+            <div class="container-site-wide">
                 <nav class="flex items-center justify-between py-4" role="navigation"
                     aria-label="<?php esc_attr_e('Navegación principal', 'intense-nerd-theme'); ?>">
 
@@ -412,28 +412,28 @@
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="mega-panel absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 z-40"
             @mouseenter="cancelClose()" @mouseleave="scheduleClose()">
-            <div class="container-site py-10">
-                <div class="flex gap-8">
-                    <div class="w-44 shrink-0">
+            <div class="container-site-wide py-10">
+                <div class="flex gap-6 xl:gap-8">
+                    <div class="w-36 xl:w-44 shrink-0">
                         <h3 class="font-heading text-dark text-lg mb-4">Grand discovery</h3>
                         <ul class="flex flex-col gap-2.5" id="mega-grand-list">
                             <li><span class="text-dark/30 text-sm">Loading…</span></li>
                         </ul>
                     </div>
-                    <div class="w-44 shrink-0">
+                    <div class="w-36 xl:w-44 shrink-0">
                         <h3 class="font-heading text-dark text-lg mb-4">Compact Journeys</h3>
                         <ul class="flex flex-col gap-2.5" id="mega-compact-list">
                             <li><span class="text-dark/30 text-sm">Loading…</span></li>
                         </ul>
                     </div>
-                    <div class="w-44 shrink-0">
+                    <div class="w-36 xl:w-44 shrink-0">
                         <h3 class="font-heading text-dark text-lg mb-4">Short Escapes</h3>
                         <ul class="flex flex-col gap-2.5" id="mega-short-list">
                             <li><span class="text-dark/30 text-sm">Loading…</span></li>
                         </ul>
                     </div>
                     <div class="flex-1"></div>
-                    <div class="shrink-0 flex flex-col gap-3">
+                    <div class="shrink-0 flex flex-col gap-3 min-w-0">
                         <div class="flex items-center justify-end mb-1">
                             <a href="<?php echo esc_url(home_url('/journeys/')); ?>"
                                 class="flex items-center gap-2 text-sm font-body text-dark hover:text-primary transition-colors">
@@ -443,10 +443,10 @@
                                 </svg>
                             </a>
                         </div>
-                        <div class="flex gap-4" id="mega-journey-cards">
+                        <div class="grid grid-cols-3 gap-3" id="mega-journey-cards">
                             <?php for ($i = 0; $i < 3; $i++): ?>
-                                <div class="w-[230px] shrink-0 animate-pulse">
-                                    <div class="w-[230px] h-[300px] bg-dark/10 rounded-lg mb-2"></div>
+                                <div class="animate-pulse">
+                                    <div class="w-full h-[240px] xl:h-[300px] bg-dark/10 rounded-lg mb-2"></div>
                                     <div class="h-3 bg-dark/10 rounded w-3/4"></div>
                                 </div>
                             <?php endfor; ?>
@@ -466,7 +466,7 @@
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="mega-panel absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 z-40"
             @mouseenter="cancelClose()" @mouseleave="scheduleClose()">
-            <div class="container-site py-10">
+            <div class="container-site-wide py-10">
                 <div class="flex justify-end mb-6">
                     <a href="<?php echo esc_url(home_url('/destinations/')); ?>"
                         class="flex items-center gap-2 text-sm font-body text-dark hover:text-primary transition-colors">
@@ -476,10 +476,10 @@
                         </svg>
                     </a>
                 </div>
-                <div class="grid grid-cols-6 gap-4" id="mega-destination-cards">
+                <div class="grid grid-cols-3 xl:grid-cols-6 gap-4" id="mega-destination-cards">
                     <?php for ($i = 0; $i < 6; $i++): ?>
                         <div class="animate-pulse">
-                            <div class="w-full h-[300px] bg-dark/10 rounded-lg mb-2"></div>
+                            <div class="w-full h-[220px] xl:h-[300px] bg-dark/10 rounded-lg mb-2"></div>
                             <div class="h-3 bg-dark/10 rounded w-3/4"></div>
                         </div>
                     <?php endfor; ?>
@@ -497,15 +497,15 @@
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="mega-panel absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 z-40"
             @mouseenter="cancelClose()" @mouseleave="scheduleClose()">
-            <div class="container-site py-10">
-                <div class="flex gap-10">
-                    <div class="w-64 shrink-0">
+            <div class="container-site-wide py-10">
+                <div class="flex gap-6 xl:gap-10">
+                    <div class="w-48 xl:w-64 shrink-0">
                         <h3 class="font-heading text-dark text-lg mb-4">Featured Blogs</h3>
                         <ul class="flex flex-col gap-3" id="mega-blog-list">
                             <li><span class="text-dark/30 text-sm">Loading…</span></li>
                         </ul>
                     </div>
-                    <div class="flex-1 flex flex-col gap-3">
+                    <div class="flex-1 flex flex-col gap-3 min-w-0">
                         <div class="flex items-center justify-end mb-1">
                             <a href="<?php echo esc_url(home_url('/blog/')); ?>"
                                 class="flex items-center gap-2 text-sm font-body text-dark hover:text-primary transition-colors">
@@ -515,10 +515,10 @@
                                 </svg>
                             </a>
                         </div>
-                        <div class="grid grid-cols-4 gap-4" id="mega-blog-cards">
+                        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4" id="mega-blog-cards">
                             <?php for ($i = 0; $i < 4; $i++): ?>
                                 <div class="animate-pulse">
-                                    <div class="w-full h-[300px] bg-dark/10 rounded-lg mb-2"></div>
+                                    <div class="w-full h-[240px] xl:h-[300px] bg-dark/10 rounded-lg mb-2"></div>
                                     <div class="h-3 bg-dark/10 rounded w-3/4"></div>
                                 </div>
                             <?php endfor; ?>

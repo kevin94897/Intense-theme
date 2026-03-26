@@ -44,7 +44,7 @@ get_header();
             <!-- Section Header -->
             <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
                 <div
-                    class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-12 mb-10 overflow-hidden">
+                    class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-12 mb-10">
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
                         class="mx-auto md:mb-10">
                     <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit" data-aos="fade-up">Start

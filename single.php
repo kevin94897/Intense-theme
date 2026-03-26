@@ -77,12 +77,12 @@ while (have_posts()) : the_post();
                     <?php the_title(); ?>
                 </h1>
 
-                <?php if (has_excerpt()) : ?>
+                <!-- <?php if (has_excerpt()) : ?>
                     <p class="font-body text-white text-lg md:text-xl font-light max-w-2xl mx-auto mb-10"
                         data-aos="fade-up" data-aos-delay="200">
                         <?php the_excerpt(); ?>
                     </p>
-                <?php endif; ?>
+                <?php endif; ?> -->
 
                 <!-- Meta row -->
                 <div class="flex flex-wrap justify-center items-center gap-4 text-white text-lg font-body font-light"
@@ -164,7 +164,7 @@ while (have_posts()) : the_post();
 
                 <!-- ── Main Article ────────────────────────────────────────────── -->
                 <article id="post-<?php the_ID(); ?>"
-                    class="flex-1 min-w-0 max-w-2xl"
+                    class="flex-1 min-w-0 max-w-4xl"
                     data-aos="fade-up">
 
                     <!-- Excerpt / standfirst -->
