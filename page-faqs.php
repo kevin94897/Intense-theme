@@ -35,7 +35,7 @@ $questions    = $faqs_group['list_of_questions'] ?? [];
         <h1 class="heading-2 max-w-3xl mx-auto md:text-6xl text-4xl">
             <?php echo esc_html($title ?: get_the_title()); ?>
         </h1>
-        <p class="mt-4 text-dark max-w-2xl mx-auto font-light">
+        <p class="mt-8 text-dark max-w-2xl mx-auto font-light">
             <?php echo esc_html($description); ?>
         </p>
     </section>
@@ -164,15 +164,41 @@ $questions    = $faqs_group['list_of_questions'] ?? [];
     }
 
     /* ── WYSIWYG response content ───────────────────────────────────── */
-    .faq-wysiwyg p { margin-bottom: 0.75rem; }
-    .faq-wysiwyg p:last-child { margin-bottom: 0; }
-    .faq-wysiwyg a { color: var(--color-primary, #b76739); text-decoration: underline; }
-    .faq-wysiwyg strong { font-weight: 600; color: var(--color-dark, #1a1a1a); }
+    .faq-wysiwyg p {
+        margin-bottom: 0.75rem;
+    }
+
+    .faq-wysiwyg p:last-child {
+        margin-bottom: 0;
+    }
+
+    .faq-wysiwyg a {
+        color: var(--color-primary, #b76739);
+        text-decoration: underline;
+    }
+
+    .faq-wysiwyg strong {
+        font-weight: 600;
+        color: var(--color-dark, #1a1a1a);
+    }
+
     .faq-wysiwyg ul,
-    .faq-wysiwyg ol { padding-left: 1.25rem; margin-bottom: 0.75rem; }
-    .faq-wysiwyg ul { list-style: disc; }
-    .faq-wysiwyg ol { list-style: decimal; }
-    .faq-wysiwyg li { margin-bottom: 0.25rem; }
+    .faq-wysiwyg ol {
+        padding-left: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .faq-wysiwyg ul {
+        list-style: disc;
+    }
+
+    .faq-wysiwyg ol {
+        list-style: decimal;
+    }
+
+    .faq-wysiwyg li {
+        margin-bottom: 0.25rem;
+    }
 
     /* Animación x-collapse si no está disponible, fallback */
     [x-cloak] {

@@ -35,11 +35,11 @@ get_header();
 
 // ── ACF: Home fields ─────────────────────────────────────────────────────────
 $banner_hero             = get_field('banner_hero')             ?: [];
+$message_home            = get_field('message_home')            ?: '';
 $signature_destinations  = get_field('signature_destinations')  ?: [];
 $motivation              = get_field('motivation')              ?: [];
 $gallery_group           = get_field('gallery')                 ?: [];
 
-$hero_description        = $banner_hero['description'] ?? '';
 $hero_btn1               = $banner_hero['button_1']    ?? [];
 $hero_btn2               = $banner_hero['button_2']    ?? [];
 $hero_video_field        = $banner_hero['video']       ?? null;
@@ -83,11 +83,11 @@ $download_button         = $travel_guides['download_button'] ?? [];
                 data-aos="fade-up" data-aos-delay="100">
                 <?php echo esc_html(get_the_title()); ?>
             </h1>
-            <?php if ($hero_description) : ?>
-                <p class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10"
+            <?php if (get_the_content()) : ?>
+                <div class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10 entry-content-hero"
                     data-aos="fade-up" data-aos-delay="200">
-                    <?php echo esc_html($hero_description); ?>
-                </p>
+                    <?php the_content(); ?>
+                </div>
             <?php endif; ?>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up"
                 data-aos-delay="300">
@@ -108,16 +108,17 @@ $download_button         = $travel_guides['download_button'] ?? [];
         </div>
     </section>
 
-    <section class="py-20">
-        <div class="container-site">
-            <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center" data-aos="fade-up"
-                data-aos-delay="200">
-                Proudly Peruvian, we believe the future is built by keeping the past alive. Every day, we honor and
-                nurture our traditions, share their beauty with the world, and design unforgettable experiences that
-                invite people from around the globe to discover — and celebrate — life in Peru.
-            </p>
-        </div>
-    </section>
+    <!-- Message -->
+    <?php if ($message_home) : ?>
+        <section class="py-20">
+            <div class="container-site">
+                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center" data-aos="fade-up"
+                    data-aos-delay="200">
+                    <?php echo nl2br(esc_html($message_home)); ?>
+                </p>
+            </div>
+        </section>
+    <?php endif; ?>
 
     <!-- B. Signature Destinations -->
     <?php if (!empty($dest_posts)) : ?>
@@ -389,17 +390,205 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     <?php endif; ?>
 
                     <?php if (!empty($download_button)) : ?>
-                        <?php get_template_part('template-parts/components/btn-outline', null, [
-                            'text'        => $download_button['title'] ?? 'Choose a Brochure',
-                            'href'        => $download_button['url']   ?? '#',
-                            'color'       => 'dark',
-                            'class_extra' => 'px-10 py-4 text-base',
-                        ]); ?>
+                        <div x-data @click.prevent="$dispatch('ccp:openbrochure')" class="inline-block cursor-pointer">
+                            <?php get_template_part('template-parts/components/btn-outline', null, [
+                                'text'        => $download_button['title'] ?? 'Choose a Brochure',
+                                'href'        => '#',
+                                'color'       => 'dark',
+                                'class_extra' => 'px-5 py-2 text-base',
+                            ]); ?>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- ══════════════════════════════════════════════
+         BROCHURE MODAL
+    ══════════════════════════════════════════════ -->
+    <div
+        x-data="brochureModal()"
+        @ccp:openbrochure.window="show = true"
+        x-show="show"
+        style="display:none;"
+        class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-dark/50 backdrop-blur-sm"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
+
+        <!-- Modal Container -->
+        <div
+            x-show="show"
+            @click.outside="show = false"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-3"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            class="bg-white rounded-xl shadow-2xl w-full max-w-4xl mx-auto overflow-hidden relative flex flex-col md:flex-row">
+
+            <!-- × close -->
+            <button @click="show = false"
+                class="absolute top-4 right-4 z-[101] text-dark/40 hover:text-dark transition-colors bg-white/50 backdrop-blur-sm rounded-full p-2 md:bg-transparent md:backdrop-blur-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- Left Image -->
+            <div class="hidden md:block w-full md:w-5/12 h-64 md:h-auto relative p-5">
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_donwload_brochure_img.webp" alt="Peru Travel Guide" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Right Content (Form) -->
+            <div class="w-full md:w-7/12 p-8 md:p-14 flex flex-col justify-center">
+                <h2 class="font-heading text-3xl md:text-4xl text-dark font-light mb-10 text-center leading-snug">
+                    Download our Peru Travel<br>Guide
+                </h2>
+
+                <form @submit.prevent="submitForm" class="space-y-8">
+
+                    <!-- Brochure Dropdown -->
+                    <div class="input-wrapper" :class="{ 'has-error': errors.brochure }">
+                        <select x-model="formData.brochure" @change="validateField('brochure')" class="input-field appearance-none cursor-pointer bg-transparent relative z-10 w-full text-dark" style="color: inherit;">
+                            <option value="" disabled hidden></option>
+                            <?php
+                            $first_file_url = '';
+                            if (!empty($travel_guides['files_to_download'])) :
+                                foreach ($travel_guides['files_to_download'] as $item) :
+                                    if (!empty($item['file_name']) && !empty($item['file_'])) :
+                                        $file_url = is_array($item['file_']) ? ($item['file_']['url'] ?? '') : $item['file_'];
+                                        if (!$file_url) continue;
+                                        if (empty($first_file_url)) $first_file_url = $file_url;
+                            ?>
+                                        <option value="<?php echo esc_url($file_url); ?>"><?php echo esc_html($item['file_name']); ?></option>
+                            <?php
+                                    endif;
+                                endforeach;
+                            endif;
+                            ?>
+                        </select>
+                        <label class="input-label !opacity-100 transition-all duration-300" :class="formData.brochure ? '!-translate-y-5 !text-xs' : ''">Choose a brochure</label>
+                        <div class="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-dark/70 pr-2">
+                            <svg class="w-5 h-5 border-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                        <span x-show="errors.brochure" x-text="errors.brochure" class="input-error-msg"></span>
+                    </div>
+
+                    <!-- First Name -->
+                    <div class="input-wrapper" :class="{ 'has-error': errors.firstName }">
+                        <input type="text"
+                            x-model="formData.firstName"
+                            @blur="validateField('firstName')"
+                            class="input-field" placeholder="First Name">
+                        <label class="input-label">First Name</label>
+                        <span x-show="errors.firstName" x-text="errors.firstName" class="input-error-msg"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="input-wrapper" :class="{ 'has-error': errors.email }">
+                        <input type="email"
+                            x-model="formData.email"
+                            @blur="validateField('email')"
+                            class="input-field" placeholder="Email">
+                        <label class="input-label">Email</label>
+                        <span x-show="errors.email" x-text="errors.email" class="input-error-msg"></span>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="pt-6 flex justify-center w-full text-center">
+                        <a href="#"
+                           @click.prevent="submitForm()"
+                           :class="{ 'opacity-50 pointer-events-none': isSubmitting }"
+                           class="btn btn-outline-dark px-10 py-3 text-sm font-medium hover:bg-dark hover:text-white">
+                            <span x-text="isSubmitting ? 'Sending...' : 'Get the Guide'"></span>
+                        </a>
+                    </div>
+
+                    <div x-show="successMessage" x-transition class="text-primary font-body text-sm text-center mt-2">
+                        Thank you! Your guide is on its way.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function brochureModal() {
+            return {
+                show: false,
+                isSubmitting: false,
+                successMessage: false,
+                formData: {
+                    brochure: '<?php echo esc_js($first_file_url ?? ''); ?>',
+                    firstName: '',
+                    email: ''
+                },
+                errors: {},
+                validateField(field) {
+                    const v = this.formData;
+                    if (field === 'brochure') this.errors.brochure = v.brochure ? '' : 'Please select a brochure.';
+                    if (field === 'firstName') this.errors.firstName = v.firstName.trim() ? '' : 'First name is required.';
+                    if (field === 'email') this.errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email) ? '' : 'Please enter a valid email address.';
+                },
+                validateAll() {
+                    ['brochure', 'firstName', 'email'].forEach(f => this.validateField(f));
+                    return Object.values(this.errors).every(e => !e);
+                },
+                async submitForm() {
+                    if (!this.validateAll()) return;
+                    this.isSubmitting = true;
+                    try {
+                        await new Promise(r => setTimeout(r, 800));
+                        this.successMessage = true;
+
+                        // Trigger file download
+                        if (this.formData.brochure) {
+                            const link = document.createElement('a');
+                            link.href = this.formData.brochure;
+                            link.setAttribute('download', '');
+                            link.target = '_blank';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+
+                        this.formData = {
+                            brochure: '<?php echo esc_js($first_file_url ?? ''); ?>',
+                            firstName: '',
+                            email: ''
+                        };
+                        setTimeout(() => {
+                            this.show = false;
+                            this.successMessage = false;
+                        }, 3000);
+                    } catch (err) {
+                        console.error('Error:', err);
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+                }
+            }
+        }
+
+        // Listen for the custom button click (since we used the template part, the anchor won't submit the Alpine form directly)
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.addEventListener('click', (e) => {
+                const trigger = e.target.closest('#hidden-brochure-submit-trigger');
+                if (trigger) {
+                    e.preventDefault();
+                    document.getElementById('hidden-brochure-submit').click();
+                }
+            });
+        });
+    </script>
 
 </main>
 

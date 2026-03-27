@@ -24,7 +24,7 @@ if (!empty($banner_cta['button'])) {
 $bg_image_url = !empty($banner_cta['background_image']['url']) ? $banner_cta['background_image']['url'] : get_template_directory_uri() . '/assets/images/intense_cta_bolivia.webp';
 
 ?>
-<section class="relative py-24 md:py-32 flex items-center justify-center text-center" data-aos="fade-in">
+<section class="relative py-12 md:py-24 flex items-center justify-center text-center" data-aos="fade-in">
     <div class="absolute inset-0 z-0">
         <img src="<?php echo esc_url($bg_image_url); ?>" alt="<?php echo esc_attr(strip_tags($title)); ?>"
             class="w-full h-full object-cover">
@@ -32,7 +32,7 @@ $bg_image_url = !empty($banner_cta['background_image']['url']) ? $banner_cta['ba
     </div>
     <div class="container-site relative z-10 px-4" data-aos="fade-up" data-aos-delay="100">
         <h2
-            class="font-heading text-3xl md:text-4xl lg:text-5xl leading-tight text-white mb-6 md:mb-8 max-w-6xl mx-auto">
+            class="font-heading text-xl md:text-3xl lg:text-4xl leading-tight text-white mb-6 md:mb-8 max-w-6xl mx-auto">
             <?php echo esc_html($title); ?>
         </h2>
         <?php if ($description): ?>

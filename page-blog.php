@@ -33,24 +33,34 @@ $blog_query = new WP_Query($args);
         <h1 class="heading-2 max-w-3xl mx-auto md:text-6xl text-4xl">
             Travel insights to inspire your<br>next journey
         </h1>
-        <p class="mt-4 text-dark max-w-2xl mx-auto font-light">
+        <p class="mt-8 text-dark max-w-2xl mx-auto font-light">
             Curated stories, tips, and guides for travelers seeking unforgettable experiences.
         </p>
     </section>
 
     <!-- ── Filter Pills ─────────────────────────────────────────────────────────── -->
-    <div class="flex flex-wrap justify-center gap-2 px-4 pb-10" data-aos="fade-up" data-aos-delay="100">
+    <div class="flex flex-wrap justify-center gap-2 px-4 pb-10 max-w-5xl mx-auto" data-aos="fade-up" data-aos-delay="100">
         <a href="<?php echo get_permalink(); ?>"
-            class="filter-pill <?php echo !$current_cat ? 'active' : ''; ?> text-sm font-body font-medium px-5 py-2 rounded-full">
+            class="filter-pill <?php echo !$current_cat ? 'active' : ''; ?> text-sm font-body font-normal px-5 py-2 rounded-full">
             All
         </a>
         <?php
         $categories = get_categories(['hide_empty' => true]);
         foreach ($categories as $cat) :
+            $cat_posts_check = new WP_Query([
+                'post_type' => 'post',
+                'post_status' => 'publish',
+                'cat' => $cat->term_id,
+                'posts_per_page' => 1,
+                'fields' => 'ids'
+            ]);
+            if (!$cat_posts_check->have_posts()) {
+                continue;
+            }
             $is_active = ($current_cat === $cat->slug);
         ?>
             <a href="<?php echo add_query_arg('category_name', $cat->slug, get_permalink()); ?>"
-                class="filter-pill <?php echo $is_active ? 'active' : ''; ?> text-sm font-body font-medium px-5 py-2 rounded-full">
+                class="filter-pill <?php echo $is_active ? 'active' : ''; ?> text-sm font-body font-normal px-5 py-2 rounded-full">
                 <?php echo esc_html($cat->name); ?>
             </a>
         <?php endforeach; ?>

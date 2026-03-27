@@ -412,28 +412,34 @@
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="mega-panel absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 z-40"
             @mouseenter="cancelClose()" @mouseleave="scheduleClose()">
-            <div class="container-site-wide py-10">
-                <div class="flex gap-6 xl:gap-8">
-                    <div class="w-36 xl:w-44 shrink-0">
-                        <h3 class="font-heading text-dark text-lg mb-4">Grand discovery</h3>
-                        <ul class="flex flex-col gap-2.5" id="mega-grand-list">
-                            <li><span class="text-dark/30 text-sm">Loading…</span></li>
+
+            <div class="container-site-wide py-8 xl:py-10">
+                <div class="flex gap-4 xl:gap-6 2xl:gap-8">
+
+                    <!-- Listas — más compactas en xl -->
+                    <div class="w-28 xl:w-32 2xl:w-44 shrink-0">
+                        <h3 class="font-heading text-dark text-base xl:text-lg mb-3 xl:mb-4">Grand discovery</h3>
+                        <ul class="flex flex-col gap-1 xl:gap-2.5" id="mega-grand-list">
+                            <li><span class="text-dark/30 text-xs xl:text-sm">Loading…</span></li>
                         </ul>
                     </div>
-                    <div class="w-36 xl:w-44 shrink-0">
-                        <h3 class="font-heading text-dark text-lg mb-4">Compact Journeys</h3>
-                        <ul class="flex flex-col gap-2.5" id="mega-compact-list">
-                            <li><span class="text-dark/30 text-sm">Loading…</span></li>
+
+                    <div class="w-28 xl:w-32 2xl:w-44 shrink-0">
+                        <h3 class="font-heading text-dark text-base xl:text-lg mb-3 xl:mb-4">Compact Journeys</h3>
+                        <ul class="flex flex-col gap-1 xl:gap-2.5" id="mega-compact-list">
+                            <li><span class="text-dark/30 text-xs xl:text-sm">Loading…</span></li>
                         </ul>
                     </div>
-                    <div class="w-36 xl:w-44 shrink-0">
-                        <h3 class="font-heading text-dark text-lg mb-4">Short Escapes</h3>
-                        <ul class="flex flex-col gap-2.5" id="mega-short-list">
-                            <li><span class="text-dark/30 text-sm">Loading…</span></li>
+
+                    <div class="w-28 xl:w-32 2xl:w-44 shrink-0">
+                        <h3 class="font-heading text-dark text-base xl:text-lg mb-3 xl:mb-4">Short Escapes</h3>
+                        <ul class="flex flex-col gap-1 xl:gap-2.5" id="mega-short-list">
+                            <li><span class="text-dark/30 text-xs xl:text-sm">Loading…</span></li>
                         </ul>
                     </div>
-                    <div class="flex-1"></div>
-                    <div class="shrink-0 flex flex-col gap-3 min-w-0">
+
+                    <!-- Cards — siempre 3, ancho se ajusta al espacio disponible -->
+                    <div class="flex-1 min-w-0 flex flex-col gap-3">
                         <div class="flex items-center justify-end mb-1">
                             <a href="<?php echo esc_url(home_url('/journeys/')); ?>"
                                 class="flex items-center gap-2 text-sm font-body text-dark hover:text-primary transition-colors">
@@ -443,15 +449,17 @@
                                 </svg>
                             </a>
                         </div>
-                        <div class="grid grid-cols-3 gap-3" id="mega-journey-cards">
+
+                        <div class="grid grid-cols-3 gap-2 xl:gap-3" id="mega-journey-cards">
                             <?php for ($i = 0; $i < 3; $i++): ?>
                                 <div class="animate-pulse">
-                                    <div class="w-full h-[240px] xl:h-[300px] bg-dark/10 rounded-lg mb-2"></div>
+                                    <div class="w-full h-[180px] xl:h-[240px] 2xl:h-[300px] bg-dark/10 rounded-lg mb-2"></div>
                                     <div class="h-3 bg-dark/10 rounded w-3/4"></div>
                                 </div>
                             <?php endfor; ?>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

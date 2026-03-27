@@ -14,26 +14,23 @@ get_header();
     <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20" data-aos="fade-in">
         <!-- Background Image -->
         <div class="absolute inset-0 z-0">
-            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_banner_contact.webp"
-                alt="Machu Picchu" class="w-full h-full object-cover">
+            <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full') ?: get_template_directory_uri() . '/assets/images/intense_banner_contact.webp'; ?>"
+                alt="<?php echo esc_attr(get_the_title()); ?>" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 
         <div class="container-site relative z-10 text-center px-4">
             <h1 class="font-heading text-white text-4xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
                 data-aos="fade-up" data-aos-delay="100">
-                Let's Begin "Weaving" Your Journey
+                <?php echo esc_html(get_the_title()); ?>
             </h1>
-            <p class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10" data-aos="fade-up"
-                data-aos-delay="200">
-                Share your preferences, pace, and dreams. Your custom-made journey starts here.
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up"
-                data-aos-delay="300">
-                <?php get_template_part('template-parts/components/btn-primary', null, [
-                    'text' => 'Explore itineraries',
-                    'href' => '#itineraries',
-                ]); ?>
-            </div>
+
+            <?php if (get_the_content()) : ?>
+                <div class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10 entry-content"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <?php the_content(); ?>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -47,14 +44,14 @@ get_header();
                     class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-12 mb-10">
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
                         class="mx-auto md:mb-10">
-                    <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit" data-aos="fade-up">Start
-                        Designing Your Trip</h2>
+                    <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit" data-aos="fade-up">
+                        <?php echo esc_html(get_field('title_design') ?: 'Start Designing Your Trip'); ?>
+                    </h2>
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
                         class="mx-auto mb-10 hidden md:block">
                 </div>
                 <p class="font-body text-sm md:text-[15px] text-dark/70 max-w-2xl mx-auto leading-relaxed">
-                    Thank you for your interest in Intense Peru. Share a few details about your travel plans,
-                    and our designers will create a personalized journey crafted with care and authenticity.
+                    <?php echo esc_html(get_field('description') ?: 'Thank you for your interest in Intense Peru. Share a few details about your travel plans, and our designers will create a personalized journey crafted with care and authenticity.'); ?>
                 </p>
             </div>
 
@@ -200,7 +197,7 @@ get_header();
 
                             <!-- Boutique -->
                             <button type="button" @click="formData.hotelCategory = 'boutique'"
-                                class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md border transition-all duration-200"
+                                class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer border transition-all duration-200"
                                 :class="formData.hotelCategory === 'boutique'
                                     ? 'border-primary bg-primary/10'
                                     : 'border-dark hover:border-dark/40'">
@@ -220,7 +217,7 @@ get_header();
 
                             <!-- Luxury -->
                             <button type="button" @click="formData.hotelCategory = 'luxury'"
-                                class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md border transition-all duration-200"
+                                class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer border transition-all duration-200"
                                 :class="formData.hotelCategory === 'luxury'
                                     ? 'border-primary bg-primary/10'
                                     : 'border-dark hover:border-dark/40'">
@@ -240,7 +237,7 @@ get_header();
 
                             <!-- Superior -->
                             <button type="button" @click="formData.hotelCategory = 'superior'"
-                                class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md border transition-all duration-200"
+                                class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer border transition-all duration-200"
                                 :class="formData.hotelCategory === 'superior'
                                     ? 'border-primary bg-primary/10'
                                     : 'border-dark hover:border-dark/40'">
@@ -260,7 +257,7 @@ get_header();
 
                             <!-- Best Value -->
                             <button type="button" @click="formData.hotelCategory = 'value'"
-                                class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md border transition-all duration-200"
+                                class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer border transition-all duration-200"
                                 :class="formData.hotelCategory === 'value'
                                     ? 'border-primary bg-primary/10'
                                     : 'border-dark hover:border-dark/40'">

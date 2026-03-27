@@ -135,14 +135,14 @@ if (empty($team_members_data)) {
     </div>
 </section>
 
-                    <!-- Dots -->
-                    <div class="embla__dots flex gap-2 mt-5" id="teamEmblaDots"></div>
+<!-- Dots -->
+<div class="embla__dots flex gap-2 mt-5" id="teamEmblaDots"></div>
 
-                </div><!-- /.embla -->
+</div><!-- /.embla -->
 
-            </div><!-- /.col-right -->
-        </div><!-- /.team-layout -->
-    </div>
+</div><!-- /.col-right -->
+</div><!-- /.team-layout -->
+</div>
 </section>
 
 <?php
@@ -166,7 +166,7 @@ function intense_nerd_team_card(string $name, string $role, string $img): string
         <div class="team-card__overlay absolute inset-x-0 bottom-0 p-4
                     bg-gradient-to-t from-dark/70 to-transparent
                     rounded-b-xl">
-            <p class="font-body font-medium text-cream text-sm leading-tight"><?php echo esc_html($name); ?></p>
+            <p class="font-heading font-bold text-cream text-lg leading-tight"><?php echo esc_html($name); ?></p>
             <?php if ($role) : ?>
                 <p class="font-body text-cream/70 text-xs mt-0.5"><?php echo esc_html($role); ?></p>
             <?php endif; ?>

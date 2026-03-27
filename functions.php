@@ -260,7 +260,7 @@ function load_more_journeys_handler()
             $price = $price_val ? 'USD ' . number_format($price_val) : '';
             $destinations = $information['short_description'] ?? '';
             $link = get_permalink();
-            ?>
+?>
             <div class="journey-card" data-days="<?php echo esc_attr($days_val); ?>">
                 <?php
                 get_template_part('template-parts/components/card-itinerary', null, [
@@ -276,7 +276,7 @@ function load_more_journeys_handler()
                 ]);
                 ?>
             </div>
-            <?php
+<?php
             $index++;
         endwhile;
         wp_reset_postdata();
@@ -447,7 +447,7 @@ function intense_mega_journeys()
             $days = '';
             $out .= '<li>';
             $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
-                . 'class="text-sm font-body text-dark/70 hover:text-primary transition-colors underline-offset-2 hover:underline">'
+                . 'class="lg:text-sm text-xs font-body text-dark/70 hover:text-primary !leading-snug transition-colors underline-offset-2 hover:underline">'
                 . ($days ? $days . 'D ' : '') . esc_html($p->post_title)
                 . '</a></li>';
         }
@@ -458,13 +458,13 @@ function intense_mega_journeys()
         $out = '';
         foreach ($items as $p) {
             $img = get_the_post_thumbnail_url($p->ID, 'full');
-            $out .= '<div class="w-[230px] shrink-0">';
+            $out .= '<div class="w-full shrink-0">';
             if ($img) {
                 $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-3 relative group">'
-                    . '<div class="w-[230px] h-[300px] shrink-0 bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden group-hover:opacity-90 transition-opacity" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>';
+                    . '<div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden group-hover:opacity-90 transition-opacity" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>';
             } else {
                 $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2">'
-                    . '<div class="w-[230px] h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden"></div></a>';
+                    . '<div class="w-full h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden"></div></a>';
             }
             $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
                 . 'class="text-xs font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline line-clamp-2 leading-snug">'
@@ -612,7 +612,7 @@ function intense_mega_blog()
     ]);
 }
 
-add_filter('use_block_editor_for_post_type', function($use_block_editor, $post_type) {
+add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
     if ($post_type === 'post') {
         return true; // Gutenberg en blog
     }

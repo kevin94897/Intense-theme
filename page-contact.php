@@ -3,7 +3,10 @@
 /**
  * Template Name: Contact Page
  */
-get_header(); ?>
+get_header(); 
+
+$image_faq = get_field('image_faq');
+?>
 
 <main id="primary" class="site-main bg-cream">
 
@@ -14,13 +17,14 @@ get_header(); ?>
         <div class="container-site max-w-4xl">
 
             <h1 class="font-heading text-4xl md:text-6xl text-dark mb-6 leading-tight">
-                Contact Us
+                <?php echo esc_html(get_the_title()); ?>
             </h1>
 
-            <p class="font-body body-medium text-dark max-w-4xl mx-auto mb-4 leading-relaxed">
-                Thank you for your interest in Intense Peru.<br>
-                Share a few details about your inquiry — our travel designers will get back to you within 24 hours.
-            </p>
+            <?php if (get_the_content()) : ?>
+                <div class="font-body body-medium text-dark max-w-4xl mx-auto mb-4 leading-relaxed entry-content">
+                    <?php the_content(); ?>
+                </div>
+            <?php endif; ?>
 
             <!-- Inline contact shortcuts -->
 
@@ -154,11 +158,18 @@ get_header(); ?>
 
                 <!-- Left: Photo -->
                 <div class="relative" data-aos="fade-right">
-                    <div class="rounded-2xl overflow-hidden shadow-xl">
-                        <img
-                            src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_faq_contact_img.webp"
-                            alt="Vicuñas in the Peruvian highlands"
-                            class="w-full h-full object-cover">
+                    <div class="rounded-2xl overflow-hidden shadow-xl aspect-4/3 md:aspect-auto md:h-full">
+                        <?php if (!empty($image_faq)): ?>
+                            <img
+                                src="<?php echo esc_url($image_faq['url']); ?>"
+                                alt="<?php echo esc_attr($image_faq['alt'] ?: get_the_title()); ?>"
+                                class="w-full h-full object-cover">
+                        <?php else: ?>
+                            <img
+                                src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_faq_contact_img.webp"
+                                alt="Vicuñas in the Peruvian highlands"
+                                class="w-full h-full object-cover">
+                        <?php endif; ?>
                     </div>
                 </div>
 

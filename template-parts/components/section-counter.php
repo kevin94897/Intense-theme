@@ -15,6 +15,11 @@ if (!empty($args['list_of_values'])) {
         $numeric_value = preg_replace('/[^0-9.]/', '', $value);
         $is_numeric = is_numeric($numeric_value) && strlen($numeric_value) > 0;
 
+        // Disable numeric animation for ranges (e.g. 2015-2025, 2015–2025)
+        if (preg_match('/\d+\s*[-–]\s*\d+/', $value)) {
+            $is_numeric = false;
+        }
+
         $stats[] = [
             'value'    => $is_numeric ? $numeric_value : $value,
             'label'    => $item['text'] ?? '',
