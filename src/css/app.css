@@ -990,6 +990,11 @@ footer a {
   font-weight: 300;
 }
 
+.notes ul {
+  list-style: disc;
+  margin-left: 30px;
+}
+
 /* ══════════════════════════════════════════════════════════
    MEGAMENU — CSS
    Add to your main stylesheet or enqueue separately

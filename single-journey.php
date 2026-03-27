@@ -34,7 +34,7 @@ $selected_activities = array_filter($selected_activities);
         $hero_img = $information['background_hero_image'] ?: get_the_post_thumbnail_url(get_the_ID(), 'full');
         $subtitle = $information['short_description'];
         $btn = $information['button_request'];
-        ?>
+    ?>
         <!-- 1. Hero Section -->
         <section class="relative md:h-screen min-h-[600px] flex items-end justify-start pb-10 md:pb-20">
             <!-- Background Image -->
@@ -76,7 +76,7 @@ $selected_activities = array_filter($selected_activities);
 
     <?php if ($feature_group && (!empty($feature_group['title']) || !empty($feature_group['description']) || !empty($feature_group['features']))):
         $features = $feature_group['features'];
-        ?>
+    ?>
         <!-- 2. Overview Section -->
         <section class="py-24 overflow-hidden">
             <div class="container-site max-w-7xl mx-auto">
@@ -141,7 +141,7 @@ $selected_activities = array_filter($selected_activities);
                         <div class="space-y-4">
                             <?php foreach ($features as $index => $item):
                                 $delay = 100 + ($index * 150);
-                                ?>
+                            ?>
                                 <div data-aos="fade-left" data-aos-duration="700" data-aos-delay="<?php echo $delay; ?>"
                                     class="flex items-start gap-4 md:gap-6 p-5 transition-all duration-500">
                                     <div class="text-primary">
@@ -353,12 +353,12 @@ $selected_activities = array_filter($selected_activities);
                         <!-- Itinerary Accordion -->
                         <?php if ($itinerary_group && !empty($itinerary_group['list_of_tours'])):
                             $tours = $itinerary_group['list_of_tours'];
-                            ?>
+                        ?>
                             <div id="itinerary" class="scroll-mt-32 mb-20" data-aos="fade-up">
                                 <div class="space-y-6">
                                     <?php foreach ($tours as $index => $tour):
                                         $open = ($index === 0) ? 'true' : 'false';
-                                        ?>
+                                    ?>
                                         <div x-data="{ expanded: <?php echo $open; ?> }" x-init="$watch('expanded', value => value && setTimeout(() => { 
                                              const headerHeight = 100;
                                              const buffer = 24;
@@ -414,7 +414,7 @@ $selected_activities = array_filter($selected_activities);
 
                                                     <?php if (!empty($tour['list_of_activities']) && is_array($tour['list_of_activities'])):
                                                         foreach ($tour['list_of_activities'] as $activity):
-                                                            ?>
+                                                    ?>
                                                             <div class="flex items-center gap-3 mb-4 mt-4 shadow-none">
                                                                 <?php if (!empty($activity['icon']) || !empty($activity['icon_2'])): ?>
                                                                     <div class="flex items-center gap-2">
@@ -448,7 +448,7 @@ $selected_activities = array_filter($selected_activities);
                                                                     <?php echo wp_kses_post($activity['activity_description']); ?>
                                                                 </div>
                                                             <?php endif; ?>
-                                                        <?php endforeach;
+                                                    <?php endforeach;
                                                     endif; ?>
 
                                                 </div>
@@ -464,7 +464,7 @@ $selected_activities = array_filter($selected_activities);
                             $included = isset($inc_not_inc['included_list']) ? $inc_not_inc['included_list'] : null;
                             $not_included = isset($inc_not_inc['not_included_list']) ? $inc_not_inc['not_included_list'] : null;
                             if (!empty($included) || !empty($not_included)):
-                                ?>
+                        ?>
                                 <!-- Included / Not Included -->
                                 <div id="included" class="scroll-mt-32 mb-24" data-aos="fade-up">
                                     <div class="mb-12 text-center">
@@ -522,7 +522,7 @@ $selected_activities = array_filter($selected_activities);
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                            <?php endif;
+                        <?php endif;
                         endif; ?>
 
                         <!-- Pricing Options -->
@@ -540,7 +540,7 @@ $selected_activities = array_filter($selected_activities);
                                     <?php foreach ($prices_group['tables_for_prices'] as $table_row):
                                         $table = $table_row['prices_table'];
                                         if ($table && !empty($table['body'])):
-                                            ?>
+                                    ?>
                                             <div class="overflow-x-auto">
                                                 <table class="w-full text-left border-collapse">
                                                     <?php if (!empty($table['header'])): ?>
@@ -567,8 +567,13 @@ $selected_activities = array_filter($selected_activities);
                                                         <?php endforeach; ?>
                                                     </tbody>
                                                 </table>
+                                                <?php if (!empty($table_row['notes'])): ?>
+                                                    <div class="mt-4 font-body text-md text-dark italic notes leading-relaxed font-light [&_p]:mb-4 last:[&_p]:mb-0">
+                                                        <?php echo wp_kses_post($table_row['notes']); ?>
+                                                    </div>
+                                                <?php endif; ?>
                                             </div>
-                                        <?php endif;
+                                    <?php endif;
                                     endforeach; ?>
                                 </div>
                             </div>
@@ -600,7 +605,7 @@ $selected_activities = array_filter($selected_activities);
                                                 ];
                                             }
                                         }
-                                        ?>
+                                    ?>
                                         <div class="hotel-item" x-show="<?php echo $index; ?> < visibleHotels" x-transition>
                                             <?php get_template_part('template-parts/components/card-hotel', null, [
                                                 'image' => get_the_post_thumbnail_url($hotel_id, 'large'),
@@ -614,7 +619,7 @@ $selected_activities = array_filter($selected_activities);
                                                 'amenities' => $amenities
                                             ]); ?>
                                         </div>
-                                        <?php
+                                    <?php
                                     endforeach; ?>
                                 </div>
 
@@ -674,7 +679,7 @@ $selected_activities = array_filter($selected_activities);
                                             <?php foreach ($selected_activities as $activity_post):
                                                 $act_id = is_object($activity_post) ? $activity_post->ID : $activity_post;
                                                 $act_image = get_the_post_thumbnail_url($act_id, 'large');
-                                                ?>
+                                            ?>
                                                 <div
                                                     class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8">
                                                     <?php get_template_part('template-parts/components/card-activity', null, [
@@ -918,7 +923,7 @@ $selected_activities = array_filter($selected_activities);
                 ];
 
                 foreach ($itineraries as $index => $itin):
-                    ?>
+                ?>
                     <?php get_template_part('template-parts/components/card-itinerary', null, [
                         'image' => $itin['img'],
                         'title' => $itin['title'],
@@ -985,8 +990,9 @@ $selected_activities = array_filter($selected_activities);
 
                         <!-- Date & Trip Length Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            <div class="input-wrapper" :class="{ 'has-error': errors.startDate }">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                            <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }" x-data="{ dateFocused: false }" @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
+                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
+                                    x-show="!dateFocused && !formData.startDate">
                                     <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
@@ -994,9 +1000,13 @@ $selected_activities = array_filter($selected_activities);
                                         </path>
                                     </svg>
                                 </div>
-                                <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')"
+                                <input type="text"
+                                    x-ref="startDateInput"
+                                    @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
+                                    @blur="if(!$el.value) $el.type='text'; dateFocused = false"
+                                    @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
                                     x-model="formData.startDate" @input="validateField('startDate')"
-                                    class="input-field cursor-pointer" placeholder="Star Date">
+                                    class="input-field cursor-pointer" placeholder="Start Date">
                                 <span x-show="errors.startDate" x-text="errors.startDate"
                                     class="input-error-msg"></span>
                             </div>

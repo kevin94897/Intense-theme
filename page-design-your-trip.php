@@ -100,8 +100,9 @@ get_header();
 
                     <!-- Date & Trip Length Row -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                        <div class="input-wrapper" :class="{ 'has-error': errors.startDate }">
-                            <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                        <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }" x-data="{ dateFocused: false }" @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
+                            <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
+                                x-show="!dateFocused && !formData.startDate">
                                 <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
@@ -110,7 +111,10 @@ get_header();
                                 </svg>
                             </div>
                             <input type="text"
-                                onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'"
+                                x-ref="startDateInput"
+                                @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
+                                @blur="if(!$el.value) $el.type='text'; dateFocused = false"
+                                @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
                                 x-model="formData.startDate" @input="validateField('startDate')"
                                 class="input-field cursor-pointer"
                                 placeholder="Start Date">

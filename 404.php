@@ -28,18 +28,18 @@ get_header();
             <a href="<?php echo esc_url(home_url('/')); ?>" class="btn btn-primary">
                 <?php esc_html_e('Ir al inicio', 'intense-nerd-theme'); ?>
             </a>
-            <a href="<?php echo esc_url(home_url('/contacto/')); ?>" class="btn btn-outline">
+            <a href="<?php echo esc_url(home_url('/contact/')); ?>" class="btn btn-outline">
                 <?php esc_html_e('Contáctanos', 'intense-nerd-theme'); ?>
             </a>
         </div>
 
         <!-- Búsqueda -->
-        <div class="mt-16 max-w-sm mx-auto" data-aos="fade-up" data-aos-delay="100">
+        <!-- <div class="mt-16 max-w-sm mx-auto" data-aos="fade-up" data-aos-delay="100">
             <p class="body-small text-neutral-gray mb-4">
                 <?php esc_html_e('O busca lo que necesitas:', 'intense-nerd-theme'); ?>
             </p>
             <?php get_search_form(); ?>
-        </div>
+        </div> -->
     </div>
 </main>
 
