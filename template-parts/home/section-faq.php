@@ -36,9 +36,9 @@ $faqs = $args['faqs'] ?? [];
                         <h2 class="font-heading text-4xl lg:text-[40px] text-dark font-normal tracking-wide"><?php echo esc_html($title); ?></h2>
                     </div>
                     <?php if ($description) : ?>
-                        <p class="font-body text-neutral-black text-lg font-light leading-relaxed">
-                            <?php echo esc_html($description); ?>
-                        </p>
+                        <div class="font-body text-neutral-black text-lg font-light leading-relaxed faq-wysiwyg">
+                            <?php echo wp_kses_post($description); ?>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>

@@ -43,3 +43,6 @@ wp-cli.local.yml
 .agent/
 _agents/
 _agent/
+.antigravity/
+.antigravityignore
+find_unused_images.py

@@ -447,7 +447,7 @@ function intense_mega_journeys()
             $days = '';
             $out .= '<li>';
             $out .= '<a href="' . esc_url(get_permalink($p)) . '" '
-                . 'class="lg:text-sm text-xs font-body text-dark/70 hover:text-primary !leading-snug transition-colors underline-offset-2 hover:underline">'
+                . 'class="lg:text-sm text-xs font-body text-dark/70 hover:text-primary leading-none transition-colors underline-offset-2 hover:underline">'
                 . ($days ? $days . 'D ' : '') . esc_html($p->post_title)
                 . '</a></li>';
         }
@@ -610,6 +610,106 @@ function intense_mega_blog()
         'cards' => $cards_html,
         'mobile_list' => $mobile_list,
     ]);
+}
+
+// ── FORMS — Localizar ajaxUrl y nonce en el JS principal ─────────────────────
+add_action('wp_enqueue_scripts', function () {
+    wp_localize_script('intense-nerd-js', 'intenseAjax', [
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('intense_forms_nonce'),
+    ]);
+}, 20);
+
+// ── FORM: Contacto ────────────────────────────────────────────────────────────
+add_action('wp_ajax_intense_contact',        'intense_handle_contact');
+add_action('wp_ajax_nopriv_intense_contact', 'intense_handle_contact');
+
+function intense_handle_contact()
+{
+    check_ajax_referer('intense_forms_nonce', 'nonce');
+
+    $to = ['sales@intenseperu.com', 'karen@intenseperu.com', 'juanpablo@intenseperu.com'];
+
+    $first_name = sanitize_text_field($_POST['firstName'] ?? '');
+    $last_name  = sanitize_text_field($_POST['lastName']  ?? '');
+    $telephone  = sanitize_text_field($_POST['telephone'] ?? '');
+    $email      = sanitize_email($_POST['email']          ?? '');
+    $mensaje    = sanitize_textarea_field($_POST['mensaje'] ?? '');
+
+    if (!$first_name || !$email) {
+        wp_send_json_error(['message' => 'Missing required fields.'], 400);
+    }
+
+    $subject = 'New Contact Message — Intense Peru';
+    $body  = "Name: {$first_name} {$last_name}\n";
+    $body .= "Email: {$email}\n";
+    $body .= $telephone ? "Phone/WhatsApp: {$telephone}\n" : '';
+    $body .= $mensaje   ? "\nMessage:\n{$mensaje}\n" : '';
+
+    $headers = [
+        'Content-Type: text/plain; charset=UTF-8',
+        "Reply-To: {$first_name} {$last_name} <{$email}>",
+    ];
+
+    $sent = wp_mail($to, $subject, $body, $headers);
+
+    if ($sent) {
+        wp_send_json_success(['message' => 'Email sent.']);
+    } else {
+        wp_send_json_error(['message' => 'Could not send email.'], 500);
+    }
+}
+
+// ── FORM: Booking / Quote ─────────────────────────────────────────────────────
+add_action('wp_ajax_intense_booking',        'intense_handle_booking');
+add_action('wp_ajax_nopriv_intense_booking', 'intense_handle_booking');
+
+function intense_handle_booking()
+{
+    check_ajax_referer('intense_forms_nonce', 'nonce');
+
+    $to = ['sales@intenseperu.com', 'karen@intenseperu.com', 'juanpablo@intenseperu.com'];
+
+    $first_name    = sanitize_text_field($_POST['firstName']    ?? '');
+    $last_name     = sanitize_text_field($_POST['lastName']     ?? '');
+    $email         = sanitize_email($_POST['email']             ?? '');
+    $whatsapp      = sanitize_text_field($_POST['whatsapp']     ?? '');
+    $start_date    = sanitize_text_field($_POST['startDate']    ?? '');
+    $trip_length   = sanitize_text_field($_POST['tripLength']   ?? '');
+    $adults        = sanitize_text_field($_POST['adults']       ?? '');
+    $children      = sanitize_text_field($_POST['children']     ?? '');
+    $enfants       = sanitize_text_field($_POST['enfants']      ?? '');
+    $hotel_cat     = sanitize_text_field($_POST['hotelCategory'] ?? '');
+    $hear_about    = sanitize_text_field($_POST['hearAboutUs']  ?? '');
+    $mensaje       = sanitize_textarea_field($_POST['mensaje']  ?? '');
+
+    if (!$first_name || !$email) {
+        wp_send_json_error(['message' => 'Missing required fields.'], 400);
+    }
+
+    $subject = 'New Quote Request — Intense Peru';
+    $body  = "Name: {$first_name} {$last_name}\n";
+    $body .= "Email: {$email}\n";
+    $body .= $whatsapp   ? "WhatsApp: {$whatsapp}\n"           : '';
+    $body .= $start_date ? "Start Date: {$start_date}\n"       : '';
+    $body .= $trip_length ? "Trip Length: {$trip_length} days\n" : '';
+    $body .= "Adults: {$adults} | Children: {$children} | Infants: {$enfants}\n";
+    $body .= $hotel_cat  ? "Hotel Category: {$hotel_cat}\n"    : '';
+    $body .= $hear_about ? "How they heard about us: {$hear_about}\n" : '';
+    $body .= $mensaje    ? "\nMessage:\n{$mensaje}\n"           : '';
+
+    $headers = [
+        'Content-Type: text/plain; charset=UTF-8',
+        "Reply-To: {$first_name} {$last_name} <{$email}>",
+    ];
+
+    $sent = wp_mail($to, $subject, $body, $headers);
+
+    if ($sent) {
+        wp_send_json_success(['message' => 'Email sent.']);
+    } else {
+        wp_send_json_error(['message' => 'Could not send email.'], 500);
+    }
 }
 
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {

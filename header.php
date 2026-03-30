@@ -13,7 +13,7 @@
 <body <?php body_class('bg-cream'); ?>>
     <?php wp_body_open(); ?>
 
-    <?php $is_light_header = is_page_template('page-contact.php') || is_page_template('page-blog.php') || is_page_template('page-politics.php') || is_page_template('page-faqs.php') || is_404(); ?>
+    <?php $is_light_header = is_page_template('page-contact.php') || is_page_template('page-blog.php') || is_page_template('page-politics.php') || is_page_template('page-faqs.php') || is_404() || is_page_template('page-terms.php'); ?>
 
     <!-- Site Header -->
     <header

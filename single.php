@@ -283,46 +283,30 @@ while (have_posts()) : the_post();
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-left">
                         <?php
-                        $itineraries = [
-                            [
-                                'title' => '14D Grand discovery',
-                                'days' => '14 Days',
-                                'price' => 'USD 2,059',
-                                'destinations' => 'Lima • Paracas • Nazca • Arequipa • Colca Canyon • Lake Titicaca • Sacred Valley • Machu Picchu & Cusco',
-                                'img' => get_template_directory_uri() . '/assets/images/intense_02.webp',
-                                'badges' => ['New', 'Top seller']
-                            ],
-                            [
-                                'title' => 'Inca Trail Discovery',
-                                'days' => '5 Days',
-                                'price' => 'USD 899',
-                                'destinations' => 'Cusco • Wayllabamba • Pacaymayo • Wiñay Wayna • Machu Picchu',
-                                'img' => get_template_directory_uri() . '/assets/images/intense_03.webp',
-                                'badges' => ['Top seller']
-                            ],
-                            [
-                                'title' => 'Amazon & Andes',
-                                'days' => '12 Days',
-                                'price' => 'USD 2,499',
-                                'destinations' => 'Lima • Puerto Maldonado • Amazon Basin • Cusco • Sacred Valley • Machu Picchu',
-                                'img' => get_template_directory_uri() . '/assets/images/intense_04.webp',
-                                'badges' => []
-                            ],
-                        ];
-                        foreach ($itineraries as $index => $itin):
+                        $related_query = new WP_Query([
+                            'post_type'      => 'journey',
+                            'posts_per_page' => 3,
+                            'orderby'        => 'rand',
+                        ]);
+                        $r_index = 0;
+                        while ($related_query->have_posts()) : $related_query->the_post();
+                            $r_features    = get_field('features');
+                            $r_information = get_field('information');
+                            $r_days_val    = (int) ($r_information['days'] ?? 0);
+                            $r_price_val   = $r_features['price'] ?? '';
                         ?>
                             <?php get_template_part('template-parts/components/card-itinerary', null, [
-                                'image' => $itin['img'],
-                                'title' => $itin['title'],
-                                'price' => $itin['price'],
-                                'duration' => $itin['days'],
-                                'destinations' => $itin['destinations'],
-                                'link' => '#',
-                                'link_text' => 'Explore itineraries',
-                                'aos_delay' => ($index * 100) + 200,
-                                'badges' => $itin['badges'],
+                                'image'        => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_template_directory_uri() . '/assets/images/intense_02.webp',
+                                'title'        => get_the_title(),
+                                'price'        => $r_price_val ? 'USD ' . number_format($r_price_val) : '',
+                                'duration'     => $r_days_val ? $r_days_val . ' Days' : '',
+                                'destinations' => wp_get_post_tags(get_the_ID(), ['fields' => 'names']),
+                                'link'         => get_permalink(),
+                                'link_text'    => 'Explore itineraries',
+                                'aos_delay'    => ($r_index * 100) + 200,
+                                'badges'       => get_field('badges') ?: [],
                             ]); ?>
-                        <?php endforeach; ?>
+                        <?php $r_index++; endwhile; wp_reset_postdata(); ?>
                     </div>
                 </div>
         </section>

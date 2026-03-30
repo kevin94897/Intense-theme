@@ -24,7 +24,7 @@ $bg_image_url = !empty($banner_text['background_image']['url']) ? $banner_text['
     </div>
     <div class="container-site relative z-10 px-4" data-aos="fade-up" data-aos-delay="100">
         <?php if ($description): ?>
-            <p class="font-body text-lg md:text-xl text-white mb-8 max-w-5xl mx-auto font-light leading-relaxed">
+            <p class="font-body text-lg md:text-xl text-white max-w-5xl mx-auto font-light leading-relaxed">
                 <?php echo wp_kses_post($description); ?>
             </p>
         <?php endif; ?>

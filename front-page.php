@@ -112,7 +112,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <?php if ($message_home) : ?>
         <section class="py-20">
             <div class="container-site">
-                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center" data-aos="fade-up"
+                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center leading-relaxed" data-aos="fade-up"
                     data-aos-delay="200">
                     <?php echo nl2br(esc_html($message_home)); ?>
                 </p>
@@ -124,9 +124,20 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <?php if (!empty($dest_posts)) : ?>
         <section class="py-10 bg-cream">
             <div class="container-site text-left">
-                <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12" data-aos="fade-up" data-aos-delay="100">
-                    Signature Destinations</h2>
-
+                <div class="flex flex-col items-center md:items-start gap-4">
+                    <svg class="block md:hidden" width="65" height="41" viewBox="0 0 65 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z" stroke="#7B4424" stroke-width="1.12281" />
+                        <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z" fill="#B76739" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="#7B4424" stroke-width="1.12281" />
+                        <path d="M54.7339 40.3481L31.997 27.4359L9.26017 40.3481" stroke="#7B4424" stroke-width="1.12281" />
+                        <path d="M23.2954 3.29541L32.2779 8.90945L41.2603 3.29541" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M41.2603 37.541L32.2778 31.927L23.2953 37.541" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M64.2779 8.90942L44.0674 20.4182L64.2779 31.927" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="#B76739" stroke-width="1.12281" />
+                    </svg>
+                    <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12 text-center md:text-left" data-aos="fade-up" data-aos-delay="100">
+                        Signature Destinations</h2>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
                     <?php
                     // Bento layout: item 0 → 2col×2row, item 1 → 2col×1row, items 2-3 → 1col×1row
@@ -137,10 +148,10 @@ $download_button         = $travel_guides['download_button'] ?? [];
                         '',
                     ];
                     $heading_sizes = [
-                        'text-3xl',
                         'text-2xl',
                         'text-xl',
-                        'text-xl',
+                        'text-lg',
+                        'text-md',
                     ];
                     $aos_delays = [200, 300, 400, 500];
 
@@ -160,6 +171,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                                     <?php echo esc_html($dest_title); ?></h3>
                                 <?php get_template_part('template-parts/components/btn-outline', null, [
                                     'text'  => 'Explore destination',
+                                    'class_extra' => 'py-2',
                                     'href'  => $dest_url,
                                     'color' => 'light',
                                 ]); ?>
@@ -320,51 +332,78 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <?php get_template_part('template-parts/components/banner-cta'); ?>
 
     <!-- H. Journal & Stories -->
-    <section class="py-20 bg-cream">
+    <section class="md:py-20 py-12 bg-cream overflow-hidden">
         <div class="container-site">
-            <div class="text-center mb-12">
-                <h2 class="font-heading text-4xl md:text-5xl text-dark" data-aos="fade-up">Journal & Stories</h2>
-            </div>
-            <div class="text-right" data-aos="fade-up" data-aos-delay="100">
-                <a href="<?php echo esc_url(get_post_type_archive_link('post')); ?>"
-                    class="font-body text-sm text-dark uppercase tracking-wide hover:text-hover transition-colors font-medium flex items-center gap-2">See
-                    All <svg class="w-12 h-6 text-dark transition-transform duration-300 group-hover:translate-x-2"
-                        viewBox="0 0 40 10" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <line x1="0" y1="5" x2="38" y2="5"></line>
-                        <polyline points="34 1 39 5 34 9"></polyline>
-                    </svg></a>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end md:mb-12 mb-6 gap-6">
+                <div class="text-left">
+                    <h2 class="font-heading text-4xl md:text-5xl text-dark" data-aos="fade-up">Journal & Stories</h2>
+                </div>
+                <div class="flex items-center gap-6" data-aos="fade-up" data-aos-delay="100">
+                    <a href="<?php echo esc_url(get_post_type_archive_link('post')); ?>"
+                        class="group font-body text-xs md:text-sm text-dark uppercase tracking-widest hover:text-primary transition-colors font-medium flex items-center gap-3">
+                        See All
+                        <svg class="w-10 h-4 text-dark transition-transform duration-300 group-hover:translate-x-1"
+                            viewBox="0 0 40 10" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="0" y1="5" x2="38" y2="5"></line>
+                            <polyline points="34 1 39 5 34 9"></polyline>
+                        </svg>
+                    </a>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-4">
-                <?php
-                $recent_posts = get_posts([
-                    'post_type'      => 'post',
-                    'posts_per_page' => 3,
-                    'post_status'    => 'publish',
-                    'orderby'        => 'date',
-                    'order'          => 'DESC',
-                ]);
-                foreach ($recent_posts as $pidx => $story_post) :
-                    $story_img  = get_the_post_thumbnail_url($story_post->ID, 'large') ?: get_template_directory_uri() . '/assets/images/intense_journal_01.webp';
-                    $read_time  = get_field('read_time', $story_post->ID) ?? '';
-                    $story_date = get_the_date('d M Y', $story_post->ID);
-                ?>
-                    <?php get_template_part('template-parts/components/card-story', null, [
-                        'image'     => $story_img,
-                        'image_alt' => get_the_title($story_post->ID),
-                        'title'     => get_the_title($story_post->ID),
-                        'read_time' => $read_time,
-                        'date'      => $story_date,
-                        'link'      => get_permalink($story_post->ID),
-                        'aos_delay' => $pidx * 100,
-                    ]); ?>
-                <?php endforeach; ?>
+            <!-- Embla Wrapper -->
+            <div class="embla-stories relative" data-aos="fade-up" data-aos-delay="200">
+                <div class="embla overflow-hidden py-4">
+                    <div class="embla__container flex -ml-6 md:-ml-10">
+                        <?php
+                        $recent_posts = get_posts([
+                            'post_type'      => 'post',
+                            'posts_per_page' => 9,
+                            'post_status'    => 'publish',
+                            'orderby'        => 'date',
+                            'order'          => 'DESC',
+                        ]);
+                        foreach ($recent_posts as $pidx => $story_post) :
+                            $story_img  = get_the_post_thumbnail_url($story_post->ID, 'large') ?: get_template_directory_uri() . '/assets/images/intense_journal_01.webp';
+                            $read_time  = get_field('read_time', $story_post->ID) ?? '';
+                            $story_date = get_the_date('d M Y', $story_post->ID);
+                        ?>
+                            <div class="embla__slide flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-10">
+                                <?php get_template_part('template-parts/components/card-story', null, [
+                                    'image'     => $story_img,
+                                    'image_alt' => get_the_title($story_post->ID),
+                                    'title'     => get_the_title($story_post->ID),
+                                    'read_time' => $read_time,
+                                    'date'      => $story_date,
+                                    'link'      => get_permalink($story_post->ID),
+                                    'aos_delay' => 0, // Delay handled by wrapper
+                                ]); ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center justify-center md:justify-start gap-12 mt-12">
+                    <button class="embla__prev group cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed transition-opacity" aria-label="Previous">
+                        <svg class="w-16 h-5" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <line x1="95" y1="12" x2="10" y2="12" class="transition-all duration-300"></line>
+                            <polyline points="20 4 10 12 20 20" class="transition-all duration-300 group-hover:-translate-x-1"></polyline>
+                        </svg>
+                    </button>
+                    <button class="embla__next group cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed transition-opacity" aria-label="Next">
+                        <svg class="w-16 h-5" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <line x1="5" y1="12" x2="90" y2="12" class="transition-all duration-300"></line>
+                            <polyline points="80 4 90 12 80 20" class="transition-all duration-300 group-hover:translate-x-1"></polyline>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- I. Travel Guides Download -->
-    <section class="py-20">
+    <section class="md:py-20 py-12">
         <div class="container-site">
             <div class="flex flex-col md:flex-row items-center gap-12">
                 <!-- Image -->
@@ -505,9 +544,9 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     <!-- Submit -->
                     <div class="pt-6 flex justify-center w-full text-center">
                         <a href="#"
-                           @click.prevent="submitForm()"
-                           :class="{ 'opacity-50 pointer-events-none': isSubmitting }"
-                           class="btn btn-outline-dark px-10 py-3 text-sm font-medium hover:bg-dark hover:text-white">
+                            @click.prevent="submitForm()"
+                            :class="{ 'opacity-50 pointer-events-none': isSubmitting }"
+                            class="btn btn-outline-dark px-10 py-3 text-sm font-medium hover:bg-dark hover:text-white">
                             <span x-text="isSubmitting ? 'Sending...' : 'Get the Guide'"></span>
                         </a>
                     </div>

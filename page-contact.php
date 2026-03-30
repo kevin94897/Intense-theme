@@ -192,24 +192,8 @@ $image_faq = get_field('image_faq');
                     </div>
 
                     <?php
-                    $faqs = [
-                        [
-                            'q' => 'How do I book a trip with Intense Peru?',
-                            'a' => 'Fill out our contact form with your travel dates, group size, and preferences. One of our travel designers will reach out within 24 hours to craft your personalized itinerary — no commitment required.',
-                        ],
-                        [
-                            'q' => 'What is included in the quoted price?',
-                            'a' => 'Our quotes typically include private accommodation, internal transportation, expert local guides, and entrance fees to all listed sites. International flights and personal expenses are not included unless specified. Every inclusion is clearly outlined in your custom proposal.',
-                        ],
-                        [
-                            'q' => 'Can I customize my itinerary after receiving the quote?',
-                            'a' => 'Absolutely. Every journey we design is completely flexible. After reviewing your initial proposal you can adjust destinations, pace, hotel category, or activities as many times as needed until it feels exactly right.',
-                        ],
-                        [
-                            'q' => 'Do you offer group discounts?',
-                            'a' => 'Yes. We offer special rates for groups of 6 or more travellers. Mention your group size in the contact form and we will include a dedicated group rate in your proposal.',
-                        ],
-                    ];
+                    $faqs_global = get_field('faqs', 'option');
+                    $faqs        = array_slice( $faqs_global['list_of_questions'] ?? [], 0, 4 );
                     ?>
 
                     <div x-data="{ active: null }" class="divide-y divide-neutral-gray/30">
@@ -223,7 +207,7 @@ $image_faq = get_field('image_faq');
                                     <span
                                         class="font-body body-medium leading-snug transition-colors duration-200"
                                         :class="active === <?php echo $i; ?> ? 'text-primary' : 'text-dark/80 group-hover:text-dark'">
-                                        <?php echo esc_html($faq['q']); ?>
+                                        <?php echo esc_html($faq['question']); ?>
                                     </span>
 
                                     <!-- Chevron -->
@@ -245,9 +229,9 @@ $image_faq = get_field('image_faq');
                                     x-transition:leave-end="opacity-0"
                                     style="display:none;"
                                     class="pb-5 pr-8">
-                                    <p class="font-body body-small text-dark/60 leading-relaxed">
-                                        <?php echo esc_html($faq['a']); ?>
-                                    </p>
+                                    <div class="font-body body-small text-dark/60 leading-relaxed">
+                                        <?php echo wp_kses_post($faq['response']); ?>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -364,9 +348,14 @@ $image_faq = get_field('image_faq');
                     if (!this.validateAll()) return;
                     this.isSubmitting = true;
                     try {
-                        // ── swap for your real wp_ajax / CF7 / REST endpoint ──
-                        await new Promise(r => setTimeout(r, 1200));
-                        // ─────────────────────────────────────────────────────
+                        const body = new URLSearchParams({
+                            action: 'intense_contact',
+                            nonce:  intenseAjax.nonce,
+                            ...this.formData,
+                        });
+                        const res  = await fetch(intenseAjax.ajaxUrl, { method: 'POST', body });
+                        const json = await res.json();
+                        if (!json.success) throw new Error(json.data?.message || 'Error');
                         window.dispatchEvent(new CustomEvent('ccp:quotesuccess'));
                     } catch (err) {
                         console.error('Form error:', err);

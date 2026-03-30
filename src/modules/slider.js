@@ -9,9 +9,15 @@ export function initSliders() {
         if (emblaNode.id === 'teamEmbla') return
 
         // Obtenemos su wrapper padre para buscar sus propios botones
-        const wrapper = emblaNode.closest('.embla-gallery') || emblaNode.parentElement;
+        const wrapper = emblaNode.closest('.embla-gallery') || emblaNode.closest('.embla-stories') || emblaNode.parentElement;
         
-        const options = { loop: true }
+        const isStories = wrapper.classList.contains('embla-stories');
+        const options = { 
+            loop: true,
+            align: isStories ? 'start' : 'center',
+            containScroll: isStories ? 'trimSnaps' : false
+        }
+        
         const emblaApi = EmblaCarousel(emblaNode, options)
 
         const prevBtn = wrapper.querySelector('.embla__prev')
@@ -37,6 +43,9 @@ export function initSliders() {
 
             emblaApi.on('select', updateButtons)
             emblaApi.on('init', updateButtons)
+            
+            // Initial call to set correct button states
+            updateButtons();
         }
     });
 }

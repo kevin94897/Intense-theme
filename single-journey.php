@@ -45,7 +45,7 @@ $selected_activities = array_filter($selected_activities);
                         class="w-full h-full object-cover">
                 <?php endif; ?>
                 <!-- Add a gradient overlay for text readability -->
-                <div class="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
             </div>
 
             <!-- Content -->
@@ -894,48 +894,31 @@ $selected_activities = array_filter($selected_activities);
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
                 <?php
-                // Mock array for related
-                $itineraries = [
-                    [
-                        'title' => '8D Andes Experience',
-                        'days' => '8 Days',
-                        'price' => 'USD 1,399',
-                        'destinations' => 'Lima • Arequipa • Colca Canyon • Cusco • Sacred Valley • Machu Picchu',
-                        'img' => get_template_directory_uri() . '/assets/images/intense_01.webp',
-                        'badges' => ['Top seller']
-                    ],
-                    [
-                        'title' => '5D Andean Getaway',
-                        'days' => '5 Days',
-                        'price' => 'USD 1,099',
-                        'destinations' => 'Cusco • Sacred Valley • Machu Picchu',
-                        'img' => get_template_directory_uri() . '/assets/images/intense_03.webp',
-                        'badges' => []
-                    ],
-                    [
-                        'title' => '8D Cusco Immersive',
-                        'days' => '8 Days',
-                        'price' => 'USD 1,299',
-                        'destinations' => 'Cusco • Pisac • Ollantaytambo • Machu Picchu & Cusco',
-                        'img' => get_template_directory_uri() . '/assets/images/intense_gallery_01.webp',
-                        'badges' => []
-                    ],
-                ];
-
-                foreach ($itineraries as $index => $itin):
+                $related_query = new WP_Query([
+                    'post_type'      => 'journey',
+                    'posts_per_page' => 3,
+                    'post__not_in'   => [get_the_ID()],
+                    'orderby'        => 'rand',
+                ]);
+                $r_index = 0;
+                while ($related_query->have_posts()) : $related_query->the_post();
+                    $r_features     = get_field('features');
+                    $r_information  = get_field('information');
+                    $r_days_val     = (int) ($r_information['days'] ?? 0);
+                    $r_price_val    = $r_features['price'] ?? '';
                 ?>
                     <?php get_template_part('template-parts/components/card-itinerary', null, [
-                        'image' => $itin['img'],
-                        'title' => $itin['title'],
-                        'price' => $itin['price'],
-                        'duration' => $itin['days'],
-                        'destinations' => $itin['destinations'],
-                        'link' => '#',
-                        'link_text' => 'Explore itinerary',
-                        'aos_delay' => ($index % 3) * 100,
-                        'badges' => $itin['badges'],
+                        'image'        => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_template_directory_uri() . '/assets/images/intense_01.webp',
+                        'title'        => get_the_title(),
+                        'price'        => $r_price_val ? 'USD ' . number_format($r_price_val) : '',
+                        'duration'     => $r_days_val ? $r_days_val . ' Days' : '',
+                        'destinations' => wp_get_post_tags(get_the_ID(), ['fields' => 'names']),
+                        'link'         => get_permalink(),
+                        'link_text'    => 'Explore itinerary',
+                        'aos_delay'    => ($r_index % 3) * 100,
+                        'badges'       => get_field('badges') ?: [],
                     ]); ?>
-                <?php endforeach; ?>
+                <?php $r_index++; endwhile; wp_reset_postdata(); ?>
             </div>
         </div>
     </section>
@@ -1225,28 +1208,8 @@ $selected_activities = array_filter($selected_activities);
                 <div class="lg:col-span-9" data-aos="fade-left" x-data="{ active: null }">
 
                     <?php
-                    $faqs = [
-                        [
-                            'q' => 'How do I book a trip with Intense Peru?',
-                            'a' => 'Simply fill out our quote request form above with your travel dates, group size, and preferences. One of our travel designers will reach out within 24 hours to begin crafting your personalized itinerary.'
-                        ],
-                        [
-                            'q' => 'What is included in the quoted price?',
-                            'a' => 'Our quotes typically include accommodation, private transportation, guided tours, and entrance fees to all listed sites. International flights and personal expenses are generally not included unless specified. We will clearly outline every inclusion in your custom proposal.'
-                        ],
-                        [
-                            'q' => 'Can I customize my itinerary after receiving the quote?',
-                            'a' => 'Absolutely. Every journey we design is fully flexible. After reviewing your initial proposal, you can adjust destinations, pace, hotel categories, or activities as many times as needed until the itinerary feels exactly right for you.'
-                        ],
-                        [
-                            'q' => 'How far in advance should I book?',
-                            'a' => 'We recommend booking at least 2–3 months in advance, especially for peak season (June–August) and popular routes like the Inca Trail to Machu Picchu, which requires permits that sell out quickly. That said, we can often accommodate last-minute requests.'
-                        ],
-                        [
-                            'q' => 'Do you offer private tours only?',
-                            'a' => 'Yes. All Intense Peru experiences are exclusively private, ensuring you travel at your own pace with a dedicated guide who adapts the journey to your interests and energy each day.'
-                        ],
-                    ];
+                    $faqs_global = get_field('faqs', 'option');
+                    $faqs        = $faqs_global['list_of_questions'] ?? [];
                     ?>
 
                     <ul class="divide-y divide-neutral-gray/50">
@@ -1258,7 +1221,7 @@ $selected_activities = array_filter($selected_activities);
 
                                     <span class="font-body text-sm md:text-[15px] transition-colors duration-200"
                                         :class="active === <?php echo $i; ?> ? 'text-primary' : 'text-dark/80 group-hover:text-dark'">
-                                        <?php echo esc_html($faq['q']); ?>
+                                        <?php echo esc_html($faq['question']); ?>
                                     </span>
 
                                     <!-- Arrow: rotates to × when open -->
@@ -1282,9 +1245,9 @@ $selected_activities = array_filter($selected_activities);
                                     x-transition:leave="transition ease-in duration-200"
                                     x-transition:leave-start="opacity-100 translate-y-0"
                                     x-transition:leave-end="opacity-0 -translate-y-2" class="pb-5 pr-12">
-                                    <p class="font-body text-sm text-dark/60 leading-relaxed">
-                                        <?php echo esc_html($faq['a']); ?>
-                                    </p>
+                                    <div class="font-body text-sm text-dark/60 leading-relaxed">
+                                        <?php echo wp_kses_post($faq['response']); ?>
+                                    </div>
                                 </div>
                             </li>
                         <?php endforeach; ?>

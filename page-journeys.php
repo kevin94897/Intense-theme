@@ -49,16 +49,16 @@ get_header();
                         All Journeys
                     </button>
                     <button data-filter="signature"
-                        class="filter-btn font-body text-sm font-medium text-neutral-gray hover:text-dark transition-colors pb-1 text-center cursor-pointer min-w-[80px]">
-                        Signature<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">10+ days</span>
+                        class="filter-btn font-body text-sm font-medium text-dark/70 hover:text-dark transition-colors pb-1 text-center cursor-pointer min-w-[80px]">
+                        Signature<br><span class="text-xs normal-case text-dark/60 font-normal">10+ days</span>
                     </button>
                     <button data-filter="design-it"
-                        class="filter-btn font-body text-sm text-neutral-gray hover:text-dark transition-colors pb-1 text-center cursor-pointer min-w-[80px]">
-                        Compact<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">5-9 days</span>
+                        class="filter-btn font-body text-sm font-medium text-dark/70 hover:text-dark transition-colors pb-1 text-center cursor-pointer min-w-[80px]">
+                        Compact<br><span class="text-xs normal-case text-dark/60 font-normal">5-9 days</span>
                     </button>
                     <button data-filter="treasures"
-                        class="filter-btn font-body text-sm font-medium text-neutral-gray hover:text-dark transition-colors pb-1 text-center cursor-pointer min-w-[80px]">
-                        Escapes<br><span class="text-xs normal-case text-neutral-gray/60 font-normal">1-4 days</span>
+                        class="filter-btn font-body text-sm font-medium text-dark/70 hover:text-dark transition-colors pb-1 text-center cursor-pointer min-w-[80px]">
+                        Escapes<br><span class="text-xs normal-case text-dark/60 font-normal">1-4 days</span>
                     </button>
                 </div>
             </div>
@@ -92,7 +92,7 @@ get_header();
                         $price = $price_val ? 'USD ' . number_format($price_val) : '';
                         $destinations = wp_get_post_tags(get_the_ID(), ['fields' => 'names']);
                         $link = get_permalink();
-                        ?>
+                ?>
 
                         <div class="journey-card" data-days="<?php echo $days_val; ?>">
                             <?php
@@ -110,7 +110,7 @@ get_header();
                             ?>
                         </div>
 
-                        <?php
+                <?php
                         $index++;
                     endwhile;
                     wp_reset_postdata();
@@ -142,7 +142,7 @@ get_header();
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
 
         const filterBtns = document.querySelectorAll('#journey-filters .filter-btn');
         const cards = document.querySelectorAll('#journey-grid .journey-card');
@@ -156,7 +156,7 @@ get_header();
         };
 
         filterBtns.forEach(btn => {
-            btn.addEventListener('click', function () {
+            btn.addEventListener('click', function() {
 
                 // Update active styles
                 filterBtns.forEach(b => {
@@ -180,7 +180,7 @@ get_header();
         // Load More feature
         const loadMoreBtn = document.getElementById('load-more-journeys');
         if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', function (e) {
+            loadMoreBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const btn = this;
                 let page = parseInt(btn.dataset.page);
@@ -197,9 +197,9 @@ get_header();
                 formData.append('page', page + 1);
 
                 fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
-                    method: 'POST',
-                    body: formData
-                })
+                        method: 'POST',
+                        body: formData
+                    })
                     .then(res => res.text())
                     .then(html => {
                         if (html.trim() !== '') {

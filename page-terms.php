@@ -1,31 +1,27 @@
 <?php
 
 /**
- * Template Name: FAQs
+ * Template Name: Terms & Conditions
  *
- * Lee los datos desde ACF Options Page (faqs).
+ * Lee los datos desde ACF Options Page (terms-and-conditions).
  * Estructura ACF:
- *   faqs (group)
- *     ├── title_faqs       (text)
- *     ├── description      (text)
- *     └── list_of_questions (repeater)
+ *   tyc (group)
+ *     ├── title_terms      (text)
+ *     ├── description      (wysiwyg)
+ *     └── list_of_terms    (repeater)
  *           ├── question   (text)
  *           └── response   (wysiwyg)
  *
- * Requiere: ACF Pro + Options Page registrada como 'faqs'
+ * Requiere: ACF Pro + Options Page registrada como 'terms-and-conditions'
  */
 
 get_header();
 
 // ── Leer campos ACF desde Options Page ──────────────────────────────────────
-$faqs_group   = get_field('faqs', 'option');
-$title        = $faqs_group['title_faqs']       ?? get_the_title();
-$description  = $faqs_group['description']      ?? '';
-$questions    = $faqs_group['list_of_questions'] ?? [];
-
-// ── Construir secciones para el sidebar (igual que page-legal) ───────────────
-// Agrupamos por la inicial de cada pregunta si son muchas,
-// o simplemente listamos todas las preguntas como ítems del sidebar.
+$tyc_group   = get_field('tyc', 'option');
+$title       = $tyc_group['title_terms']  ?? get_the_title();
+$description = $tyc_group['description'] ?? '';
+$questions   = $tyc_group['list_of_terms'] ?? [];
 ?>
 
 <main class="min-h-screen bg-cream">
@@ -49,12 +45,12 @@ $questions    = $faqs_group['list_of_questions'] ?? [];
             ══════════════════════════════════════════════════════ -->
             <?php if (!empty($questions)) : ?>
                 <aside class="legal-sidebar lg:w-72 xl:w-80 shrink-0">
-                    <nav class="legal-nav lg:sticky lg:top-28" aria-label="Preguntas frecuentes">
+                    <nav class="legal-nav lg:sticky lg:top-28" aria-label="Términos y condiciones">
                         <ul class="">
                             <?php foreach ($questions as $i => $item) :
                                 $q_text = $item['question'] ?? '';
                                 if (!$q_text) continue;
-                                $q_id = 'faq-' . ($i + 1);
+                                $q_id = 'term-' . ($i + 1);
                             ?>
                                 <li class="border-b border-dark/8">
                                     <a
@@ -75,21 +71,21 @@ $questions    = $faqs_group['list_of_questions'] ?? [];
             <?php endif; ?>
 
             <!-- ══════════════════════════════════════════════════════
-                 CONTENT — Accordion FAQs
+                 CONTENT — Accordion Terms
             ══════════════════════════════════════════════════════ -->
             <div class="legal-content faq-content flex-1 min-w-0">
 
                 <?php if (empty($questions)) : ?>
                     <p class="text-sm text-dark/40 font-body">
-                        <?php esc_html_e('No hay preguntas disponibles.', 'intense-nerd-theme'); ?>
+                        <?php esc_html_e('No hay términos disponibles.', 'intense-nerd-theme'); ?>
                     </p>
 
                 <?php else : ?>
                     <div class="faq-list">
                         <?php foreach ($questions as $i => $item) :
-                            $q_text  = $item['question'] ?? '';
-                            $a_text  = $item['response'] ?? '';
-                            $q_id    = 'faq-' . ($i + 1);
+                            $q_text = $item['question'] ?? '';
+                            $a_text = $item['response'] ?? '';
+                            $q_id   = 'term-' . ($i + 1);
                             if (!$q_text) continue;
                         ?>
                             <div
@@ -200,7 +196,6 @@ $questions    = $faqs_group['list_of_questions'] ?? [];
         margin-bottom: 0.25rem;
     }
 
-    /* Animación x-collapse si no está disponible, fallback */
     [x-cloak] {
         display: none !important;
     }

@@ -93,28 +93,32 @@ export default function bookingForm() {
         async submitForm(e) {
             e.preventDefault();
             this.submitSuccess = false;
-            
-            if (!this.validate()) {
-                // Scroll to first error randomly or just return
-                return;
-            }
+
+            if (!this.validate()) return;
 
             this.isSubmitting = true;
-            
-            // Simular petición
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            this.isSubmitting = false;
-            this.submitSuccess = true;
-            window.dispatchEvent(new CustomEvent('ccp:quoteSuccess'));
-            
-            // clear form (opcional)
-            // Object.keys(this.formData).forEach(k => this.formData[k] = (k === 'adults') ? '1' : (k === 'children' || k === 'enfants') ? '0' : '');
-            // this.formData.hotelCategory = '';
-            
-            setTimeout(() => {
-                this.submitSuccess = false;
-            }, 5000);
+            try {
+                const body = new URLSearchParams({
+                    action: 'intense_booking',
+                    nonce:  window.intenseAjax?.nonce || '',
+                    ...this.formData,
+                });
+                const res  = await fetch(window.intenseAjax?.ajaxUrl || '/wp-admin/admin-ajax.php', {
+                    method: 'POST',
+                    body,
+                });
+                const json = await res.json();
+                if (!json.success) throw new Error(json.data?.message || 'Error');
+
+                this.submitSuccess = true;
+                window.dispatchEvent(new CustomEvent('ccp:quoteSuccess'));
+
+                setTimeout(() => { this.submitSuccess = false; }, 5000);
+            } catch (err) {
+                console.error('Booking form error:', err);
+            } finally {
+                this.isSubmitting = false;
+            }
         }
     }
 }

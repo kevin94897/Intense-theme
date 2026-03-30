@@ -41,7 +41,7 @@ get_header();
     <?php if (get_field('message')) : ?>
         <section class="py-20">
             <div class="container-site">
-                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center" data-aos="fade-up"
+                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center leading-relaxed" data-aos="fade-up"
                     data-aos-delay="200">
                     <?php echo get_field('message'); ?>
                 </p>

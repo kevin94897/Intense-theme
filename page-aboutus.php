@@ -97,7 +97,7 @@ $alt_msg      = $alternative_txt['message'] ?? '';
     <?php if ($story_msg) : ?>
         <section class="py-20">
             <div class="container-site">
-                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center" data-aos="fade-up"
+                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center leading-relaxed" data-aos="fade-up"
                     data-aos-delay="200">
                     <?php echo esc_html($story_msg); ?>
                 </p>
