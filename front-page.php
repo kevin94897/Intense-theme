@@ -135,45 +135,51 @@ $download_button         = $travel_guides['download_button'] ?? [];
                         <path d="M64.2779 8.90942L44.0674 20.4182L64.2779 31.927" stroke="#B76739" stroke-width="1.12281" />
                         <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="#B76739" stroke-width="1.12281" />
                     </svg>
-                    <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12 text-center md:text-left" data-aos="fade-up" data-aos-delay="100">
-                        Signature Destinations</h2>
+                    <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12 text-center md:text-left"
+                        data-aos="fade-up" data-aos-delay="100">Signature Destinations</h2>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[300px]">
                     <?php
-                    // Bento layout: item 0 → 2col×2row, item 1 → 2col×1row, items 2-3 → 1col×1row
                     $bento_classes = [
-                        'md:col-span-2 md:row-span-2',
-                        'md:col-span-2',
-                        '',
-                        '',
+                        'md:col-span-1 md:row-span-1',
+                        'md:col-span-2 md:row-span-1',
+                        'md:col-span-1 md:row-span-2',
+                        'md:col-span-2 md:row-span-1',
+                        'md:col-span-1 md:row-span-1',
+                        'md:col-span-1 md:row-span-2',
                     ];
                     $heading_sizes = [
+                        'text-xl',
+                        'text-2xl',
                         'text-2xl',
                         'text-xl',
                         'text-lg',
-                        'text-md',
+                        'text-xl',
                     ];
-                    $aos_delays = [200, 300, 400, 500];
+                    $aos_delays = [200, 300, 400, 500, 600, 700];
 
                     foreach ($dest_posts as $idx => $dest_post) :
-                        if ($idx >= 4) break;
-                        $thumb = get_the_post_thumbnail_url($dest_post->ID, 'large') ?: get_template_directory_uri() . '/assets/images/intense_01.webp';
+                        if ($idx >= 5) break;
+                        $thumb      = get_the_post_thumbnail_url($dest_post->ID, 'large') ?: get_template_directory_uri() . '/assets/images/intense_01.webp';
                         $dest_title = get_the_title($dest_post->ID);
                         $dest_url   = get_permalink($dest_post->ID);
                     ?>
-                        <div class="<?php echo $bento_classes[$idx]; ?> relative group overflow-hidden rounded-lg cursor-pointer"
+                        <div class="<?php echo $bento_classes[$idx]; ?> relative group overflow-hidden rounded-sm cursor-pointer"
                             data-aos="fade-up" data-aos-delay="<?php echo $aos_delays[$idx]; ?>">
-                            <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($dest_title); ?>"
-                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                            <img src="<?php echo esc_url($thumb); ?>"
+                                alt="<?php echo esc_attr($dest_title); ?>"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-black/20"></div>
                             <div class="absolute bottom-6 left-6 text-left">
                                 <h3 class="font-heading text-white <?php echo $heading_sizes[$idx]; ?> font-medium mb-2">
-                                    <?php echo esc_html($dest_title); ?></h3>
+                                    <?php echo esc_html($dest_title); ?>
+                                </h3>
                                 <?php get_template_part('template-parts/components/btn-outline', null, [
-                                    'text'  => 'Explore destination',
-                                    'class_extra' => 'py-2',
-                                    'href'  => $dest_url,
-                                    'color' => 'light',
+                                    'text'        => 'Explore destination',
+                                    'class_extra' => '',
+                                    'href'        => $dest_url,
+                                    'color'       => 'light',
                                 ]); ?>
                             </div>
                         </div>
