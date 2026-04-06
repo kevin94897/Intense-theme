@@ -10,7 +10,10 @@
  *     │     ├── button_1      (link)
  *     │     └── button_2      (link)
  *     ├── signature_destinations (group)
- *     │     ├── destinations  (post_object, multiple → CPT destination)
+ *     │     ├── destinations_list (repeater)
+ *     │     │     ├── destination_image (image)
+ *     │     │     ├── destination_title (text)
+ *     │     │     └── destination_button (link)
  *     │     └── journeys      (post_object, multiple → CPT journey)
  *     ├── motivation (group)
  *     │     ├── title         (text)
@@ -49,7 +52,7 @@ $hero_video_url          = is_array($hero_video_field)
     : (string) $hero_video_field;
 $hero_video_fallback     = get_template_directory_uri() . '/assets/videos/intense_video_home_hero.mp4';
 
-$dest_posts              = $signature_destinations['destinations'] ?? [];
+$dest_list               = $signature_destinations['destinations_list'] ?? [];
 $journey_posts           = $signature_destinations['journeys']     ?? [];
 
 $motivation_title        = $motivation['title']            ?? '';
@@ -121,7 +124,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <?php endif; ?>
 
     <!-- B. Signature Destinations -->
-    <?php if (!empty($dest_posts)) : ?>
+    <?php if (!empty($dest_list)) : ?>
         <section class="py-10 bg-cream">
             <div class="container-site text-left">
                 <div class="flex flex-col items-center md:items-start gap-4">
@@ -139,15 +142,15 @@ $download_button         = $travel_guides['download_button'] ?? [];
                         data-aos="fade-up" data-aos-delay="100">Signature Destinations</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[300px]">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-2 auto-rows-[300px]">
                     <?php
                     $bento_classes = [
                         'md:col-span-1 md:row-span-1',
                         'md:col-span-2 md:row-span-1',
-                        'md:col-span-1 md:row-span-2',
+                        'md:col-span-1 md:row-span-1',
                         'md:col-span-2 md:row-span-1',
                         'md:col-span-1 md:row-span-1',
-                        'md:col-span-1 md:row-span-2',
+                        'md:col-span-1 md:row-span-1',
                     ];
                     $heading_sizes = [
                         'text-xl',
@@ -159,11 +162,15 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     ];
                     $aos_delays = [200, 300, 400, 500, 600, 700];
 
-                    foreach ($dest_posts as $idx => $dest_post) :
-                        if ($idx >= 5) break;
-                        $thumb      = get_the_post_thumbnail_url($dest_post->ID, 'large') ?: get_template_directory_uri() . '/assets/images/intense_01.webp';
-                        $dest_title = get_the_title($dest_post->ID);
-                        $dest_url   = get_permalink($dest_post->ID);
+                    foreach ($dest_list as $idx => $dest_item) :
+                        if ($idx >= 6) break;
+                        $img_array  = $dest_item['destination_image'] ?? [];
+                        $thumb      = !empty($img_array['sizes']['large']) ? $img_array['sizes']['large'] : (!empty($img_array['url']) ? $img_array['url'] : get_template_directory_uri() . '/assets/images/intense_01.webp');
+                        $dest_title = $dest_item['destination_title'] ?? '';
+                        $dest_btn   = $dest_item['destination_button'] ?? [];
+                        
+                        $dest_url   = $dest_btn['url'] ?? '#';
+                        $dest_btn_text = $dest_btn['title'] ?? 'Explore destination';
                     ?>
                         <div class="<?php echo $bento_classes[$idx]; ?> relative group overflow-hidden rounded-sm cursor-pointer"
                             data-aos="fade-up" data-aos-delay="<?php echo $aos_delays[$idx]; ?>">
@@ -175,12 +182,14 @@ $download_button         = $travel_guides['download_button'] ?? [];
                                 <h3 class="font-heading text-white <?php echo $heading_sizes[$idx]; ?> font-medium mb-2">
                                     <?php echo esc_html($dest_title); ?>
                                 </h3>
-                                <?php get_template_part('template-parts/components/btn-outline', null, [
-                                    'text'        => 'Explore destination',
-                                    'class_extra' => '',
-                                    'href'        => $dest_url,
-                                    'color'       => 'light',
-                                ]); ?>
+                                <?php if (!empty($dest_btn)) : ?>
+                                    <?php get_template_part('template-parts/components/btn-outline', null, [
+                                        'text'        => $dest_btn_text,
+                                        'class_extra' => '',
+                                        'href'        => $dest_url,
+                                        'color'       => 'light',
+                                    ]); ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -591,7 +600,28 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     if (!this.validateAll()) return;
                     this.isSubmitting = true;
                     try {
-                        await new Promise(r => setTimeout(r, 800));
+                        const fd = new FormData();
+                        fd.append('action', 'intense_brochure');
+                        fd.append('nonce', '<?php echo wp_create_nonce('intense_forms_nonce'); ?>');
+                        fd.append('brochure', this.formData.brochure);
+                        fd.append('firstName', this.formData.firstName);
+                        fd.append('email', this.formData.email);
+
+                        const res = await fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                            method: 'POST',
+                            body: fd
+                        });
+
+                        // We do not strict check res.ok here in case there are warnings, but we do try to parse JSON
+                        const json = await res.json().catch(() => null);
+
+                        console.log('[Brochure] HTTP status:', res.status, res.ok ? 'OK' : 'FAIL');
+                        console.log('[Brochure] Server response:', json);
+
+                        if (!res.ok) {
+                            throw new Error(json?.data?.message || 'Error processing request');
+                        }
+
                         this.successMessage = true;
 
                         // Trigger file download

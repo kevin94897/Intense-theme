@@ -50,19 +50,11 @@ if (!empty($gallery)) {
     }
 }
 
-// Fallback if still empty
+// Conditional render
 if (empty($team_members_data)) {
-    $team_members_data = [
-        ['name' => 'Antonia',  'role' => 'Lead Guide',          'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_01.webp'],
-        ['name' => 'Karen',    'role' => 'Operations Manager',  'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_02.webp'],
-        ['name' => 'Karina',   'role' => 'Cultural Specialist', 'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_03.webp'],
-        ['name' => 'Lucía',    'role' => 'Travel Consultant',   'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_01.webp'],
-        ['name' => 'Valeria',  'role' => 'Guest Experience',    'img' => get_template_directory_uri() . '/assets/images/intense_conocenos_slider_img_02.webp'],
-    ];
+    return;
 }
-?>
-
-<!-- ═══════════════════════════════════════════════════════
+?><!-- ═══════════════════════════════════════════════════════
      MEET THE TEAM
      Row layout: Group image on left | Text + Carousel on right
 ════════════════════════════════════════════════════════ -->

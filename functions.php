@@ -6,6 +6,15 @@
  * @package intense-nerd-theme
  */
 
+// ── Modo de prueba de emails ───────────────────────────────────────────────────
+// Cambia a true para redirigir todos los emails internos a $INTENSE_TEST_EMAIL.
+// Cambia a false para enviar a los correos reales del equipo.
+define('INTENSE_EMAIL_TEST_MODE', false);
+define('INTENSE_EMAIL_TEST_ADDRESS', 'kevin.gomez@nerd.pe');
+
+// Correos reales del equipo (se usan cuando TEST_MODE = false)
+define('INTENSE_TEAM_EMAILS', ['sales@intenseperu.com', 'karen@intenseperu.com', 'juanpablo@intenseperu.com', 'sofia@intenseperu.com']);
+
 // ── Soporte del Tema ───────────────────────────────────────────────────────────
 function intense_nerd_setup()
 {
@@ -925,8 +934,7 @@ function intense_handle_contact()
   ];
 
   // 1. Email interno al equipo
-  // $team_to = ['sales@intenseperu.com', 'karen@intenseperu.com', 'juanpablo@intenseperu.com'];
-  $team_to = "kevin.gomez@nerd.pe";
+  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
   $sent = wp_mail(
     $team_to,
     "New Contact Message — {$first_name} {$last_name}",
@@ -993,8 +1001,7 @@ function intense_handle_booking()
   ];
 
   // 1. Email interno al equipo
-  // $team_to = ['sales@intenseperu.com', 'karen@intenseperu.com', 'juanpablo@intenseperu.com'];
-  $team_to = "kevin.gomez@nerd.pe";
+  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
   $sent = wp_mail(
     $team_to,
     "New Quote Request — {$first_name} {$last_name}",
@@ -1013,6 +1020,150 @@ function intense_handle_booking()
   $sent
     ? wp_send_json_success(['message' => 'Email sent.'])
     : wp_send_json_error(['message' => 'Could not send email.'], 500);
+}
+
+// ── FORM: Brochure Download ───────────────────────────────────────────────────
+add_action('wp_ajax_intense_brochure', 'intense_handle_brochure');
+add_action('wp_ajax_nopriv_intense_brochure', 'intense_handle_brochure');
+
+function intense_handle_brochure()
+{
+  check_ajax_referer('intense_forms_nonce', 'nonce');
+
+  $first_name = sanitize_text_field($_POST['firstName'] ?? '');
+  $email = sanitize_email($_POST['email'] ?? '');
+  $brochure = esc_url_raw($_POST['brochure'] ?? '');
+
+  if (!$first_name || !$email) {
+    wp_send_json_error(['message' => 'Missing required fields.'], 400);
+  }
+
+  $data = compact('first_name', 'email', 'brochure');
+
+  $html_headers = [
+    'Content-Type: text/html; charset=UTF-8',
+    "Reply-To: {$first_name} <{$email}>",
+  ];
+
+  // 1. Email interno al equipo
+  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
+  $sent = wp_mail(
+    $team_to,
+    "New Brochure Download — {$first_name}",
+    intense_email_brochure_internal($data),
+    $html_headers
+  );
+
+  // 2. Auto-respuesta al cliente
+  wp_mail(
+    $email,
+    'Your Peru Travel Guide — Intense Peru',
+    intense_email_brochure_autoreply($data),
+    ['Content-Type: text/html; charset=UTF-8']
+  );
+
+  $sent
+    ? wp_send_json_success(['message' => 'Email sent.'])
+    : wp_send_json_error(['message' => 'Could not send email.'], 500);
+}
+
+/**
+ * Email interno al equipo cuando se descarga el brochure.
+ */
+function intense_email_brochure_internal($data)
+{
+  $name = esc_html($data['first_name']);
+  $email = esc_html($data['email']);
+  $brochure_url = esc_url($data['brochure']);
+  $timestamp = current_time('d M Y · H:i');
+
+  $rows = intense_email_header_html();
+  $rows .= <<<HTML
+
+  <tr>
+    <td style="background:#b76739;padding:32px 40px;text-align:center;">
+      <h1 style="color:#ffffff;font-size:24px;font-weight:normal;font-family:Georgia,serif;margin:0 0 6px;letter-spacing:0.04em;">New Brochure Download</h1>
+      <p style="color:rgba(255,255,255,0.85);font-size:13px;margin:0;line-height:1.5;">A visitor requested the Peru Travel Guide</p>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:36px 40px;background:#ffffff;">
+      <div style="display:inline-block;background:#fcf1eb;color:#b76739;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;margin-bottom:20px;">Download Details</div>
+
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Name</td>
+            <td style="font-size:14px;color:#161616;">{$name}</td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Email</td>
+            <td style="font-size:14px;color:#161616;"><a href="mailto:{$email}" style="color:#b76739;text-decoration:none;">{$email}</a></td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Brochure URL</td>
+            <td style="font-size:14px;color:#161616;"><a href="{$brochure_url}" style="color:#161616;word-break:break-all;">{$brochure_url}</a></td>
+          </tr></table>
+        </td></tr>
+      </table>
+
+      <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="height:1px;background:#c7c7c7;padding:0;font-size:0;">&nbsp;</td></tr></table>
+      <br>
+      <p style="font-size:12px;color:#776c60;margin:0;">Received: {$timestamp} &nbsp;·&nbsp; Source: Brochure Modal &nbsp;·&nbsp; intenseperu.com</p>
+    </td>
+  </tr>
+
+HTML;
+  $rows .= intense_email_footer_html();
+
+  return intense_email_wrap('New Brochure Download — Intense Peru', $rows);
+}
+
+/**
+ * Auto-respuesta al cliente invitándolo a ver más tras descarga de brochure.
+ */
+function intense_email_brochure_autoreply($data)
+{
+  $first_name = esc_html($data['first_name']);
+
+  $rows = intense_email_header_html();
+  $rows .= <<<HTML
+
+  <tr>
+    <td style="background:#b76739;padding:32px 40px;text-align:center;">
+      <h1 style="color:#ffffff;font-size:24px;font-weight:normal;font-family:Georgia,serif;margin:0 0 6px;letter-spacing:0.04em;">Your Peru Travel Guide</h1>
+      <p style="color:rgba(255,255,255,0.85);font-size:13px;margin:0;line-height:1.5;">Thank you for downloading our brochure</p>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:36px 40px;background:#ffffff;">
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 14px;">Dear <strong>{$first_name}</strong>,</p>
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 20px;">Thank you for downloading our Travel Guide. We hope it inspires your next adventure. Peru has a lot of magic in store for you, and we're here whenever you're ready to start planning.</p>
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 24px;">Feel free to explore our signature journeys and let us help you design your perfect trip.</p>
+
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+        <tr><td align="center">
+          <a href="https://intenseperu.com/journeys" style="display:inline-block;background:#b76739;color:#ffffff;text-decoration:none;padding:13px 32px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;">Explore Journeys</a>
+        </td></tr>
+      </table>
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0;">If you have any questions, you can reply directly to this email. We'd be happy to talk to you.</p>
+
+    </td>
+  </tr>
+
+HTML;
+  $rows .= intense_email_footer_html();
+
+  return intense_email_wrap('Your Peru Travel Guide — Intense Peru', $rows);
 }
 
 // ── Gutenberg: solo en posts, Classic en el resto ─────────────────────────────
