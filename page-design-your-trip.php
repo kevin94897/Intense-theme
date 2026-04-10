@@ -305,7 +305,7 @@ get_header();
                                 <option value="friend">Friend / Family</option>
                                 <option value="social">Social Media</option>
                                 <option value="travel-agent">Travel Agent</option>
-                                <option value="other">Other</option>
+                                <option value="ai">Artificial Intelligence</option>
                             </select>
                         </div>
                     </div>

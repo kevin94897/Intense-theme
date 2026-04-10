@@ -14,7 +14,7 @@ $query_args = array(
 $featured_posts = new WP_Query($query_args);
 ?>
 
-<section class="md:py-20 py-12 bg-cream overflow-hidden">
+<section class="md:pb-20 pb-12 bg-cream overflow-hidden">
     <div class="container-site">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-end md:mb-12 mb-6 gap-6">
             <div class="text-left">
@@ -52,7 +52,7 @@ $featured_posts = new WP_Query($query_args);
                 </div>
 
                 <!-- Navigation Controls -->
-                <div class="flex items-center justify-center md:justify-start gap-12 mt-12">
+                <!-- <div class="flex items-center justify-center md:justify-start gap-12 mt-12">
                     <button class="embla__prev group cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed transition-opacity" aria-label="Previous">
                         <svg class="w-16 h-5" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <line x1="95" y1="12" x2="10" y2="12"></line>
@@ -65,7 +65,7 @@ $featured_posts = new WP_Query($query_args);
                             <polyline points="80 4 90 12 80 20" class="transition-all duration-300 group-hover:translate-x-1"></polyline>
                         </svg>
                     </button>
-                </div>
+                </div> -->
             </div>
         <?php else : ?>
             <p class="text-center font-body text-dark/70">No featured posts found.</p>

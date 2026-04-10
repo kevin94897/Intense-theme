@@ -22,6 +22,7 @@ $title = $args['title'] ?? '';
 $price = $args['price'] ?? '';
 $duration = $args['duration'] ?? '';
 $destinations = $args['destinations'] ?? '';
+$post_id = $args['post_id'] ?? 0;
 $link = $args['link'] ?? '#';
 $link_text = $args['link_text'] ?? 'Explore itineraries';
 $aos_delay = $args['aos_delay'] ?? 0;
@@ -75,7 +76,7 @@ $badges = $args['badges'] ?? [];
     <div class="flex flex-col flex-1">
         <!-- Title & Price -->
         <div class="flex flex-wrap justify-between items-baseline gap-2 mb-4 font-bold">
-            <h3 class="font-heading text-lg md:text-xl leading-tight text-dark m-0 max-w-[65%]">
+            <h3 class="font-heading text-lg md:text-xl leading-tight text-dark m-0 max-w-[70%]">
                 <a href="<?php echo esc_url($link); ?>" class="hover:text-primary transition-colors">
                     <?php echo esc_html($title); ?>
                 </a>
@@ -86,7 +87,7 @@ $badges = $args['badges'] ?? [];
         </div>
 
         <!-- Meta -->
-        <div class="flex items-start gap-4 mb-8">
+        <div class="flex items-start gap-4 mb-4">
             <!-- Duration -->
             <div class="flex items-center gap-2 shrink-0 pt-1">
                 <svg class="text-dark/70 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -111,7 +112,10 @@ $badges = $args['badges'] ?? [];
                 </svg>
                 <span class="font-body text-xs md:text-sm italic text-dark/80 leading-snug">
                     <?php
-                    if (is_array($destinations)) {
+                    if ($post_id && function_exists('ito_get_ordered_tags')) {
+                        $tags = ito_get_ordered_tags($post_id);
+                        echo esc_html(implode(' • ', array_column($tags, 'name')));
+                    } elseif (is_array($destinations)) {
                         echo esc_html(implode(' • ', array_filter($destinations)));
                     } else {
                         echo esc_html($destinations);

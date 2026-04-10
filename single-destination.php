@@ -21,7 +21,7 @@ get_header();
             <div class="absolute inset-0 z-0">
                 <img src="<?php echo esc_url($hero_bg); ?>"
                     alt="<?php echo esc_attr($hero_title); ?>" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-neutral-black/40"></div>
+                <div class="absolute inset-0 bg-neutral-black/20"></div>
             </div>
 
             <div class="container-site relative z-10 text-left pb-20 px-4">
@@ -38,13 +38,13 @@ get_header();
                     }
                     ?>
                 </div>
-                <div class="text-left" data-aos="fade-up" data-aos-delay="300">
+                <!-- <div class="text-left" data-aos="fade-up" data-aos-delay="300">
                     <?php get_template_part('template-parts/components/btn-outline', null, [
                         'text' => 'Free Quote Request',
                         'color' => 'light',
                         'href' => '#',
                     ]); ?>
-                </div>
+                </div> -->
             </div>
         </section>
 
@@ -99,16 +99,22 @@ get_header();
                                     <?php endif; ?>
                                     <div class="absolute inset-0 bg-black/25 group-hover:bg-black/45 transition-colors duration-500"></div>
                                     <div class="absolute inset-x-0 bottom-0 p-6 md:p-10 z-10">
-                                        <h3 class="font-heading text-white text-2xl md:text-4xl font-medium drop-shadow mb-1">
+                                        <h3 class="font-heading text-white text-2xl md:text-4xl font-medium drop-shadow mb-2">
                                             <?php echo esc_html($itinerary_title); ?>
                                         </h3>
-                                        <p class="text-white text-sm font-body mb-4"><?php echo esc_html($itinerary_destination); ?></p>
+                                        <?php if (function_exists('ito_get_ordered_tags')) :
+                                            $itinerary_tags = ito_get_ordered_tags($itinerary_id);
+                                            if (!empty($itinerary_tags)) : ?>
+                                        <p class="text-white text-sm font-body mb-4 max-w-[350px]">
+                                            <?php echo esc_html(implode(', ', array_column($itinerary_tags, 'name'))); ?>
+                                        </p>
+                                        <?php endif; endif; ?>
                                         <div>
                                             <?php get_template_part('template-parts/components/btn-outline', null, [
                                                 'text'        => 'View Itinerary',
                                                 'href'        => $itinerary_link,
                                                 'color'       => 'light',
-                                                'class_extra' => 'text-[10px] md:text-xs px-4 py-1.5 md:px-5 md:py-2 z-20 relative'
+                                                'class_extra' => 'text-xs md:text-sm'
                                             ]); ?>
                                         </div>
                                     </div>
@@ -131,16 +137,18 @@ get_header();
                                         <?php endif; ?>
                                         <div class="absolute inset-0 bg-black/25 group-hover:bg-black/45 transition-colors duration-500"></div>
                                         <div class="absolute inset-x-0 bottom-0 p-4 md:p-8 z-10">
-                                            <h3 class="font-heading text-white text-lg md:text-3xl font-medium drop-shadow mb-1">
+                                            <h3 class="font-heading text-white text-lg md:text-3xl font-medium drop-shadow mb-2">
                                                 <?php echo esc_html($itinerary_title); ?>
                                             </h3>
-                                            <p class="text-white text-sm font-body mb-3 md:mb-4"><?php echo esc_html($itinerary_destination); ?></p>
+                                            <p class="text-white text-sm font-body mb-4 max-w-[350px]">
+                                            <?php echo esc_html(implode(', ', array_column($itinerary_tags, 'name'))); ?>
+                                        </p>
                                             <div>
                                                 <?php get_template_part('template-parts/components/btn-outline', null, [
                                                     'text'        => 'View Itinerary',
                                                     'href'        => $itinerary_link,
                                                     'color'       => 'light',
-                                                    'class_extra' => 'text-[10px] md:text-xs px-3 py-1.5 md:px-5 md:py-2 z-20 relative'
+                                                    'class_extra' => 'text-xs md:text-sm'
                                                 ]); ?>
                                             </div>
                                         </div>

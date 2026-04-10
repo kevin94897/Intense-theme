@@ -87,7 +87,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                 <?php echo esc_html(get_the_title()); ?>
             </h1>
             <?php if (get_the_content()) : ?>
-                <div class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10 entry-content-hero"
+                <div class="font-body text-white/90 text-lg md:text-xl font-light max-w-xl mx-auto mb-10 entry-content-hero"
                     data-aos="fade-up" data-aos-delay="200">
                     <?php the_content(); ?>
                 </div>
@@ -152,14 +152,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                         'md:col-span-1 md:row-span-1',
                         'md:col-span-1 md:row-span-1',
                     ];
-                    $heading_sizes = [
-                        'text-xl',
-                        'text-2xl',
-                        'text-2xl',
-                        'text-xl',
-                        'text-lg',
-                        'text-xl',
-                    ];
+
                     $aos_delays = [200, 300, 400, 500, 600, 700];
 
                     foreach ($dest_list as $idx => $dest_item) :
@@ -177,15 +170,15 @@ $download_button         = $travel_guides['download_button'] ?? [];
                             <img src="<?php echo esc_url($thumb); ?>"
                                 alt="<?php echo esc_attr($dest_title); ?>"
                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            <div class="absolute inset-0 bg-black/20"></div>
-                            <div class="absolute bottom-6 left-6 text-left">
-                                <h3 class="font-heading text-white <?php echo $heading_sizes[$idx]; ?> font-medium mb-2">
+                            <!-- <div class="absolute inset-0 bg-black/20"></div> -->
+                            <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-left">
+                                <h3 class="font-heading text-white text-2xl md:text-2xl font-medium mb-2">
                                     <?php echo esc_html($dest_title); ?>
                                 </h3>
                                 <?php if (!empty($dest_btn)) : ?>
                                     <?php get_template_part('template-parts/components/btn-outline', null, [
                                         'text'        => $dest_btn_text,
-                                        'class_extra' => '',
+                                        'class_extra' => 'text-xs md:text-sm',
                                         'href'        => $dest_url,
                                         'color'       => 'light',
                                     ]); ?>
@@ -222,17 +215,18 @@ $download_button         = $travel_guides['download_button'] ?? [];
                             $j_title       = get_the_title($j_id);
                             $j_url         = get_permalink($j_id);
                             $j_thumb       = get_the_post_thumbnail_url($j_id, 'large') ?: get_template_directory_uri() . '/assets/images/intense_02.webp';
-                            $j_days        = get_field('information_days', $j_id) ?? '';
-                            $j_price       = get_field('information_price', $j_id) ?? '';
-                            $j_dests       = wp_get_post_tags($j_id, ['fields' => 'names']);
+                            $j_features    = get_field('features', $j_id);
+                            $j_information = get_field('information', $j_id);
+                            $j_price_val   = $j_features['price'] ?? '';
+                            $j_days_val    = (int) ($j_information['days'] ?? 0);
                             $j_badges      = get_field('badges', $j_id) ?: [];
                         ?>
                             <?php get_template_part('template-parts/components/card-itinerary', null, [
                                 'image'        => $j_thumb,
                                 'title'        => $j_title,
-                                'price'        => $j_price,
-                                'duration'     => $j_days ? $j_days . ' Days' : '',
-                                'destinations' => $j_dests,
+                                'price'        => $j_price_val ? 'USD ' . number_format((int) $j_price_val) : '',
+                                'duration'     => $j_days_val ? $j_days_val . ' Days' : '',
+                                'post_id'      => $j_id,
                                 'link'         => $j_url,
                                 'link_text'    => 'Explore itineraries',
                                 'aos_delay'    => ($jidx * 100) + 200,
@@ -268,12 +262,12 @@ $download_button         = $travel_guides['download_button'] ?? [];
                             class="w-full h-auto rounded-lg shadow-xl object-cover aspect-[4/3]">
                     <?php endif; ?>
                 </div>
-                <div data-aos="fade-left">
+                <div data-aos="fade-left" class="space-y-12">
                     <?php if (!empty($list_of_purposes)) : ?>
                         <?php foreach ($list_of_purposes as $purpose) : ?>
-                            <div class="mb-12">
+                            <div class="">
                                 <?php if (!empty($purpose['purpose_title'])) : ?>
-                                    <h2 class="font-heading text-4xl md:text-5xl font-medium mb-6">
+                                    <h2 class="font-heading text-3xl md:text-4xl font-medium mb-6">
                                         <?php echo esc_html($purpose['purpose_title']); ?>
                                     </h2>
                                 <?php endif; ?>
@@ -293,7 +287,28 @@ $download_button         = $travel_guides['download_button'] ?? [];
     </section>
 
     <!-- E. Gallery -->
-    <section class="py-20 bg-cream">
+    <?php
+    // Build gallery images array for the lightbox
+    $gallery_lightbox_images = [];
+    if (!empty($gallery_photos)) :
+        $photos_for_lb = array_slice($gallery_photos, 0, 8);
+        foreach ($photos_for_lb as $glb_photo) :
+            $gallery_lightbox_images[] = [
+                'src' => $glb_photo['url'],
+                'thumb' => $glb_photo['sizes']['large'] ?? $glb_photo['url'],
+                'alt' => $glb_photo['alt'] ?? 'Gallery Image',
+            ];
+        endforeach;
+    endif;
+    $gallery_lb_json = wp_json_encode($gallery_lightbox_images);
+    ?>
+    <section
+        x-data="galleryLightbox(<?php echo esc_attr($gallery_lb_json); ?>)"
+        @keydown.escape.window="closeModal()"
+        @keydown.arrow-left.window="prev()"
+        @keydown.arrow-right.window="next()"
+        class="py-20 bg-cream">
+
         <div class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-12 mb-10">
             <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
                 class="mx-auto md:mb-10">
@@ -303,9 +318,9 @@ $download_button         = $travel_guides['download_button'] ?? [];
             <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
                 class="mx-auto mb-10 hidden md:block">
         </div>
+
         <div class="container-site text-center">
             <?php if (!empty($gallery_photos)) :
-                // Split photos into 4 columns (2 items each), percentage heights alternate
                 $photos      = array_slice($gallery_photos, 0, 8);
                 $col_heights = [
                     [['h' => '55%'], ['h' => '45%']],
@@ -314,29 +329,138 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     [['h' => '45%'], ['h' => '55%']],
                 ];
             ?>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-[1100px] md:h-[500px] lg:h-[600px] xl:h-[700px] w-full">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 h-[1100px] md:h-[500px] lg:h-[600px] xl:h-[700px] w-full">
                     <?php for ($col = 0; $col < 4; $col++) : ?>
-                        <div class="flex flex-col gap-4 h-full w-full">
+                        <div class="flex flex-col gap-2 h-full w-full">
                             <?php for ($row = 0; $row < 2; $row++) :
                                 $photo_idx = ($col * 2) + $row;
                                 if (!isset($photos[$photo_idx])) continue;
                                 $photo = $photos[$photo_idx];
                                 $h     = $col_heights[$col][$row]['h'];
                             ?>
-                                <a href="<?php echo esc_url($photo['url']); ?>"
-                                    class="block w-full relative group overflow-hidden rounded-sm"
+                                <button
+                                    type="button"
+                                    @click="openModal(<?php echo $photo_idx; ?>)"
+                                    class="gallery-item block w-full relative group overflow-hidden rounded-sm cursor-zoom-in"
                                     style="height: calc(<?php echo $h; ?> - 0.5rem);"
                                     data-aos="fade-up"
-                                    data-aos-delay="<?php echo ($col * 150) + ($row * 100); ?>">
+                                    data-aos-delay="<?php echo ($col * 150) + ($row * 100); ?>"
+                                    aria-label="Ver imagen <?php echo esc_attr($photo['alt'] ?? 'Gallery Image'); ?>">
                                     <img src="<?php echo esc_url($photo['sizes']['large'] ?? $photo['url']); ?>"
                                         alt="<?php echo esc_attr($photo['alt'] ?? 'Gallery Image'); ?>"
                                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                </a>
+                                    <!-- Hover overlay -->
+                                    <span class="gallery-hover-icon absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="11" cy="11" r="8"/>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                            <line x1="11" y1="8" x2="11" y2="14"/>
+                                            <line x1="8" y1="11" x2="14" y2="11"/>
+                                        </svg>
+                                    </span>
+                                </button>
                             <?php endfor; ?>
                         </div>
                     <?php endfor; ?>
                 </div>
             <?php endif; ?>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             GALLERY LIGHTBOX MODAL
+        ═══════════════════════════════════════════ -->
+        <div
+            x-show="isOpen"
+            x-cloak
+            @click.self="closeModal()"
+            class="gallery-lightbox-overlay"
+            x-transition:enter="transition ease-out duration-250"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Visor de imagen">
+
+            <!-- Modal shell -->
+            <div class="gallery-lightbox-shell"
+                x-transition:enter="transition ease-out duration-250"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-90">
+
+
+                <!-- Close button (floating) -->
+                <button
+                    type="button"
+                    @click="closeModal()"
+                    class="gallery-lightbox-close"
+                    aria-label="Cerrar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+
+
+                <!-- Image area (pinch-to-zoom container) -->
+                <div class="gallery-lightbox-img-wrap"
+                    x-ref="zoomWrap"
+                    @touchstart.passive="onTouchStart($event)"
+                    @touchmove.passive="onTouchMove($event)"
+                    @touchend.passive="onTouchEnd($event)"
+                    @dblclick="toggleZoom()">
+
+                    <img
+                        x-ref="lightboxImg"
+                        :src="images[currentIndex]?.src"
+                        :alt="images[currentIndex]?.alt"
+                        class="gallery-lightbox-img"
+                        :style="{ transform: `scale(${zoomScale}) translate(${panX}px, ${panY}px)`, cursor: zoomScale > 1 ? 'grab' : 'default' }"
+                        draggable="false">
+                </div>
+
+                <!-- Footer bar: caption + counter -->
+                <div class="gallery-lightbox-footer">
+                    <p class="gallery-lightbox-caption" x-text="images[currentIndex]?.alt" x-show="images[currentIndex]?.alt"></p>
+                    <span class="gallery-lightbox-counter" x-text="(currentIndex + 1) + ' / ' + images.length"></span>
+                </div>
+
+
+                <!-- Navigation: Prev -->
+                <button
+                    type="button"
+                    @click="prev()"
+                    x-show="images.length > 1"
+                    class="gallery-lightbox-nav gallery-lightbox-nav--prev"
+                    aria-label="Imagen anterior">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"/>
+                    </svg>
+                </button>
+
+                <!-- Navigation: Next -->
+                <button
+                    type="button"
+                    @click="next()"
+                    x-show="images.length > 1"
+                    class="gallery-lightbox-nav gallery-lightbox-nav--next"
+                    aria-label="Siguiente imagen">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </button>
+
+                <!-- Mobile zoom hint (shows briefly on first open) -->
+                <div class="gallery-lightbox-zoom-hint" x-show="showZoomHint" x-transition>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3H7m3 0h3"/></svg>
+                    Pellizca para hacer zoom
+                </div>
+            </div>
         </div>
     </section>
 
@@ -354,7 +478,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     <h2 class="font-heading text-4xl md:text-5xl text-dark" data-aos="fade-up">Journal & Stories</h2>
                 </div>
                 <div class="flex items-center gap-6" data-aos="fade-up" data-aos-delay="100">
-                    <a href="<?php echo esc_url(get_post_type_archive_link('post')); ?>"
+                    <a href="<?php echo home_url('/blog'); ?>"
                         class="group font-body text-xs md:text-sm text-dark uppercase tracking-widest hover:text-primary transition-colors font-medium flex items-center gap-3">
                         See All
                         <svg class="w-10 h-4 text-dark transition-transform duration-300 group-hover:translate-x-1"
@@ -399,7 +523,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                 </div>
 
                 <!-- Navigation Controls -->
-                <div class="flex items-center justify-center md:justify-start gap-12 mt-12">
+                <!-- <div class="flex items-center justify-center md:justify-start gap-12 mt-12">
                     <button class="embla__prev group cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed transition-opacity" aria-label="Previous">
                         <svg class="w-16 h-5" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="1.5">
                             <line x1="95" y1="12" x2="10" y2="12" class="transition-all duration-300"></line>
@@ -412,7 +536,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                             <polyline points="80 4 90 12 80 20" class="transition-all duration-300 group-hover:translate-x-1"></polyline>
                         </svg>
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
@@ -420,7 +544,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <!-- I. Travel Guides Download -->
     <section class="md:py-20 py-12">
         <div class="container-site">
-            <div class="flex flex-col md:flex-row items-center gap-12">
+            <div class="flex flex-col-reverse md:flex-row items-center gap-12">
                 <!-- Image -->
                 <div class="w-full md:w-1/2" data-aos="fade-right">
                     <?php if (!empty($guides_image)) : ?>
@@ -438,7 +562,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                         <?php echo esc_html($guides_title ?: 'Intense Peru Travel Guides'); ?>
                     </h3>
                     <?php if ($guides_description) : ?>
-                        <p class="font-body text-dark text-lg mb-8 font-light">
+                        <p class="font-body text-dark text-base md:text-lg mb-8 font-light">
                             <?php echo esc_html($guides_description); ?>
                         </p>
                     <?php endif; ?>
@@ -575,6 +699,145 @@ $download_button         = $travel_guides['download_button'] ?? [];
     </div>
 
     <script>
+        /* ─── Gallery Lightbox ─────────────────────────────────────────── */
+        function galleryLightbox(images) {
+            return {
+                images: images || [],
+                isOpen: false,
+                currentIndex: 0,
+
+                // Zoom / Pan state
+                zoomScale: 1,
+                panX: 0,
+                panY: 0,
+                minZoom: 1,
+                maxZoom: 4,
+
+                // Touch tracking
+                _touches: [],
+                _startDist: 0,
+                _startScale: 1,
+                _startPanX: 0,
+                _startPanY: 0,
+                _midX: 0,
+                _midY: 0,
+                _isPanning: false,
+                _panStartX: 0,
+                _panStartY: 0,
+
+                // UI hint
+                showZoomHint: false,
+                _hintShown: false,
+
+                openModal(index) {
+                    this.currentIndex = index;
+                    this.resetZoom();
+                    this.isOpen = true;
+                    document.body.style.overflow = 'hidden';
+                    if (!this._hintShown && window.matchMedia('(pointer: coarse)').matches) {
+                        this.showZoomHint = true;
+                        this._hintShown = true;
+                        setTimeout(() => { this.showZoomHint = false; }, 2800);
+                    }
+                },
+
+                closeModal() {
+                    this.isOpen = false;
+                    document.body.style.overflow = '';
+                    this.resetZoom();
+                },
+
+                prev() {
+                    if (!this.isOpen) return;
+                    this.resetZoom();
+                    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+                },
+
+                next() {
+                    if (!this.isOpen) return;
+                    this.resetZoom();
+                    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+                },
+
+                resetZoom() {
+                    this.zoomScale = 1;
+                    this.panX = 0;
+                    this.panY = 0;
+                },
+
+                toggleZoom() {
+                    if (this.zoomScale > 1) {
+                        this.resetZoom();
+                    } else {
+                        this.zoomScale = 2.5;
+                    }
+                },
+
+                /* ── Touch handlers ── */
+                onTouchStart(e) {
+                    this._touches = Array.from(e.touches);
+                    if (this._touches.length === 2) {
+                        // Pinch start
+                        this._startDist = this._getDist(this._touches[0], this._touches[1]);
+                        this._startScale = this.zoomScale;
+                        const rect = this.$refs.zoomWrap.getBoundingClientRect();
+                        this._midX = ((this._touches[0].clientX + this._touches[1].clientX) / 2) - rect.left;
+                        this._midY = ((this._touches[0].clientY + this._touches[1].clientY) / 2) - rect.top;
+                        this._isPanning = false;
+                    } else if (this._touches.length === 1 && this.zoomScale > 1) {
+                        // Pan start (only when zoomed)
+                        this._isPanning = true;
+                        this._panStartX = this._touches[0].clientX - this.panX;
+                        this._panStartY = this._touches[0].clientY - this.panY;
+                    } else {
+                        this._isPanning = false;
+                    }
+                },
+
+                onTouchMove(e) {
+                    const touches = Array.from(e.touches);
+                    if (touches.length === 2) {
+                        // Pinch zoom
+                        const dist = this._getDist(touches[0], touches[1]);
+                        let newScale = this._startScale * (dist / this._startDist);
+                        newScale = Math.min(Math.max(newScale, this.minZoom), this.maxZoom);
+                        this.zoomScale = newScale;
+                        if (newScale <= 1) { this.panX = 0; this.panY = 0; }
+                    } else if (touches.length === 1 && this._isPanning && this.zoomScale > 1) {
+                        // Pan
+                        const maxPan = this._getMaxPan();
+                        let nx = touches[0].clientX - this._panStartX;
+                        let ny = touches[0].clientY - this._panStartY;
+                        this.panX = Math.min(Math.max(nx, -maxPan.x), maxPan.x);
+                        this.panY = Math.min(Math.max(ny, -maxPan.y), maxPan.y);
+                    }
+                },
+
+                onTouchEnd(e) {
+                    if (Array.from(e.touches).length === 0) {
+                        this._isPanning = false;
+                        if (this.zoomScale < 1.05) this.resetZoom();
+                    }
+                    this._touches = Array.from(e.touches);
+                },
+
+                _getDist(t1, t2) {
+                    return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+                },
+
+                _getMaxPan() {
+                    const wrap = this.$refs.zoomWrap;
+                    if (!wrap) return { x: 200, y: 200 };
+                    const { width, height } = wrap.getBoundingClientRect();
+                    return {
+                        x: (width  * (this.zoomScale - 1)) / 2,
+                        y: (height * (this.zoomScale - 1)) / 2,
+                    };
+                },
+            };
+        }
+
+        /* ─── Brochure Modal ───────────────────────────────────────────── */
         function brochureModal() {
             return {
                 show: false,

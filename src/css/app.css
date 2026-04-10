@@ -348,6 +348,37 @@
     background-color: var(--color-hover);
   }
 
+  /* ── Mobile Button Overrides ── */
+@media (max-width: 767px) {
+
+  .btn {
+    min-width: unset;          /* elimina el mínimo fijo */
+    white-space: normal;       /* permite wrap si el texto es largo */
+    padding: 0.625rem 1.25rem; /* reduce padding horizontal */
+    font-size: 0.875rem;       /* mantiene 14px */
+    width: auto;
+  }
+
+  /* Variante full-width para mobile — agrégala donde necesites */
+  .btn-block {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Reduce el padding generoso del outline */
+  .btn-outline {
+    padding: 0.625rem 1.5rem;
+  }
+
+  /* btn-submit-intense en mobile */
+  .btn-submit-intense {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    min-width: unset;
+    width: 100%;
+  }
+}
+
   /* ==========================================
    INPUTS ESTANDARIZADOS (Minimalist style)
    ========================================== */
@@ -1432,5 +1463,233 @@ figure.wp-block-gallery.has-nested-images {
   .wp-block-gallery.has-nested-images.columns-default
     figure.wp-block-image:not(#individual-image):first-child:last-child {
     width: 100%;
+  }
+}
+
+/* ==========================================
+   GALLERY LIGHTBOX MODAL
+   ========================================== */
+@layer components {
+
+  /* x-cloak: oculta elementos Alpine antes de inicializar */
+  [x-cloak] { display: none !important; }
+
+  /* ── Overlay ── */
+  .gallery-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(22, 22, 22, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 1rem;
+  }
+
+  /* ── Shell (card) ── */
+  .gallery-lightbox-shell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 90vw;
+    max-height: 92dvh;
+    background-color: #111;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7);
+  }
+
+  /* ── Close button (floating top-right) ── */
+  .gallery-lightbox-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(0, 0, 0, 0.45);
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .gallery-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    transform: rotate(90deg);
+  }
+
+  /* ── Image wrapper ── */
+  .gallery-lightbox-img-wrap {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+    touch-action: none;
+  }
+
+  /* ── Image ── */
+  .gallery-lightbox-img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transform-origin: center center;
+    transition: transform 0.08s linear;
+    user-select: none;
+    -webkit-user-select: none;
+    will-change: transform;
+  }
+
+  /* ── Footer bar: caption + counter ── */
+  .gallery-lightbox-footer {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 1rem 0.625rem;
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  /* Caption — left side of footer */
+  .gallery-lightbox-caption {
+    flex: 1 1 auto;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  /* Counter — right side of footer */
+  .gallery-lightbox-counter {
+    flex-shrink: 0;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  /* ── Navigation arrows ── */
+  .gallery-lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.45);
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .gallery-lightbox-nav:hover {
+    background: rgba(183, 103, 57, 0.9);
+    border-color: transparent;
+    color: #ffffff;
+  }
+
+  .gallery-lightbox-nav--prev {
+    left: 0.75rem;
+  }
+
+  .gallery-lightbox-nav--prev:hover {
+    transform: translateY(-50%) translateX(-2px);
+  }
+
+  .gallery-lightbox-nav--next {
+    right: 0.75rem;
+  }
+
+  .gallery-lightbox-nav--next:hover {
+    transform: translateY(-50%) translateX(2px);
+  }
+
+  /* ── Mobile pinch-zoom hint ── */
+  .gallery-lightbox-zoom-hint {
+    position: absolute;
+    bottom: 3.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.72);
+    color: rgba(255, 255, 255, 0.85);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    padding: 0.45rem 1rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  /* ── Gallery thumbnail button reset ── */
+  .gallery-item {
+    border: none;
+    padding: 0;
+    background: transparent;
+  }
+
+  /* ── Responsive: tablet+ ── */
+  @media (min-width: 768px) {
+    .gallery-lightbox-shell {
+      max-width: 88vw;
+      max-height: 90dvh;
+    }
+
+    .gallery-lightbox-nav {
+      width: 3.25rem;
+      height: 3.25rem;
+    }
+
+    .gallery-lightbox-nav--prev { left: 1.25rem; }
+    .gallery-lightbox-nav--next { right: 1.25rem; }
+  }
+
+  /* ── Responsive: desktop ── */
+  @media (min-width: 1280px) {
+    .gallery-lightbox-shell {
+      max-width: 78vw;
+      max-height: 88vh;
+    }
   }
 }

@@ -300,7 +300,7 @@ while (have_posts()) : the_post();
                                 'title'        => get_the_title(),
                                 'price'        => $r_price_val ? 'USD ' . number_format($r_price_val) : '',
                                 'duration'     => $r_days_val ? $r_days_val . ' Days' : '',
-                                'destinations' => wp_get_post_tags(get_the_ID(), ['fields' => 'names']),
+                                'post_id'      => get_the_ID(),
                                 'link'         => get_permalink(),
                                 'link_text'    => 'Explore itineraries',
                                 'aos_delay'    => ($r_index * 100) + 200,

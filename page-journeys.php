@@ -90,22 +90,21 @@ get_header();
                         $duration = $days_val ? $days_val . ' Days' : '';
                         $price_val = $features['price'] ?? '';
                         $price = $price_val ? 'USD ' . number_format($price_val) : '';
-                        $destinations = wp_get_post_tags(get_the_ID(), ['fields' => 'names']);
                         $link = get_permalink();
                 ?>
 
                         <div class="journey-card" data-days="<?php echo $days_val; ?>">
                             <?php
                             get_template_part('template-parts/components/card-itinerary', null, [
-                                'image' => $image,
-                                'title' => $title,
-                                'price' => $price,
+                                'image'    => $image,
+                                'title'    => $title,
+                                'price'    => $price,
                                 'duration' => $duration,
-                                'destinations' => $destinations,
-                                'link' => $link,
+                                'post_id'  => get_the_ID(),
+                                'link'     => $link,
                                 'link_text' => 'Explore itinerary',
                                 'aos_delay' => ($index % 3) * 100,
-                                'badges' => [],
+                                'badges'   => [],
                             ]);
                             ?>
                         </div>
@@ -131,7 +130,7 @@ get_header();
             <?php endif; ?>
 
         </div>
-    </section>ß
+    </section>
 
     <!-- CTA Banner -->
     <?php get_template_part('template-parts/components/banner-cta'); ?>

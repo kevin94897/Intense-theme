@@ -17,7 +17,7 @@ $testimonials_list = get_field('list_of_testimonials', 'option');
                 <?php echo esc_html($testimonials_title); ?>
             </h2>
             <?php if ($testimonials_desc): ?>
-                <span class="font-body text-sm text-neutral-black font-normal md:max-w-xs italic">
+                <span class="font-body text-sm text-neutral-black font-normal md:max-w-md italic">
                     <?php echo esc_html($testimonials_desc); ?>
                 </span>
             <?php endif; ?>

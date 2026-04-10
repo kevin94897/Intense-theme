@@ -224,21 +224,20 @@ function load_more_journeys_handler()
       $duration = $days_val ? $days_val . ' Days' : '';
       $price_val = $features['price'] ?? '';
       $price = $price_val ? 'USD ' . number_format($price_val) : '';
-      $destinations = $information['short_description'] ?? '';
       $link = get_permalink();
       ?>
       <div class="journey-card" data-days="<?php echo esc_attr($days_val); ?>">
         <?php
         get_template_part('template-parts/components/card-itinerary', null, [
-          'image' => $image,
-          'title' => $title,
-          'price' => $price,
-          'duration' => $duration,
-          'destinations' => $destinations,
-          'link' => $link,
+          'image'     => $image,
+          'title'     => $title,
+          'price'     => $price,
+          'duration'  => $duration,
+          'post_id'   => get_the_ID(),
+          'link'      => $link,
           'link_text' => 'Explore itinerary',
           'aos_delay' => ($index % 3) * 100,
-          'badges' => [],
+          'badges'    => [],
         ]);
         ?>
       </div>
@@ -275,6 +274,14 @@ function theme_customize_contact_section($wp_customize)
   }
 }
 add_action('customize_register', 'theme_customize_contact_section');
+
+add_filter('get_terms_args', function($args, $taxonomies) {
+    if (in_array('post_tag', $taxonomies)) {
+        $args['orderby'] = 'term_order';
+        $args['order'] = 'ASC';
+    }
+    return $args;
+}, 10, 2);
 
 // ── Customizer: Redes Sociales ────────────────────────────────────────────────
 function theme_customize_social_links($wp_customize)
@@ -319,6 +326,7 @@ function intense_mega_journeys()
   $grand = $compact = $short = [];
   foreach ($all as $post) {
     $days = (int) get_field('information_days', $post->ID) ?: (int) get_post_meta($post->ID, 'days', true);
+    $post->_days = $days;
     if ($days >= 10)
       $grand[] = $post;
     elseif ($days >= 5)
@@ -326,6 +334,11 @@ function intense_mega_journeys()
     elseif ($days >= 2)
       $short[] = $post;
   }
+
+  $sort_by_days = fn($a, $b) => $b->_days - $a->_days;
+  usort($grand,   $sort_by_days);
+  usort($compact, $sort_by_days);
+  usort($short,   $sort_by_days);
 
   $recent = get_posts(['post_type' => 'journey', 'posts_per_page' => 3, 'orderby' => 'date', 'order' => 'DESC']);
 

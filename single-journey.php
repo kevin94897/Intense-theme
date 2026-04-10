@@ -42,7 +42,7 @@ $selected_activities = array_filter($selected_activities);
                 <?php if ($hero_img): ?>
                     <img src="<?php echo esc_url(is_array($hero_img) ? $hero_img['url'] : $hero_img); ?>"
                         alt="<?php echo esc_attr(is_array($hero_img) ? $hero_img['alt'] : 'Journey Hero'); ?>"
-                        class="w-full h-full object-cover">
+                        class="absolute inset-0 w-full h-full object-cover block">
                 <?php endif; ?>
                 <!-- Add a gradient overlay for text readability -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
@@ -115,7 +115,7 @@ $selected_activities = array_filter($selected_activities);
                             <?php if (!empty($information['days'])): ?>
                                 <div>
                                     <span
-                                        class="block font-body text-3xl md:text-4xl text-dark font-light"><?php echo esc_html($information['days']); ?></span>
+                                        class="block font-body text-3xl md:text-4xl text-dark font-light"><?php echo esc_html($information['days']); ?>/<?php echo esc_html(str_pad($information['days'] - 1, 2, '0', STR_PAD_LEFT)); ?></span>
                                     <span
                                         class="block font-body text-[10px] text-neutral-gray uppercase tracking-widest mt-1">days
                                         / nights</span>
@@ -390,10 +390,11 @@ $selected_activities = array_filter($selected_activities);
                                                             fill="#423931" />
                                                     </svg>
 
-                                                    <h4 class="font-heading text-2xl md:text-3xl text-dark group-hover:text-[#bd7a4e] transition-all duration-300"
+                                                    <h4 class="font-heading text-2xl md:text-3xl text-dark group-hover:text-[#bd7a4e] transition-all duration-300 flex flex-wrap items-baseline gap-2"
                                                         :class="expanded ? 'scale-[1.02] text-[#bd7a4e]' : 'scale-100'">
-                                                        Day <?php echo $index + 1; ?>:
-                                                        <?php echo esc_html($tour['itinerary_title']); ?>
+                                                        <span>Day</span>
+                                                        <span><?php echo $index + 1; ?>:</span>
+                                                        <span><?php echo esc_html($tour['itinerary_title']); ?></span>
                                                     </h4>
                                                 </div>
                                                 <svg class="w-5 h-5 transform transition-transform duration-300 shrink-0 text-neutral-dark group-hover:text-primary"
@@ -531,7 +532,7 @@ $selected_activities = array_filter($selected_activities);
                                 <div class="text-center mb-10">
                                     <h3 class="font-heading text-3xl md:text-4xl text-dark mb-4">Pricing Options</h3>
                                     <?php if (!empty($prices_group['description'])): ?>
-                                        <p class="font-body text-xs text-[#626262] italic max-w-md mx-auto leading-relaxed">
+                                        <p class="font-body text-xs text-[#626262] italic max-w-sm mx-auto leading-relaxed">
                                             <?php echo esc_html($prices_group['description']); ?>
                                         </p>
                                     <?php endif; ?>
@@ -912,7 +913,7 @@ $selected_activities = array_filter($selected_activities);
                         'title'        => get_the_title(),
                         'price'        => $r_price_val ? 'USD ' . number_format($r_price_val) : '',
                         'duration'     => $r_days_val ? $r_days_val . ' Days' : '',
-                        'destinations' => wp_get_post_tags(get_the_ID(), ['fields' => 'names']),
+                        'post_id'      => get_the_ID(),
                         'link'         => get_permalink(),
                         'link_text'    => 'Explore itinerary',
                         'aos_delay'    => ($r_index % 3) * 100,
@@ -932,9 +933,9 @@ $selected_activities = array_filter($selected_activities);
                 <div class="lg:col-span-4" data-aos="fade-right">
                     <h2 class="font-heading text-3xl md:text-4xl text-dark mb-8 font-light leading-tight">Free
                         Quote<br>Request</h2>
-                    <p class="font-body text-dark text-lg font-light leading-relaxed">
+                    <!-- <p class="font-body text-dark text-lg font-light leading-relaxed">
                         Located in Arequipa's historic center, Cirqa lies steps from the Mai}
-                    </p>
+                    </p> -->
                 </div>
 
                 <!-- Right: Actually Form -->
@@ -1144,6 +1145,8 @@ $selected_activities = array_filter($selected_activities);
                                     <option value="google">Google Search</option>
                                     <option value="friend">Friend/Family</option>
                                     <option value="social">Social Media</option>
+                                    <option value="travel-agent">Travel Agent</option>
+                                    <option value="ai">Artificial Intelligence</option>
                                 </select>
                             </div>
                         </div>
