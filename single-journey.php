@@ -410,7 +410,7 @@ $selected_activities = array_filter($selected_activities);
                                                     <?php if (!empty($tour['itinerary_image']) && is_array($tour['itinerary_image'])): ?>
                                                         <img src="<?php echo esc_url($tour['itinerary_image']['url']); ?>"
                                                             alt="<?php echo esc_attr($tour['itinerary_image']['alt']); ?>"
-                                                            class="w-full h-auto aspect-[21/9] object-cover rounded-lg mb-8 shadow-sm">
+                                                            class="w-full h-auto object-cover rounded-lg mb-8 shadow-sm">
                                                     <?php endif; ?>
 
                                                     <?php if (!empty($tour['list_of_activities']) && is_array($tour['list_of_activities'])):
@@ -1248,7 +1248,7 @@ $selected_activities = array_filter($selected_activities);
                                     x-transition:leave="transition ease-in duration-200"
                                     x-transition:leave-start="opacity-100 translate-y-0"
                                     x-transition:leave-end="opacity-0 -translate-y-2" class="pb-5 pr-12">
-                                    <div class="font-body text-sm text-dark/60 leading-relaxed">
+                                    <div class="font-body text-sm text-dark/60 leading-relaxed [&_a]:text-primary [&_a]:underline [&_a:hover]:text-dark [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-2 [&_b]:font-bold [&_strong]:font-bold [&_p]:mb-2 last:[&_p]:mb-0">
                                         <?php echo wp_kses_post($faq['response']); ?>
                                     </div>
                                 </div>

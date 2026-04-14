@@ -17,17 +17,6 @@ export function initGallerySlider() {
     const containerEl = viewportEl.querySelector(".embla__container");
     if (!containerEl) return;
 
-    // ── Clonar slides si hay 3 o más ──
-    const originalSlides = Array.from(containerEl.children);
-    if (originalSlides.length >= 3) {
-      originalSlides.forEach((slide) => {
-        const clone = slide.cloneNode(true);
-        clone.setAttribute("aria-hidden", "true");
-        clone.dataset.cloned = "true";
-        containerEl.appendChild(clone);
-      });
-    }
-
     // ── Opciones cinta ──
     const options = {
       loop: true,
@@ -61,13 +50,13 @@ export function initGallerySlider() {
     viewportEl.addEventListener("mouseenter", pause);
     viewportEl.addEventListener("mouseleave", resume);
 
-    // ── Touch (mobile): pausa al tocar, reanuda al soltar ──
+    // ── Touch (mobile): pausa al tocar, reanuda cuando Embla termina de moverse ──
     viewportEl.addEventListener("touchstart", pause, { passive: true });
     viewportEl.addEventListener(
       "touchend",
       () => {
-        // Pequeño delay para que termine la inercia del drag antes de reanudar
-        setTimeout(resume, 1000);
+        // Reanudar solo después de que Embla termine la inercia del drag
+        emblaApi.once("settle", resume);
       },
       { passive: true },
     );

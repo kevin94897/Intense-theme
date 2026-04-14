@@ -82,7 +82,14 @@ get_header();
                             $itinerary_id = $itinerary->ID;
                             $itinerary_title = get_the_title($itinerary_id);
                             $itinerary_link = get_permalink($itinerary_id);
-                            $itinerary_image = get_the_post_thumbnail_url($itinerary_id, 'large');
+                            
+                            // Get Background Hero Image from Journey's ACF data, fallback to post thumbnail
+                            $itinerary_info = get_field('information', $itinerary_id);
+                            $itinerary_hero_img = $itinerary_info['background_hero_image'] ?? null;
+                            $itinerary_image = $itinerary_hero_img 
+                                ? (is_array($itinerary_hero_img) ? $itinerary_hero_img['url'] : $itinerary_hero_img) 
+                                : get_the_post_thumbnail_url($itinerary_id, 'large');
+                                
                             $itinerary_destination = get_the_title(); // Current destination
 
                             if ($index === 0) : // First one is tall and full width
