@@ -12,12 +12,12 @@ $title = $args['title'] ?? '';
 $advisor_text = $args['advisor_text'] ?? '';
 ?>
 <div class="flex flex-col h-full hover:group">
-    <div class="h-[300px] md:h-[350px] w-full rounded-2xl overflow-hidden mb-5">
+    <div class="h-[300px] md:h-[300px] w-full rounded-2xl overflow-hidden mb-5">
         <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($title); ?>"
             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
     </div>
     <div class="flex flex-col flex-1">
-        <h4 class="font-body text-md md:text-lg font-normal text-dark mb-3">
+        <h4 class="font-heading text-md md:text-lg font-bold text-dark mb-3">
             <?php echo esc_html($title); ?>
         </h4>
 

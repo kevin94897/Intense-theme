@@ -3,6 +3,7 @@
 
 /* Tailwind v4: una directiva reemplaza las tres de v3 */
 @import 'tailwindcss';
+
 /* HV Simplicite — fuente local (OTF) */
 @font-face {
   font-family: 'HV Simplicite';
@@ -70,6 +71,7 @@
    ESTILOS BASE
    ========================================== */
 @layer base {
+
   *,
   *::before,
   *::after {
@@ -78,7 +80,8 @@
 
   html,
   body {
-    overflow-x: clip; /* clip instead of hidden to avoid creating a scroll container (which breaks position:sticky) */
+    overflow-x: clip;
+    /* clip instead of hidden to avoid creating a scroll container (which breaks position:sticky) */
     width: 100%;
     position: relative;
     /* Prevent horizontal scroll from AOS animations */
@@ -97,13 +100,16 @@
     font-optical-sizing: auto;
     font-variant-ligatures: common-ligatures;
   }
-} /* Cierre de @layer base */
+}
+
+/* Cierre de @layer base */
 
 /* ==========================================
    TIPOGRAFÍA Y COMPONENTES — CLASES SEMÁNTICAS
    ========================================== */
 
 @layer components {
+
   /* H1 — HV Simplicite 64px */
   .heading-1 {
     font-family: var(--font-heading);
@@ -349,35 +355,39 @@
   }
 
   /* ── Mobile Button Overrides ── */
-@media (max-width: 767px) {
+  @media (max-width: 767px) {
 
-  .btn {
-    min-width: unset;          /* elimina el mínimo fijo */
-    white-space: normal;       /* permite wrap si el texto es largo */
-    padding: 0.625rem 1.25rem; /* reduce padding horizontal */
-    font-size: 0.875rem;       /* mantiene 14px */
-    width: auto;
-  }
+    .btn {
+      min-width: unset;
+      /* elimina el mínimo fijo */
+      white-space: normal;
+      /* permite wrap si el texto es largo */
+      padding: 0.625rem 1.25rem;
+      /* reduce padding horizontal */
+      font-size: 0.875rem;
+      /* mantiene 14px */
+      width: auto;
+    }
 
-  /* Variante full-width para mobile — agrégala donde necesites */
-  .btn-block {
-    width: 100%;
-    justify-content: center;
-  }
+    /* Variante full-width para mobile — agrégala donde necesites */
+    .btn-block {
+      width: 100%;
+      justify-content: center;
+    }
 
-  /* Reduce el padding generoso del outline */
-  .btn-outline {
-    padding: 0.625rem 1.5rem;
-  }
+    /* Reduce el padding generoso del outline */
+    .btn-outline {
+      padding: 0.625rem 1.5rem;
+    }
 
-  /* btn-submit-intense en mobile */
-  .btn-submit-intense {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    min-width: unset;
-    width: 100%;
+    /* btn-submit-intense en mobile */
+    .btn-submit-intense {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      min-width: unset;
+      width: 100%;
+    }
   }
-}
 
   /* ==========================================
    INPUTS ESTANDARIZADOS (Minimalist style)
@@ -395,14 +405,16 @@
     border-bottom: 1px solid var(--color-dark);
     padding-bottom: 0.5rem;
     font-family: var(--font-body);
-    font-size: 0.875rem; /* text-sm */
+    font-size: 0.875rem;
+    /* text-sm */
     color: var(--color-dark);
     transition: all 0.3s ease;
     outline: none;
   }
 
   .input-field::placeholder {
-    color: rgba(66, 57, 49, 0.4); /* text-dark/40 */
+    color: rgba(66, 57, 49, 0.4);
+    /* text-dark/40 */
   }
 
   .input-field:focus {
@@ -421,7 +433,8 @@
 
   /* Estado Error */
   .input-wrapper.has-error .input-field {
-    border-bottom-color: #f87171; /* red-400 */
+    border-bottom-color: #f87171;
+    /* red-400 */
   }
 
   .input-error-msg {
@@ -691,7 +704,7 @@
   }
 
   .nav-menu a:hover,
-  .nav-menu .current-menu-item > a {
+  .nav-menu .current-menu-item>a {
     color: var(--color-primary);
   }
 
@@ -710,7 +723,7 @@
   }
 
   .site-header.is-light .nav-menu a:hover,
-  .site-header.is-light .nav-menu .current-menu-item > a,
+  .site-header.is-light .nav-menu .current-menu-item>a,
   .site-header.is-light #mobile-menu a:hover {
     color: var(--color-primary);
   }
@@ -739,7 +752,9 @@
   .site-header.is-light .custom-logo-link img {
     filter: brightness(0);
   }
-} /* Cierre de @layer components */
+}
+
+/* Cierre de @layer components */
 
 /* ==========================================
    UTILIDADES GLOBALES
@@ -768,7 +783,7 @@
   /* Contenedor más ancho — max-w-8xl (96rem / 1536px) */
   .container-site-wide {
     width: 100%;
-    max-width: 96rem;
+    max-width: 95rem;
     margin-inline: auto;
     padding-inline: 1.5rem;
   }
@@ -815,6 +830,7 @@
   :not(.site-header):not(.site-header *)[data-aos] {
     opacity: 0;
   }
+
   :not(.site-header):not(.site-header *)[data-aos].aos-animate {
     opacity: 1;
   }
@@ -995,6 +1011,7 @@
     .news-grid {
       grid-template-columns: 1fr;
     }
+
     .news-card.large-left,
     .news-card.large-right,
     .news-card.pos-5 {
@@ -1006,12 +1023,15 @@
     .news-grid {
       grid-template-columns: repeat(2, 1fr);
     }
+
     .news-card.large-left {
       grid-column: 1 / span 2;
     }
+
     .news-card.pos-5 {
       grid-column: 1;
     }
+
     .news-card.large-right {
       grid-column: 1 / span 2;
     }
@@ -1061,6 +1081,7 @@ footer a {
     transform 0.35s ease,
     opacity 0.25s ease;
 }
+
 .mega-panel a:hover img {
   transform: scale(1.04);
   opacity: 0.92;
@@ -1095,6 +1116,7 @@ body.mobile-menu-open {
   color: rgba(26, 26, 26, 0.7);
   transition: color 0.2s;
 }
+
 #mob-grand-list li a:hover,
 #mob-compact-list li a:hover,
 #mob-short-list li a:hover {
@@ -1110,28 +1132,36 @@ body.mobile-menu-open {
 body .is-layout-flex {
   display: flex;
 }
+
 .is-layout-flex {
   flex-wrap: wrap;
   align-items: center;
 }
-.is-layout-flex > :is(*, div) {
+
+.is-layout-flex> :is(*, div) {
   margin: 0;
 }
+
 body .is-layout-grid {
   display: grid;
 }
-.is-layout-grid > :is(*, div) {
+
+.is-layout-grid> :is(*, div) {
   margin: 0;
 }
+
 :where(.wp-block-columns.is-layout-flex) {
   gap: 2em;
 }
+
 :where(.wp-block-columns.is-layout-grid) {
   gap: 2em;
 }
+
 :where(.wp-block-post-template.is-layout-flex) {
   gap: 1.25em;
 }
+
 :where(.wp-block-post-template.is-layout-grid) {
   gap: 1.25em;
 }
@@ -1144,10 +1174,8 @@ body .is-layout-grid {
 
 /* Instancias numeradas generadas por WP (wp-block-gallery-1, -2, etc.) */
 [class*='wp-block-gallery-'] {
-  --wp--style--unstable-gallery-gap: var(
-    --wp--style--gallery-gap-default,
-    var(--gallery-block--gutter-size, var(--wp--style--block-gap, 0.5em))
-  );
+  --wp--style--unstable-gallery-gap: var(--wp--style--gallery-gap-default,
+      var(--gallery-block--gutter-size, var(--wp--style--block-gap, 0.5em)));
   gap: var(--wp--style--gallery-gap-default, var(--gallery-block--gutter-size, var(--wp--style--block-gap, 0.5em)));
 }
 
@@ -1251,22 +1279,27 @@ body .is-layout-grid {
     width: calc(33.33333% - 0.66667em);
     margin-right: 1em;
   }
+
   .wp-block-gallery:not(.has-nested-images).columns-4 .blocks-gallery-item {
     width: calc(25% - 0.75em);
     margin-right: 1em;
   }
+
   .wp-block-gallery:not(.has-nested-images).columns-5 .blocks-gallery-item {
     width: calc(20% - 0.8em);
     margin-right: 1em;
   }
+
   .wp-block-gallery:not(.has-nested-images).columns-6 .blocks-gallery-item {
     width: calc(16.66667% - 0.83333em);
     margin-right: 1em;
   }
+
   .wp-block-gallery:not(.has-nested-images).columns-7 .blocks-gallery-item {
     width: calc(14.28571% - 0.85714em);
     margin-right: 1em;
   }
+
   .wp-block-gallery:not(.has-nested-images).columns-8 .blocks-gallery-item {
     width: calc(12.5% - 0.875em);
     margin-right: 1em;
@@ -1319,8 +1352,8 @@ figure.wp-block-gallery.has-nested-images {
   position: relative;
 }
 
-.wp-block-gallery.has-nested-images figure.wp-block-image > a,
-.wp-block-gallery.has-nested-images figure.wp-block-image > div {
+.wp-block-gallery.has-nested-images figure.wp-block-image>a,
+.wp-block-gallery.has-nested-images figure.wp-block-image>div {
   flex-direction: column;
   flex-grow: 1;
   margin: 0;
@@ -1369,10 +1402,10 @@ figure.wp-block-gallery.has-nested-images {
   box-sizing: border-box;
 }
 
-.wp-block-gallery.has-nested-images figure.wp-block-image.has-custom-border > a,
-.wp-block-gallery.has-nested-images figure.wp-block-image.has-custom-border > div,
-.wp-block-gallery.has-nested-images figure.wp-block-image.is-style-rounded > a,
-.wp-block-gallery.has-nested-images figure.wp-block-image.is-style-rounded > div {
+.wp-block-gallery.has-nested-images figure.wp-block-image.has-custom-border>a,
+.wp-block-gallery.has-nested-images figure.wp-block-image.has-custom-border>div,
+.wp-block-gallery.has-nested-images figure.wp-block-image.is-style-rounded>a,
+.wp-block-gallery.has-nested-images figure.wp-block-image.is-style-rounded>div {
   flex: 1 1 auto;
 }
 
@@ -1402,10 +1435,8 @@ figure.wp-block-gallery.has-nested-images {
   align-self: inherit;
 }
 
-.wp-block-gallery.has-nested-images.is-cropped figure.wp-block-image:not(#individual-image) > a,
-.wp-block-gallery.has-nested-images.is-cropped
-  figure.wp-block-image:not(#individual-image)
-  > div:not(.components-drop-zone) {
+.wp-block-gallery.has-nested-images.is-cropped figure.wp-block-image:not(#individual-image)>a,
+.wp-block-gallery.has-nested-images.is-cropped figure.wp-block-image:not(#individual-image)>div:not(.components-drop-zone) {
   display: flex;
 }
 
@@ -1435,33 +1466,37 @@ figure.wp-block-gallery.has-nested-images {
   .wp-block-gallery.has-nested-images.columns-3 figure.wp-block-image:not(#individual-image) {
     width: calc(33.33333% - var(--wp--style--unstable-gallery-gap, 16px) * 0.66667);
   }
+
   .wp-block-gallery.has-nested-images.columns-4 figure.wp-block-image:not(#individual-image) {
     width: calc(25% - var(--wp--style--unstable-gallery-gap, 16px) * 0.75);
   }
+
   .wp-block-gallery.has-nested-images.columns-5 figure.wp-block-image:not(#individual-image) {
     width: calc(20% - var(--wp--style--unstable-gallery-gap, 16px) * 0.8);
   }
+
   .wp-block-gallery.has-nested-images.columns-6 figure.wp-block-image:not(#individual-image) {
     width: calc(16.66667% - var(--wp--style--unstable-gallery-gap, 16px) * 0.83333);
   }
+
   .wp-block-gallery.has-nested-images.columns-7 figure.wp-block-image:not(#individual-image) {
     width: calc(14.28571% - var(--wp--style--unstable-gallery-gap, 16px) * 0.85714);
   }
+
   .wp-block-gallery.has-nested-images.columns-8 figure.wp-block-image:not(#individual-image) {
     width: calc(12.5% - var(--wp--style--unstable-gallery-gap, 16px) * 0.875);
   }
+
   .wp-block-gallery.has-nested-images.columns-default figure.wp-block-image:not(#individual-image) {
     width: calc(33.33% - var(--wp--style--unstable-gallery-gap, 16px) * 0.66667);
   }
-  .wp-block-gallery.has-nested-images.columns-default
-    figure.wp-block-image:not(#individual-image):first-child:nth-last-child(2),
-  .wp-block-gallery.has-nested-images.columns-default
-    figure.wp-block-image:not(#individual-image):first-child:nth-last-child(2)
-    ~ figure.wp-block-image:not(#individual-image) {
+
+  .wp-block-gallery.has-nested-images.columns-default figure.wp-block-image:not(#individual-image):first-child:nth-last-child(2),
+  .wp-block-gallery.has-nested-images.columns-default figure.wp-block-image:not(#individual-image):first-child:nth-last-child(2)~figure.wp-block-image:not(#individual-image) {
     width: calc(50% - var(--wp--style--unstable-gallery-gap, 16px) * 0.5);
   }
-  .wp-block-gallery.has-nested-images.columns-default
-    figure.wp-block-image:not(#individual-image):first-child:last-child {
+
+  .wp-block-gallery.has-nested-images.columns-default figure.wp-block-image:not(#individual-image):first-child:last-child {
     width: 100%;
   }
 }
@@ -1472,7 +1507,9 @@ figure.wp-block-gallery.has-nested-images {
 @layer components {
 
   /* x-cloak: oculta elementos Alpine antes de inicializar */
-  [x-cloak] { display: none !important; }
+  [x-cloak] {
+    display: none !important;
+  }
 
   /* ── Overlay ── */
   .gallery-lightbox-overlay {
@@ -1681,8 +1718,13 @@ figure.wp-block-gallery.has-nested-images {
       height: 3.25rem;
     }
 
-    .gallery-lightbox-nav--prev { left: 1.25rem; }
-    .gallery-lightbox-nav--next { right: 1.25rem; }
+    .gallery-lightbox-nav--prev {
+      left: 1.25rem;
+    }
+
+    .gallery-lightbox-nav--next {
+      right: 1.25rem;
+    }
   }
 
   /* ── Responsive: desktop ── */

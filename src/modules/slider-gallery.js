@@ -1,6 +1,36 @@
 import EmblaCarousel from "embla-carousel";
 import AutoScroll from "embla-carousel-auto-scroll";
 
+/**
+ * Clona los slides hasta que el contenido llene al menos `minFillMultiplier`
+ * veces el ancho del viewport. Esto garantiza que Embla tenga suficiente
+ * contenido para hacer loop infinito sin saltos visibles.
+ */
+function ensureEnoughSlides(containerEl, viewportEl, minFillMultiplier = 3) {
+  const slides = Array.from(containerEl.querySelectorAll(".embla__slide"));
+  if (slides.length === 0) return;
+
+  const viewportWidth = viewportEl.offsetWidth || window.innerWidth;
+  const totalSlidesWidth = slides.reduce(
+    (acc, slide) => acc + slide.offsetWidth,
+    0,
+  );
+
+  // Si los slides originales llenan suficiente espacio, no clonar
+  if (totalSlidesWidth >= viewportWidth * minFillMultiplier) return;
+
+  // Clonar rondas completas hasta tener suficiente contenido
+  let filledWidth = totalSlidesWidth;
+  while (filledWidth < viewportWidth * minFillMultiplier) {
+    slides.forEach((slide) => {
+      const clone = slide.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      containerEl.appendChild(clone);
+    });
+    filledWidth += totalSlidesWidth;
+  }
+}
+
 export function initGallerySlider() {
   const emblaNodes = document.querySelectorAll(".journey-gallery-embla");
   if (emblaNodes.length === 0) return;
@@ -17,6 +47,12 @@ export function initGallerySlider() {
     const containerEl = viewportEl.querySelector(".embla__container");
     if (!containerEl) return;
 
+    // ── Clonar slides para garantizar loop infinito sin saltos ──
+    const isGallery = wrapper?.classList.contains("embla-gallery");
+    if (isGallery) {
+      ensureEnoughSlides(containerEl, viewportEl, 3);
+    }
+
     // ── Opciones cinta ──
     const options = {
       loop: true,
@@ -28,9 +64,8 @@ export function initGallerySlider() {
     };
 
     // ── Velocidad según tipo de wrapper ──
-    const isGallery = wrapper?.classList.contains("embla-gallery");
     const isActivities = wrapper?.classList.contains("embla-activities");
-    const speed = isGallery ? 1.2 : isActivities ? 0.9 : 1.0;
+    const speed = isGallery ? 1.5 : isActivities ? 0.9 : 1.0;
 
     const autoScrollPlugin = AutoScroll({
       speed,

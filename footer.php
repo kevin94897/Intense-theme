@@ -134,8 +134,9 @@
                     }
                     ?>
                     <div class="pt-4">
-                        <a href="<?php echo esc_url(site_url('/libro-de-reclamaciones')); ?>"
-                            class="flex flex-col items-start gap-1 text-cream/80 hover:text-primary transition-colors duration-200">
+                        <a href="https://forms.office.com/pages/responsepage.aspx?id=TWv9FReQjE2oa1-qM9_bhD8GoBe-oD9FsP_cF4L_exBUMkdST04zOVVTTUxYTVpITEQ3M1lOTEExNS4u&origin=lprLink&route=shorturl"
+                            class="flex flex-col items-start gap-1 text-cream/80 hover:text-primary transition-colors duration-200"
+                            target="_blank" rel="nofollow">
                             <svg width="94" height="59" viewBox="0 0 94 59" fill="none"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <rect width="94" height="59" fill="url(#pattern0_3089_16234)" />

@@ -34,7 +34,7 @@ $selected_activities = array_filter($selected_activities);
         $hero_img = $information['background_hero_image'] ?: get_the_post_thumbnail_url(get_the_ID(), 'full');
         $subtitle = $information['short_description'];
         $btn = $information['button_request'];
-    ?>
+        ?>
         <!-- 1. Hero Section -->
         <section class="relative md:h-screen min-h-[600px] flex items-end justify-start pb-10 md:pb-20">
             <!-- Background Image -->
@@ -76,7 +76,7 @@ $selected_activities = array_filter($selected_activities);
 
     <?php if ($feature_group && (!empty($feature_group['title']) || !empty($feature_group['description']) || !empty($feature_group['features']))):
         $features = $feature_group['features'];
-    ?>
+        ?>
         <!-- 2. Overview Section -->
         <section class="py-24 overflow-hidden">
             <div class="container-site max-w-7xl mx-auto">
@@ -141,7 +141,7 @@ $selected_activities = array_filter($selected_activities);
                         <div class="space-y-4">
                             <?php foreach ($features as $index => $item):
                                 $delay = 100 + ($index * 150);
-                            ?>
+                                ?>
                                 <div data-aos="fade-left" data-aos-duration="700" data-aos-delay="<?php echo $delay; ?>"
                                     class="flex items-start gap-4 md:gap-6 p-5 transition-all duration-500">
                                     <div class="text-primary">
@@ -205,10 +205,10 @@ $selected_activities = array_filter($selected_activities);
         <!-- 4. Main Body: Itinerary Layout -->
         <section class="py-12 md:py-20 pb-28 lg:pb-20 bg-cream">
             <div class="container-site-wide mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 items-start">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-18 items-start">
 
                     <!-- Left: Sticky Navigation -->
-                    <aside class="hidden md:block lg:col-span-3 md:sticky md:top-32" data-aos="fade-right">
+                    <aside class="hidden md:block lg:col-span-4 md:sticky md:top-32" data-aos="fade-right">
                         <nav class="mb-8 font-body text-dark text-sm md:text-base">
                             <ul>
 
@@ -348,17 +348,17 @@ $selected_activities = array_filter($selected_activities);
                     </aside>
 
                     <!-- Right: Content -->
-                    <div class="lg:col-span-9">
+                    <div class="lg:col-span-8">
 
                         <!-- Itinerary Accordion -->
                         <?php if ($itinerary_group && !empty($itinerary_group['list_of_tours'])):
                             $tours = $itinerary_group['list_of_tours'];
-                        ?>
+                            ?>
                             <div id="itinerary" class="scroll-mt-32 mb-20" data-aos="fade-up">
                                 <div class="space-y-6">
                                     <?php foreach ($tours as $index => $tour):
                                         $open = ($index === 0) ? 'true' : 'false';
-                                    ?>
+                                        ?>
                                         <div x-data="{ expanded: <?php echo $open; ?> }" x-init="$watch('expanded', value => value && setTimeout(() => { 
                                              const headerHeight = 100;
                                              const buffer = 24;
@@ -415,7 +415,7 @@ $selected_activities = array_filter($selected_activities);
 
                                                     <?php if (!empty($tour['list_of_activities']) && is_array($tour['list_of_activities'])):
                                                         foreach ($tour['list_of_activities'] as $activity):
-                                                    ?>
+                                                            ?>
                                                             <div class="flex items-center gap-3 mb-4 mt-4 shadow-none">
                                                                 <?php if (!empty($activity['icon']) || !empty($activity['icon_2'])): ?>
                                                                     <div class="flex items-center gap-2">
@@ -449,7 +449,7 @@ $selected_activities = array_filter($selected_activities);
                                                                     <?php echo wp_kses_post($activity['activity_description']); ?>
                                                                 </div>
                                                             <?php endif; ?>
-                                                    <?php endforeach;
+                                                        <?php endforeach;
                                                     endif; ?>
 
                                                 </div>
@@ -465,7 +465,7 @@ $selected_activities = array_filter($selected_activities);
                             $included = isset($inc_not_inc['included_list']) ? $inc_not_inc['included_list'] : null;
                             $not_included = isset($inc_not_inc['not_included_list']) ? $inc_not_inc['not_included_list'] : null;
                             if (!empty($included) || !empty($not_included)):
-                        ?>
+                                ?>
                                 <!-- Included / Not Included -->
                                 <div id="included" class="scroll-mt-32 mb-24" data-aos="fade-up">
                                     <div class="mb-12 text-center">
@@ -523,7 +523,7 @@ $selected_activities = array_filter($selected_activities);
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                        <?php endif;
+                            <?php endif;
                         endif; ?>
 
                         <!-- Pricing Options -->
@@ -541,7 +541,7 @@ $selected_activities = array_filter($selected_activities);
                                     <?php foreach ($prices_group['tables_for_prices'] as $table_row):
                                         $table = $table_row['prices_table'];
                                         if ($table && !empty($table['body'])):
-                                    ?>
+                                            ?>
                                             <div class="overflow-x-auto">
                                                 <table class="w-full text-left border-collapse">
                                                     <?php if (!empty($table['header'])): ?>
@@ -569,77 +569,220 @@ $selected_activities = array_filter($selected_activities);
                                                     </tbody>
                                                 </table>
                                                 <?php if (!empty($table_row['notes'])): ?>
-                                                    <div class="mt-4 font-body text-md text-dark italic notes leading-relaxed font-light [&_p]:mb-4 last:[&_p]:mb-0">
+                                                    <div
+                                                        class="mt-4 font-body text-md text-dark italic notes leading-relaxed font-light [&_p]:mb-4 last:[&_p]:mb-0">
                                                         <?php echo wp_kses_post($table_row['notes']); ?>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
-                                    <?php endif;
+                                        <?php endif;
                                     endforeach; ?>
                                 </div>
                             </div>
                         <?php endif; ?>
 
                         <!-- Hotels -->
-                        <?php if (!empty($selected_hotels)): ?>
-                            <div id="hotels" class="scroll-mt-32 mb-20" data-aos="fade-up" x-data="{ visibleHotels: 3 }"
-                                x-init="$el.dataset.totalHotels = <?php echo count($selected_hotels); ?>">
-                                <div class="text-center mb-14">
+                        <?php
+                        // Tabs = categorías del journey (mismo orden que activities)
+                        $hotel_journey_cats = wp_get_post_terms(get_the_ID(), 'category', [
+                            'fields'  => 'all',
+                            'orderby' => 'term_order',
+                            'order'   => 'ASC',
+                        ]);
+                        $hotel_tabs  = []; // [slug => name]
+                        $hotels_data = [];
+                        $hotel_cat_counts = []; // [slug => int] para "See More" por tab
+
+                        if (!is_wp_error($hotel_journey_cats) && !empty($hotel_journey_cats)) {
+                            foreach ($hotel_journey_cats as $cat) {
+                                $hotel_tabs[$cat->slug] = $cat->name;
+                            }
+
+                            $hotel_query = new WP_Query([
+                                'post_type'      => 'hotel',
+                                'post_status'    => 'publish',
+                                'posts_per_page' => -1,
+                                'orderby'        => 'title',
+                                'order'          => 'ASC',
+                                'tax_query'      => [[
+                                    'taxonomy' => 'category',
+                                    'field'    => 'slug',
+                                    'terms'    => array_keys($hotel_tabs),
+                                    'operator' => 'IN',
+                                ]],
+                            ]);
+
+                            $cat_counters_h = [];
+                            while ($hotel_query->have_posts()) {
+                                $hotel_query->the_post();
+                                $h_id        = get_the_ID();
+                                $h_terms     = wp_get_post_terms($h_id, 'category', ['fields' => 'slugs']);
+                                $h_cats      = is_wp_error($h_terms) ? [] : array_values(array_intersect($h_terms, array_keys($hotel_tabs)));
+                                $h_rating    = get_field('rating', $h_id);
+                                $h_location  = get_field('location', $h_id);
+                                $h_video     = get_field('video', $h_id);
+                                $h_services  = get_field('list_of_services', $h_id);
+                                $h_amenities = [];
+                                if ($h_services) {
+                                    foreach ($h_services as $svc) {
+                                        $h_amenities[] = [
+                                            'icon' => $svc['icon'] ? '<img src="' . esc_url($svc['icon']['url']) . '" class="min-w-5 min-h-5 w-full h-full" alt="' . esc_attr($svc['icon']['alt']) . '">' : '',
+                                            'text' => $svc['service'],
+                                        ];
+                                    }
+                                }
+
+                                // Per-category index for "See More" pagination
+                                $h_cat_indices = [];
+                                foreach ($h_cats as $slug) {
+                                    if (!isset($cat_counters_h[$slug])) $cat_counters_h[$slug] = 0;
+                                    $h_cat_indices[$slug] = $cat_counters_h[$slug]++;
+                                    $hotel_cat_counts[$slug] = $cat_counters_h[$slug];
+                                }
+
+                                $hotels_data[] = [
+                                    'id'          => $h_id,
+                                    'image'       => get_the_post_thumbnail_url($h_id, 'large'),
+                                    'title'       => get_the_title(),
+                                    'stars'       => $h_rating['stars'] ?? 5,
+                                    'web_ratings' => $h_rating['rating_web'] ?? [],
+                                    'location'    => $h_location,
+                                    'description' => get_the_excerpt(),
+                                    'video_link'  => $h_video ? $h_video['url'] : '#',
+                                    'amenities'   => $h_amenities,
+                                    'cats'        => $h_cats,
+                                    'cat_indices' => $h_cat_indices,
+                                ];
+                            }
+                            wp_reset_postdata();
+                            // Solo mostrar tabs que tengan al menos un hotel
+                            $hotel_tabs = array_filter($hotel_tabs, fn($slug) => !empty($hotel_cat_counts[$slug]), ARRAY_FILTER_USE_KEY);
+                        }
+                        ?>
+                        <?php if (!empty($hotels_data)): ?>
+                            <div id="hotels" class="scroll-mt-32 mb-20" data-aos="fade-up"
+                                x-data="{ activeTab: 'all', visibleCount: 3, catCounts: {} }"
+                                x-init="catCounts = JSON.parse($el.dataset.catCounts)"
+                                data-cat-counts='<?php echo wp_json_encode($hotel_cat_counts); ?>'>
+
+                                <div class="text-center mb-10">
                                     <h3 class="font-heading text-4xl md:text-5xl text-dark">Hotels</h3>
                                 </div>
 
-                                <div class="mb-10">
-                                    <?php foreach ($selected_hotels as $index => $hotel_post):
-                                        $hotel_id = $hotel_post->ID;
-                                        $rating = get_field('rating', $hotel_id);
-                                        $h_location = get_field('location', $hotel_id);
-                                        $h_video = get_field('video', $hotel_id);
-                                        $h_services = get_field('list_of_services', $hotel_id);
-                                        $h_web_ratings = $rating['rating_web'] ?? [];
+                                <!-- Category Tabs -->
+                                <?php if (!empty($hotel_tabs)): ?>
+                                <div class="flex items-center gap-5 overflow-x-auto no-scrollbar pb-1 mb-10">
+                                    <button
+                                        @click="activeTab = 'all'; visibleCount = 3"
+                                        :class="activeTab === 'all' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
+                                        class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
+                                        All
+                                    </button>
+                                    <?php foreach ($hotel_tabs as $slug => $name): ?>
+                                    <button
+                                        @click="activeTab = '<?php echo esc_js($slug); ?>'; visibleCount = 3"
+                                        :class="activeTab === '<?php echo esc_attr($slug); ?>' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
+                                        class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
+                                        <?php echo esc_html($name); ?>
+                                    </button>
+                                    <?php endforeach; ?>
+                                </div>
+                                <?php endif; ?>
 
-                                        $amenities = [];
-                                        if ($h_services) {
-                                            foreach ($h_services as $service) {
-                                                $amenities[] = [
-                                                    'icon' => $service['icon'] ? '<img src="' . esc_url($service['icon']['url']) . '" class="min-w-5 min-h-5 w-full h-full" alt="' . esc_attr($service['icon']['alt']) . '">' : '',
-                                                    'text' => $service['service']
-                                                ];
-                                            }
-                                        }
-                                    ?>
-                                        <div class="hotel-item" x-show="<?php echo $index; ?> < visibleHotels" x-transition>
+                                <div class="mb-10">
+                                    <?php foreach ($hotels_data as $global_idx => $hotel): ?>
+                                        <div class="hotel-item"
+                                            data-cats="<?php echo esc_attr(implode(' ', $hotel['cats'])); ?>"
+                                            data-global-idx="<?php echo $global_idx; ?>"
+                                            data-cat-indices='<?php echo wp_json_encode($hotel['cat_indices']); ?>'
+                                            x-show="
+                                                activeTab === 'all'
+                                                    ? <?php echo $global_idx; ?> < visibleCount
+                                                    : $el.dataset.cats.split(' ').includes(activeTab) && (JSON.parse($el.dataset.catIndices)[activeTab] ?? 999) < visibleCount
+                                            "
+                                            x-transition>
                                             <?php get_template_part('template-parts/components/card-hotel', null, [
-                                                'image' => get_the_post_thumbnail_url($hotel_id, 'large'),
-                                                'title' => get_the_title($hotel_id),
-                                                'stars' => $rating['stars'] ?? 5,
-                                                'type' => 'Hotel', // You might want to pull this from a taxonomy later
-                                                'web_ratings' => $h_web_ratings,
-                                                'location' => $h_location,
-                                                'description' => get_the_excerpt($hotel_id),
-                                                'video_link' => $h_video ? $h_video['url'] : '#',
-                                                'amenities' => $amenities
+                                                'image'       => $hotel['image'],
+                                                'title'       => $hotel['title'],
+                                                'stars'       => $hotel['stars'],
+                                                'type'        => 'Hotel',
+                                                'web_ratings' => $hotel['web_ratings'],
+                                                'location'    => $hotel['location'],
+                                                'description' => $hotel['description'],
+                                                'video_link'  => $hotel['video_link'],
+                                                'amenities'   => $hotel['amenities'],
                                             ]); ?>
                                         </div>
-                                    <?php
-                                    endforeach; ?>
+                                    <?php endforeach; ?>
                                 </div>
 
-                                <!-- See More Button -->
-                                <?php if (count($selected_hotels) > 3): ?>
-                                    <div class="flex justify-center">
-                                        <button @click="visibleHotels += 3"
-                                            x-show="visibleHotels < <?php echo count($selected_hotels); ?>"
-                                            class="btn btn-outline-dark text-md px-20">
-                                            See more
-                                        </button>
-                                    </div>
-                                <?php endif; ?>
+                                <!-- See More -->
+                                <div class="flex justify-center">
+                                    <button
+                                        @click="visibleCount += 3"
+                                        x-show="visibleCount < (activeTab === 'all' ? <?php echo count($hotels_data); ?> : (catCounts[activeTab] ?? 0))"
+                                        class="btn btn-outline-dark text-md px-20">
+                                        See more
+                                    </button>
+                                </div>
+
                             </div>
                         <?php endif; ?>
 
                         <!-- Other Activities -->
-                        <?php if (!empty($selected_activities)): ?>
-                            <div id="activities" class="scroll-mt-32 mb-20" data-aos="fade-up">
+                        <?php
+                        // 1. Tabs = categorías del journey actual
+                        $journey_cats = wp_get_post_terms(get_the_ID(), 'category', [
+                            'fields'  => 'all',
+                            'orderby' => 'term_order',
+                            'order'   => 'ASC',
+                        ]);
+                        $itinerary_tabs  = []; // [slug => name]
+                        $activities_data = [];
+
+                        if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
+                            foreach ($journey_cats as $cat) {
+                                $itinerary_tabs[$cat->slug] = $cat->name;
+                            }
+
+                            // 2. Query todas las activities que tengan esas mismas categorías
+                            $act_query = new WP_Query([
+                                'post_type'      => 'activity',
+                                'post_status'    => 'publish',
+                                'posts_per_page' => -1,
+                                'orderby'        => 'title',
+                                'order'          => 'ASC',
+                                'tax_query'      => [[
+                                    'taxonomy' => 'category',
+                                    'field'    => 'slug',
+                                    'terms'    => array_keys($itinerary_tabs),
+                                    'operator' => 'IN',
+                                ]],
+                            ]);
+
+                            while ($act_query->have_posts()) {
+                                $act_query->the_post();
+                                $act_id    = get_the_ID();
+                                $act_terms = wp_get_post_terms($act_id, 'category', ['fields' => 'slugs']);
+                                $activities_data[] = [
+                                    'id'    => $act_id,
+                                    'image' => get_the_post_thumbnail_url($act_id, 'large'),
+                                    'title' => get_the_title(),
+                                    'cats'  => is_wp_error($act_terms) ? [] : $act_terms,
+                                ];
+                            }
+                            wp_reset_postdata();
+                            // Solo mostrar tabs que tengan al menos una actividad
+                            $used_slugs = [];
+                            foreach ($activities_data as $act) {
+                                foreach ($act['cats'] as $s) { $used_slugs[$s] = true; }
+                            }
+                            $itinerary_tabs = array_filter($itinerary_tabs, fn($slug) => isset($used_slugs[$slug]), ARRAY_FILTER_USE_KEY);
+                        }
+                        ?>
+                        <?php if (!empty($activities_data)): ?>
+                            <div id="activities" class="scroll-mt-32 mb-20" data-aos="fade-up"
+                                x-data="{ activeTab: 'all' }">
                                 <div
                                     class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-6 overflow-hidden">
                                     <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp"
@@ -652,9 +795,33 @@ $selected_activities = array_filter($selected_activities);
 
                                 <!-- Slider Wrapper -->
                                 <div class="embla-activities relative -mx-6 md:mx-0">
-                                    <!-- Section Title & Navigation -->
-                                    <div class="flex items-center justify-end mb-8">
-                                        <div class="flex gap-6">
+                                    <!-- Category Tabs + Navigation -->
+                                    <div class="flex items-center justify-between gap-4 mb-8">
+
+                                        <!-- Tabs: always show when itinerary has tour days -->
+                                        <?php if (!empty($itinerary_tabs)): ?>
+                                        <div class="flex items-center gap-5 overflow-x-auto no-scrollbar pb-1">
+                                            <button
+                                                @click="activeTab = 'all'; window.filterActivities($refs.activitiesSlider, 'all')"
+                                                :class="activeTab === 'all' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
+                                                class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
+                                                All
+                                            </button>
+                                            <?php foreach ($itinerary_tabs as $slug => $label): ?>
+                                            <button
+                                                @click="activeTab = '<?php echo esc_js($slug); ?>'; window.filterActivities($refs.activitiesSlider, '<?php echo esc_js($slug); ?>')"
+                                                :class="activeTab === '<?php echo esc_attr($slug); ?>' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
+                                                class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
+                                                <?php echo esc_html($label); ?>
+                                            </button>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <?php else: ?>
+                                        <div></div>
+                                        <?php endif; ?>
+
+                                        <!-- Prev / Next -->
+                                        <div class="flex gap-6 shrink-0">
                                             <button
                                                 class="embla__prev outline-none text-[#bd7a4e] hover:text-dark transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-8 h-8"
@@ -674,18 +841,22 @@ $selected_activities = array_filter($selected_activities);
                                         </div>
                                     </div>
 
+                                    <!-- Loader overlay (shown while filter transitions) -->
+                                    <div class="activities-loader absolute inset-x-0 top-0 bottom-8 z-10 flex items-center justify-center bg-cream/80 opacity-0 pointer-events-none transition-opacity duration-200 rounded-xl">
+                                        <div class="w-9 h-9 border-2 border-[#bd7a4e] border-t-transparent rounded-full animate-spin"></div>
+                                    </div>
+
                                     <!-- Viewport Embla -->
-                                    <div class="embla overflow-hidden cursor-grab active:cursor-grabbing pb-8">
+                                    <div class="embla overflow-hidden cursor-grab active:cursor-grabbing pb-8"
+                                        x-ref="activitiesSlider">
                                         <div class="embla__container flex flex-row -ml-6 md:-ml-8">
-                                            <?php foreach ($selected_activities as $activity_post):
-                                                $act_id = is_object($activity_post) ? $activity_post->ID : $activity_post;
-                                                $act_image = get_the_post_thumbnail_url($act_id, 'large');
-                                            ?>
+                                            <?php foreach ($activities_data as $act): ?>
                                                 <div
-                                                    class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8">
+                                                    class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8"
+                                                    data-category="<?php echo esc_attr(implode(' ', $act['cats'])); ?>">
                                                     <?php get_template_part('template-parts/components/card-activity', null, [
-                                                        'image' => $act_image,
-                                                        'title' => get_the_title($act_id),
+                                                        'image' => $act['image'],
+                                                        'title' => $act['title'],
                                                     ]); ?>
                                                 </div>
                                             <?php endforeach; ?>
@@ -896,30 +1067,32 @@ $selected_activities = array_filter($selected_activities);
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
                 <?php
                 $related_query = new WP_Query([
-                    'post_type'      => 'journey',
+                    'post_type' => 'journey',
                     'posts_per_page' => 3,
-                    'post__not_in'   => [get_the_ID()],
-                    'orderby'        => 'rand',
+                    'post__not_in' => [get_the_ID()],
+                    'orderby' => 'rand',
                 ]);
                 $r_index = 0;
-                while ($related_query->have_posts()) : $related_query->the_post();
-                    $r_features     = get_field('features');
-                    $r_information  = get_field('information');
-                    $r_days_val     = (int) ($r_information['days'] ?? 0);
-                    $r_price_val    = $r_features['price'] ?? '';
-                ?>
+                while ($related_query->have_posts()):
+                    $related_query->the_post();
+                    $r_features = get_field('features');
+                    $r_information = get_field('information');
+                    $r_days_val = (int) ($r_information['days'] ?? 0);
+                    $r_price_val = $r_features['price'] ?? '';
+                    ?>
                     <?php get_template_part('template-parts/components/card-itinerary', null, [
-                        'image'        => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_template_directory_uri() . '/assets/images/intense_01.webp',
-                        'title'        => get_the_title(),
-                        'price'        => $r_price_val ? 'USD ' . number_format($r_price_val) : '',
-                        'duration'     => $r_days_val ? $r_days_val . ' Days' : '',
-                        'post_id'      => get_the_ID(),
-                        'link'         => get_permalink(),
-                        'link_text'    => 'Explore itinerary',
-                        'aos_delay'    => ($r_index % 3) * 100,
-                        'badges'       => get_field('badges') ?: [],
+                        'image' => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_template_directory_uri() . '/assets/images/intense_01.webp',
+                        'title' => get_the_title(),
+                        'price' => $r_price_val ? 'USD ' . number_format($r_price_val) : '',
+                        'duration' => $r_days_val ? $r_days_val . ' Days' : '',
+                        'post_id' => get_the_ID(),
+                        'link' => get_permalink(),
+                        'link_text' => 'Explore itinerary',
+                        'aos_delay' => ($r_index % 3) * 100,
+                        'badges' => get_field('badges') ?: [],
                     ]); ?>
-                <?php $r_index++; endwhile; wp_reset_postdata(); ?>
+                    <?php $r_index++; endwhile;
+                wp_reset_postdata(); ?>
             </div>
         </div>
     </section>
@@ -974,7 +1147,9 @@ $selected_activities = array_filter($selected_activities);
 
                         <!-- Date & Trip Length Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }" x-data="{ dateFocused: false }" @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
+                            <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }"
+                                x-data="{ dateFocused: false }"
+                                @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
                                     x-show="!dateFocused && !formData.startDate">
                                     <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
@@ -984,8 +1159,7 @@ $selected_activities = array_filter($selected_activities);
                                         </path>
                                     </svg>
                                 </div>
-                                <input type="text"
-                                    x-ref="startDateInput"
+                                <input type="text" x-ref="startDateInput"
                                     @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
                                     @blur="if(!$el.value) $el.type='text'; dateFocused = false"
                                     @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
@@ -1212,7 +1386,7 @@ $selected_activities = array_filter($selected_activities);
 
                     <?php
                     $faqs_global = get_field('faqs', 'option');
-                    $faqs        = $faqs_global['list_of_questions'] ?? [];
+                    $faqs = $faqs_global['list_of_questions'] ?? [];
                     ?>
 
                     <ul class="divide-y divide-neutral-gray/50">
@@ -1248,7 +1422,8 @@ $selected_activities = array_filter($selected_activities);
                                     x-transition:leave="transition ease-in duration-200"
                                     x-transition:leave-start="opacity-100 translate-y-0"
                                     x-transition:leave-end="opacity-0 -translate-y-2" class="pb-5 pr-12">
-                                    <div class="font-body text-sm text-dark/60 leading-relaxed [&_a]:text-primary [&_a]:underline [&_a:hover]:text-dark [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-2 [&_b]:font-bold [&_strong]:font-bold [&_p]:mb-2 last:[&_p]:mb-0">
+                                    <div
+                                        class="font-body text-sm text-dark/60 leading-relaxed [&_a]:text-primary [&_a]:underline [&_a:hover]:text-dark [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-2 [&_b]:font-bold [&_strong]:font-bold [&_p]:mb-2 last:[&_p]:mb-0">
                                         <?php echo wp_kses_post($faq['response']); ?>
                                     </div>
                                 </div>
