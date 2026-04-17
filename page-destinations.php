@@ -48,7 +48,7 @@ get_header();
     <?php endif; ?>
 
     <!-- C. Destinations -->
-    <section class="pb-16 bg-cream overflow-hidden">
+    <section class="pb-32 bg-cream overflow-hidden">
         <div class="container-site">
 
             <!-- Header -->

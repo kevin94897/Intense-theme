@@ -34,19 +34,24 @@
                             </svg>
                             <span class="md:block hidden"><?php echo esc_html(get_theme_mod('contact_phone_text', '1 800 670 9510 Toll Free (US, CAN)')); ?></span>
                         </a>
-                        <a href="https://wa.me/<?php echo esc_attr(get_theme_mod('contact_whatsapp', '51994008833')); ?>" target="_blank" rel="noopener noreferrer" class="pr-5 pl-5 hover:text-primary transition-colors flex items-center gap-2">
+                        <?php 
+                            $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+                            $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+                        ?>
+
+                        <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        class="pr-5 pl-5 hover:text-primary transition-colors flex items-center gap-2">
+                        
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0_2868_782)">
                                     <path d="M3 21L4.65 17.2C3.38766 15.4081 2.82267 13.217 3.06104 11.0381C3.29942 8.85918 4.32479 6.84214 5.94471 5.36552C7.56463 3.8889 9.66775 3.05421 11.8594 3.0181C14.051 2.98198 16.1805 3.74693 17.8482 5.16937C19.5159 6.59181 20.6071 8.57398 20.9172 10.7439C21.2272 12.9138 20.7347 15.1222 19.5321 16.9548C18.3295 18.7873 16.4994 20.118 14.3854 20.6971C12.2713 21.2762 10.0186 21.0639 8.05 20.1L3 21Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
                                     <path d="M9 10C9 10.1326 9.05268 10.2598 9.14645 10.3536C9.24021 10.4473 9.36739 10.5 9.5 10.5C9.63261 10.5 9.75979 10.4473 9.85355 10.3536C9.94732 10.2598 10 10.1326 10 10V9C10 8.86739 9.94732 8.74021 9.85355 8.64645C9.75979 8.55268 9.63261 8.5 9.5 8.5C9.36739 8.5 9.24021 8.55268 9.14645 8.64645C9.05268 8.74021 9 8.86739 9 9V10ZM9 10C9 11.3261 9.52678 12.5979 10.4645 13.5355C11.4021 14.4732 12.6739 15 14 15M14 15H15C15.1326 15 15.2598 14.9473 15.3536 14.8536C15.4473 14.7598 15.5 14.6326 15.5 14.5C15.5 14.3674 15.4473 14.2402 15.3536 14.1464C15.2598 14.0527 15.1326 14 15 14H14C13.8674 14 13.7402 14.0527 13.6464 14.1464C13.5527 14.2402 13.5 14.3674 13.5 14.5C13.5 14.6326 13.5527 14.7598 13.6464 14.8536C13.7402 14.9473 13.8674 15 14 15Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
                                 </g>
-                                <defs>
-                                    <clipPath id="clip0_2868_782">
-                                        <rect width="24" height="24" fill="currentColor" />
-                                    </clipPath>
-                                </defs>
                             </svg>
-                            <span class="md:block hidden">+<?php echo esc_html(get_theme_mod('contact_whatsapp', '51994008833')); ?></span>
+
+                            <span class="md:block hidden">+<?php echo esc_html($raw_whatsapp); ?></span>
                         </a>
                         <a href="mailto:<?php echo esc_attr(get_theme_mod('contact_email', 'sales@intenseperu.com')); ?>" class="hover:text-primary transition-colors flex items-center gap-2 pl-5">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -419,7 +424,7 @@
                     <!-- Listas — más compactas en xl -->
                     <div class="w-28 xl:w-32 2xl:w-44 shrink-0">
                         <h3 class="font-heading text-dark text-base xl:text-lg mb-3 xl:mb-4">Grand discovery</h3>
-                        <ul class="flex flex-col gap-1 xl:gap-2.5" id="mega-grand-list">
+                        <ul class="flex flex-col gap-1 xl:gap-2.5 leading-relaxed" id="mega-grand-list">
                             <li><span class="text-dark/30 text-xs xl:text-sm">Loading…</span></li>
                         </ul>
                     </div>

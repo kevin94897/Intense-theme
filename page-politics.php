@@ -51,9 +51,11 @@ $processed_content = preg_replace_callback(
         <h1 class="heading-2 max-w-3xl mx-auto md:text-6xl text-4xl">
             <?php the_title(); ?>
         </h1>
-        <p class="mt-8 text-dark max-w-4xl mx-auto font-light">
-            The use of the website (the “Website”) is subject to the terms and conditions stated herein. Use of the Website constitutes an agreement by you (the “Client”) that your use is governed by these terms and conditions. In addition, when using particular Intense Peru S.A.C. (the “Company”) services, you will be subject to any guidelines or rules applicable to such services that may be posted from time to time.
-        </p>
+        <?php if (!is_page('sustainability')) : ?>
+            <p class="mt-8 text-dark max-w-4xl mx-auto font-light">
+                The use of the website (the “Website”) is subject to the terms and conditions stated herein. Use of the Website constitutes an agreement by you (the “Client”) that your use is governed by these terms and conditions. In addition, when using particular Intense Peru S.A.C. (the “Company”) services, you will be subject to any guidelines or rules applicable to such services that may be posted from time to time.
+            </p>
+        <?php endif; ?>
     </section>
 
     <!-- ── Two-column layout ────────────────────────────────────────── -->

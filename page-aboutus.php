@@ -115,7 +115,7 @@ $alt_msg      = $alternative_txt['message'] ?? '';
                     <!-- Left: Photo -->
                     <div class="relative" data-aos="fade-right">
                         <?php if (!empty($story_img)) : ?>
-                            <div class="rounded-2xl overflow-hidden shadow-xl">
+                            <div class="rounded-lg overflow-hidden shadow-xl">
                                 <img src="<?php echo esc_url($story_img['url']); ?>"
                                     alt="<?php echo esc_attr($story_img['alt'] ?: $story_title); ?>"
                                     class="w-full h-full object-cover">
@@ -178,20 +178,20 @@ $alt_msg      = $alternative_txt['message'] ?? '';
                                 class="w-full h-auto rounded-lg shadow-xl object-cover aspect-[4/3]">
                         <?php endif; ?>
                     </div>
-                    <div data-aos="fade-left">
+                    <div data-aos="fade-left" class="space-y-12">
                         <?php if (!empty($motiv_list)) : ?>
                             <?php foreach ($motiv_list as $purpose) : ?>
                                 <div class="mb-12">
                                     <?php if (!empty($purpose['purpose_title'])) : ?>
-                                        <h2 class="font-heading text-4xl md:text-5xl font-medium mb-6">
+                                        <h2 class="font-heading text-3xl md:text-4xl font-medium mb-6">
                                             <?php echo esc_html($purpose['purpose_title']); ?>
                                         </h2>
                                     <?php endif; ?>
                                     <?php if (!empty($purpose['purpose_description'])) : ?>
                                         <div class="space-y-6">
-                                            <div class="font-body text-cream/80 font-light">
+                                            <p class="font-body text-cream/80 font-light">
                                                 <?php echo apply_filters('the_content', $purpose['purpose_description']); ?>
-                                            </div>
+                                            </p>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -212,7 +212,7 @@ $alt_msg      = $alternative_txt['message'] ?? '';
                     <!-- Left: Photo -->
                     <div class="relative" data-aos="fade-right">
                         <?php if (!empty($alt_img)) : ?>
-                            <div class="rounded-2xl overflow-hidden shadow-xl">
+                            <div class="rounded-lg overflow-hidden shadow-xl">
                                 <img src="<?php echo esc_url($alt_img['url']); ?>"
                                     alt="<?php echo esc_attr($alt_img['alt'] ?: $alt_title); ?>"
                                     class="w-full h-full object-cover">

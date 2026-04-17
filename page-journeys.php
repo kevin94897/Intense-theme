@@ -64,7 +64,7 @@ get_header();
             </div>
 
             <!-- Grid of Itineraries -->
-            <div id="journey-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-left">
+            <div id="journey-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-left relative min-h-[300px] transition-opacity duration-300">
                 <?php
                 $args = [
                     'post_type' => 'journey',
@@ -144,7 +144,6 @@ get_header();
     document.addEventListener('DOMContentLoaded', function() {
 
         const filterBtns = document.querySelectorAll('#journey-filters .filter-btn');
-        const cards = document.querySelectorAll('#journey-grid .journey-card');
 
         // Map filter slugs → day ranges
         const filterRanges = {
@@ -156,23 +155,43 @@ get_header();
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', function() {
+                const grid = document.getElementById('journey-grid');
+                grid.classList.add('opacity-50', 'pointer-events-none');
+                
+                let loader = document.getElementById('filter-loader');
+                if (!loader) {
+                    loader = document.createElement('div');
+                    loader.id = 'filter-loader';
+                    loader.innerHTML = '<div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>';
+                    loader.className = 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10';
+                    grid.appendChild(loader);
+                }
+                loader.style.display = 'block';
 
-                // Update active styles
-                filterBtns.forEach(b => {
-                    b.classList.remove('active', 'border-b-2', 'border-dark', 'text-dark');
-                    b.classList.add('text-neutral-gray');
-                });
-                this.classList.add('active', 'border-b-2', 'border-dark', 'text-dark');
-                this.classList.remove('text-neutral-gray');
+                setTimeout(() => {
+                    // Update active styles
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'border-b-2', 'border-dark', 'text-dark');
+                        b.classList.add('text-neutral-gray');
+                    });
+                    this.classList.add('active', 'border-b-2', 'border-dark', 'text-dark');
+                    this.classList.remove('text-neutral-gray');
 
-                const filter = this.dataset.filter;
-                const [min, max] = filterRanges[filter] ?? [0, Infinity];
+                    const filter = this.dataset.filter;
+                    const [min, max] = filterRanges[filter] ?? [0, Infinity];
 
-                cards.forEach(card => {
-                    const days = parseInt(card.dataset.days, 10) || 0;
-                    const show = days >= min && days <= max;
-                    card.style.display = show ? '' : 'none';
-                });
+                    // Refresh the list of cards so it includes newly loaded items
+                    const cards = document.querySelectorAll('#journey-grid .journey-card, #journey-grid .journey-card-item');
+
+                    cards.forEach(card => {
+                        const days = parseInt(card.dataset.days, 10) || 0;
+                        const show = days >= min && days <= max;
+                        card.style.display = show ? '' : 'none';
+                    });
+
+                    grid.classList.remove('opacity-50', 'pointer-events-none');
+                    loader.style.display = 'none';
+                }, 400); // 400ms simulate loading time for smoothness
             });
         });
 

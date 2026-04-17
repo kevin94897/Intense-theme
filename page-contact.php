@@ -158,7 +158,7 @@ $image_faq = get_field('image_faq');
 
                 <!-- Left: Photo -->
                 <div class="relative" data-aos="fade-right">
-                    <div class="rounded-2xl overflow-hidden shadow-xl aspect-4/3 md:aspect-auto md:h-full">
+                    <div class="rounded-lg overflow-hidden shadow-xl aspect-4/3 md:aspect-auto md:h-full">
                         <?php if (!empty($image_faq)): ?>
                             <img
                                 src="<?php echo esc_url($image_faq['url']); ?>"
@@ -267,7 +267,7 @@ $image_faq = get_field('image_faq');
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
-            class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-auto px-10 pt-10 pb-10 text-center relative">
+            class="bg-white rounded-lg shadow-2xl w-full max-w-sm mx-auto px-10 pt-10 pb-10 text-center relative">
 
             <!-- × close -->
             <button @click="show = false"

@@ -44,10 +44,10 @@ while (have_posts()) : the_post();
         <!-- ═══════════════════════════════════════
          HERO BANNER
     ═══════════════════════════════════════ -->
-        <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20" data-aos="fade-in">
+        <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20 overflow-hidden" data-aos="fade-in">
 
             <!-- Background: featured image or fallback -->
-            <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 z-0 overflow-hidden">
                 <?php if ($featured_img) : ?>
                     <img src="<?php echo esc_url($featured_img); ?>"
                         alt="<?php the_title_attribute(); ?>"
@@ -64,13 +64,13 @@ while (have_posts()) : the_post();
             <!-- Content -->
             <div class="container-site relative z-10 text-center px-4">
 
-                <?php if ($primary_cat) : ?>
+                <!-- <?php if ($primary_cat) : ?>
                     <a href="<?php echo add_query_arg('category_name', $primary_cat->slug, get_post_type_archive_link('post')); ?>"
                         class="inline-block mb-5 text-xs font-body font-semibold tracking-widest uppercase text-white border border-white px-4 py-1.5 rounded-full hover:bg-white hover:text-dark transition-all duration-300"
                         data-aos="fade-up" data-aos-delay="50">
                         <?php echo esc_html($primary_cat->name); ?>
                     </a>
-                <?php endif; ?>
+                <?php endif; ?> -->
 
                 <h1 class="font-heading text-white text-4xl md:text-[56px] lg:text-[64px] leading-tight md:leading-[1.15] mb-6 max-w-4xl mx-auto"
                     data-aos="fade-up" data-aos-delay="100">

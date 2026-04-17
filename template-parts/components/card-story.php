@@ -15,7 +15,7 @@ $link        = $args['link']        ?? '#';
 $aos_delay   = $args['aos_delay']   ?? 0;
 ?>
 
-<article class="group relative flex flex-col gap-4 h-full" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($aos_delay); ?>">
+<article class="group relative flex flex-col gap-2 h-full" data-aos="fade-up" data-aos-delay="<?php echo esc_attr($aos_delay); ?>">
     <!-- Image -->
     <?php if ($image) : ?>
         <div class="relative overflow-hidden aspect-[4/3] w-full mb-2">
@@ -33,7 +33,7 @@ $aos_delay   = $args['aos_delay']   ?? 0;
     <?php endif; ?>
 
     <!-- Meta footer -->
-    <div class="mt-auto pt-4 flex items-center justify-between text-neutral-gray text-sm font-body w-full">
+    <div class="mt-auto pt-2 flex items-center justify-between text-neutral-gray text-sm font-body w-full">
         <div class="flex items-center gap-4">
             <!-- Read Time -->
             <?php if ($read_time) : ?>

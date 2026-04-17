@@ -64,110 +64,124 @@ get_header();
 
                     <!-- Header -->
                     <div class="flex flex-col items-start gap-4 mb-14" data-aos="fade-up">
-                        <h2 class="font-heading text-4xl md:text-5xl text-dark max-w-xl text-left" data-aos="fade-up" data-aos-delay="100">
-                            Itineraries that Feature
+                        <h2 class="font-heading text-4xl md:text-5xl text-dark text-left" data-aos="fade-up" data-aos-delay="100">
+                            <span class="mb-2 block">Itineraries that Feature</span>
                             <?php the_title(); ?>
                         </h2>
                     </div>
 
-                    <!--
-                    LAYOUT:
-                    Row 1 → 1 card FULL WIDTH — tall
-                    Row 2 → 2 cards EQUAL WIDTH — medium height
-                    We loop through selected itineraries and follow this pattern.
-                -->
-                    <div class="flex flex-col gap-3">
+                    <?php
+                    $count = count($itineraries);
+                    // Layout map: 'class' for desktop, 'mobile_h' for mobile height
+                    $layout_map = [
+                        1 => [
+                            0 => ['class' => 'md:col-span-4 md:row-span-2 md:min-h-[500px]', 'mobile_h' => 'h-[400px]']
+                        ],
+                        2 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]']
+                        ],
+                        3 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            2 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]']
+                        ],
+                        4 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            2 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            3 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]']
+                        ],
+                        5 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            2 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            3 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            4 => ['class' => 'md:col-span-4 md:row-span-1', 'mobile_h' => 'h-[250px]']
+                        ],
+                        6 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            2 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            3 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            4 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            5 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]']
+                        ]
+                    ];
+
+                    // Fallback for more than 6 items: simple rows
+                    $current_layout = $layout_map[$count] ?? null;
+                    ?>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 md:auto-rows-[300px]">
 
                         <?php foreach ($itineraries as $index => $itinerary) :
-                            $itinerary_id = $itinerary->ID;
+                            $itinerary_id    = $itinerary->ID;
                             $itinerary_title = get_the_title($itinerary_id);
-                            $itinerary_link = get_permalink($itinerary_id);
-                            
-                            // Get Background Hero Image from Journey's ACF data, fallback to post thumbnail
+                            $itinerary_link  = get_permalink($itinerary_id);
+
+                            // Layout classes
+                            if ($current_layout && isset($current_layout[$index])) {
+                                $item_classes = $current_layout[$index]['class'];
+                                $mobile_h     = $current_layout[$index]['mobile_h'];
+                            } else {
+                                // Default for N > 6
+                                $item_classes = 'md:col-span-2 lg:col-span-4 md:row-span-1'; // Adjusted to fit 4-col base
+                                if ($count > 6) {
+                                    $item_classes = ($index % 3 === 0) ? 'md:col-span-2' : 'md:col-span-1';
+                                }
+                                $mobile_h = 'h-[300px]';
+                            }
+
+                            // Image & Tags logic
                             $itinerary_info = get_field('information', $itinerary_id);
                             $itinerary_hero_img = $itinerary_info['background_hero_image'] ?? null;
-                            $itinerary_image = $itinerary_hero_img 
-                                ? (is_array($itinerary_hero_img) ? $itinerary_hero_img['url'] : $itinerary_hero_img) 
+                            $itinerary_image = $itinerary_hero_img
+                                ? (is_array($itinerary_hero_img) ? $itinerary_hero_img['url'] : $itinerary_hero_img)
                                 : get_the_post_thumbnail_url($itinerary_id, 'large');
-                                
-                            $itinerary_destination = get_the_title(); // Current destination
 
-                            if ($index === 0) : // First one is tall and full width
+                            if (function_exists('ito_get_ordered_tags')) {
+                                $itinerary_tags = ito_get_ordered_tags($itinerary_id);
+                                $tags_string = !empty($itinerary_tags) ? implode(', ', array_column($itinerary_tags, 'name')) : '';
+                            } else {
+                                $tags_string = '';
+                            }
                         ?>
-                                <!-- ── ROW 1: Full-width tall card ── -->
-                                <div class="dest-card group relative overflow-hidden w-full cursor-pointer"
-                                    style="height: clamp(280px, 50vw, 580px);"
-                                    data-aos="fade-up" data-aos-delay="200"
-                                    onclick="window.location.href='<?php echo esc_url($itinerary_link); ?>'">
-                                    <?php if ($itinerary_image) : ?>
-                                        <img src="<?php echo esc_url($itinerary_image); ?>"
-                                            alt="<?php echo esc_attr($itinerary_title); ?>"
-                                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                                    <?php endif; ?>
-                                    <div class="absolute inset-0 bg-black/25 group-hover:bg-black/45 transition-colors duration-500"></div>
-                                    <div class="absolute inset-x-0 bottom-0 p-6 md:p-10 z-10">
-                                        <h3 class="font-heading text-white text-2xl md:text-4xl font-medium drop-shadow mb-2">
-                                            <?php echo esc_html($itinerary_title); ?>
-                                        </h3>
-                                        <?php if (function_exists('ito_get_ordered_tags')) :
-                                            $itinerary_tags = ito_get_ordered_tags($itinerary_id);
-                                            if (!empty($itinerary_tags)) : ?>
-                                        <p class="text-white text-sm font-body mb-4 max-w-[350px]">
-                                            <?php echo esc_html(implode(', ', array_column($itinerary_tags, 'name'))); ?>
+                            <div class="dest-card group relative overflow-hidden w-full cursor-pointer <?php echo $item_classes; ?> <?php echo $mobile_h; ?> md:h-auto"
+                                data-aos="fade-up" data-aos-delay="<?php echo 100 + ($index * 100); ?>"
+                                onclick="window.location.href='<?php echo esc_url($itinerary_link); ?>'">
+
+                                <?php if ($itinerary_image) : ?>
+                                    <img src="<?php echo esc_url($itinerary_image); ?>"
+                                        alt="<?php echo esc_attr($itinerary_title); ?>"
+                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110">
+                                <?php endif; ?>
+
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+
+                                <div class="absolute inset-x-0 bottom-0 p-6 md:p-8 z-10 transform transition-transform duration-500 group-hover:-translate-y-2">
+                                    <h3 class="font-heading text-white text-xl md:text-3xl font-medium drop-shadow-lg mb-2 leading-tight">
+                                        <?php echo esc_html($itinerary_title); ?>
+                                    </h3>
+
+                                    <?php if (!empty($tags_string)) : ?>
+                                        <p class="text-white/80 text-xs md:text-sm font-body mb-5 line-clamp-2 max-w-[400px]">
+                                            <?php echo esc_html($tags_string); ?>
                                         </p>
-                                        <?php endif; endif; ?>
-                                        <div>
-                                            <?php get_template_part('template-parts/components/btn-outline', null, [
-                                                'text'        => 'View Itinerary',
-                                                'href'        => $itinerary_link,
-                                                'color'       => 'light',
-                                                'class_extra' => 'text-xs md:text-sm'
-                                            ]); ?>
-                                        </div>
+                                    <?php endif; ?>
+
+                                    <div class="opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                                        <?php get_template_part('template-parts/components/btn-outline', null, [
+                                            'text'        => 'View Itinerary',
+                                            'href'        => $itinerary_link,
+                                            'color'       => 'light',
+                                            'class_extra' => 'text-[10px] md:text-xs py-2 px-4'
+                                        ]); ?>
                                     </div>
                                 </div>
-
-                                <?php if (count($itineraries) > 1) : ?>
-                                    <div class="grid grid-cols-2 gap-3">
-                                    <?php endif; ?>
-
-                                <?php else : ?>
-                                    <!-- Subsequent cards ── -->
-                                    <div class="dest-card group relative overflow-hidden w-full cursor-pointer"
-                                        style="height: clamp(200px, 32vw, 400px);"
-                                        data-aos="fade-up" data-aos-delay="<?php echo 200 + ($index * 150); ?>"
-                                        onclick="window.location.href='<?php echo esc_url($itinerary_link); ?>'">
-                                        <?php if ($itinerary_image) : ?>
-                                            <img src="<?php echo esc_url($itinerary_image); ?>"
-                                                alt="<?php echo esc_attr($itinerary_title); ?>"
-                                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                                        <?php endif; ?>
-                                        <div class="absolute inset-0 bg-black/25 group-hover:bg-black/45 transition-colors duration-500"></div>
-                                        <div class="absolute inset-x-0 bottom-0 p-4 md:p-8 z-10">
-                                            <h3 class="font-heading text-white text-lg md:text-3xl font-medium drop-shadow mb-2">
-                                                <?php echo esc_html($itinerary_title); ?>
-                                            </h3>
-                                            <p class="text-white text-sm font-body mb-4 max-w-[350px]">
-                                            <?php echo esc_html(implode(', ', array_column($itinerary_tags, 'name'))); ?>
-                                        </p>
-                                            <div>
-                                                <?php get_template_part('template-parts/components/btn-outline', null, [
-                                                    'text'        => 'View Itinerary',
-                                                    'href'        => $itinerary_link,
-                                                    'color'       => 'light',
-                                                    'class_extra' => 'text-xs md:text-sm'
-                                                ]); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                            <?php endif;
-                        endforeach;
-
-                        if (count($itineraries) > 1) : ?>
-                                    </div><!-- /grid row 2 -->
-                        <?php endif; ?>
-
-                    </div><!-- /flex col -->
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
 
                 </div>
             </section>

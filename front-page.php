@@ -41,7 +41,7 @@ $banner_hero             = get_field('banner_hero')             ?: [];
 $message_home            = get_field('message_home')            ?: '';
 $signature_destinations  = get_field('signature_destinations')  ?: [];
 $motivation              = get_field('motivation')              ?: [];
-$gallery_group           = get_field('gallery')                 ?: [];
+$journey_spark           = get_field('journey_spark')           ?: [];
 
 $hero_btn1               = $banner_hero['button_1']    ?? [];
 $hero_btn2               = $banner_hero['button_2']    ?? [];
@@ -59,8 +59,8 @@ $motivation_title        = $motivation['title']            ?? '';
 $motivation_image        = $motivation['image']            ?? [];
 $list_of_purposes        = $motivation['list_of_purposes'] ?? [];
 
-$gallery_title           = $gallery_group['title']  ?? '';
-$gallery_photos          = $gallery_group['photos'] ?? [];
+$spark_title             = $journey_spark['title']  ?? '';
+$spark_journeys          = $journey_spark['journeys'] ?? [];
 
 // ── ACF: Download options page ───────────────────────────────────────────────
 $travel_guides           = get_field('travel_guides', 'option') ?: [];
@@ -98,6 +98,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     <?php get_template_part('template-parts/components/btn-primary', null, [
                         'text' => $hero_btn1['title'] ?? 'Explore itineraries',
                         'href' => $hero_btn1['url']   ?? '#',
+                        'class_extra' => 'w-[180px] md:w-auto',
                     ]); ?>
                 <?php endif; ?>
                 <?php if (!empty($hero_btn2)) : ?>
@@ -105,6 +106,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                         'text'  => $hero_btn2['title'] ?? 'Design my trip',
                         'href'  => $hero_btn2['url']   ?? '#',
                         'color' => 'light',
+                        'class_extra' => 'w-[180px] md:w-auto',
                     ]); ?>
                 <?php endif; ?>
             </div>
@@ -209,7 +211,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12" data-aos="fade-up" data-aos-delay="100">
                         Authentic Itineraries</h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-left">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 text-left">
                         <?php foreach ($journey_posts as $jidx => $journey_post) :
                             $j_id          = $journey_post->ID;
                             $j_title       = get_the_title($j_id);
@@ -286,42 +288,22 @@ $download_button         = $travel_guides['download_button'] ?? [];
         </div>
     </section>
 
-    <!-- E. Gallery -->
-    <?php
-    // Build gallery images array for the lightbox
-    $gallery_lightbox_images = [];
-    if (!empty($gallery_photos)) :
-        $photos_for_lb = array_slice($gallery_photos, 0, 8);
-        foreach ($photos_for_lb as $glb_photo) :
-            $gallery_lightbox_images[] = [
-                'src' => $glb_photo['url'],
-                'thumb' => $glb_photo['sizes']['large'] ?? $glb_photo['url'],
-                'alt' => $glb_photo['alt'] ?? 'Gallery Image',
-            ];
-        endforeach;
-    endif;
-    $gallery_lb_json = wp_json_encode($gallery_lightbox_images);
-    ?>
-    <section
-        x-data="galleryLightbox(<?php echo esc_attr($gallery_lb_json); ?>)"
-        @keydown.escape.window="closeModal()"
-        @keydown.arrow-left.window="prev()"
-        @keydown.arrow-right.window="next()"
-        class="py-20 bg-cream">
+    <!-- E. Journey Spark (Formerly Gallery) -->
+    <section class="py-20 bg-cream">
 
         <div class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-12 mb-10">
             <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
                 class="mx-auto md:mb-10">
-            <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit" data-aos="fade-up">
-                <?php echo esc_html($gallery_title ?: 'Need a journey spark?'); ?>
+            <h2 class="font-heading text-4xl md:text-5xl text-dark md:mb-10 min-w-fit" data-aos="fade-up">
+                <?php echo esc_html($spark_title ?: 'Need a journey spark?'); ?>
             </h2>
             <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp" alt=""
                 class="mx-auto mb-10 hidden md:block">
         </div>
 
         <div class="container-site text-center">
-            <?php if (!empty($gallery_photos)) :
-                $photos      = array_slice($gallery_photos, 0, 8);
+            <?php if (!empty($spark_journeys)) :
+                $journeys_items = array_slice($spark_journeys, 0, 8);
                 $col_heights = [
                     [['h' => '55%'], ['h' => '45%']],
                     [['h' => '45%'], ['h' => '55%']],
@@ -333,134 +315,48 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     <?php for ($col = 0; $col < 4; $col++) : ?>
                         <div class="flex flex-col gap-2 h-full w-full">
                             <?php for ($row = 0; $row < 2; $row++) :
-                                $photo_idx = ($col * 2) + $row;
-                                if (!isset($photos[$photo_idx])) continue;
-                                $photo = $photos[$photo_idx];
-                                $h     = $col_heights[$col][$row]['h'];
+                                $j_idx = ($col * 2) + $row;
+                                if (!isset($journeys_items[$j_idx])) continue;
+                                $item      = $journeys_items[$j_idx];
+                                $img       = $item['journey_image'] ?? [];
+                                $img_url   = !empty($img['sizes']['large']) ? $img['sizes']['large'] : (!empty($img['url']) ? $img['url'] : '');
+                                $title     = $item['journey_title'] ?? '';
+                                $btn       = $item['journey__button'] ?? [];
+                                $btn_url   = $btn['url'] ?? '#';
+                                $btn_title = $btn['title'] ?? 'Explore';
+                                $h         = $col_heights[$col][$row]['h'];
                             ?>
-                                <button
-                                    type="button"
-                                    @click="openModal(<?php echo $photo_idx; ?>)"
-                                    class="gallery-item block w-full relative group overflow-hidden rounded-sm cursor-zoom-in"
+                                <div class="gallery-item block w-full relative group overflow-hidden rounded-sm cursor-pointer"
                                     style="height: calc(<?php echo $h; ?> - 0.5rem);"
                                     data-aos="fade-up"
-                                    data-aos-delay="<?php echo ($col * 150) + ($row * 100); ?>"
-                                    aria-label="Ver imagen <?php echo esc_attr($photo['alt'] ?? 'Gallery Image'); ?>">
-                                    <img src="<?php echo esc_url($photo['sizes']['large'] ?? $photo['url']); ?>"
-                                        alt="<?php echo esc_attr($photo['alt'] ?? 'Gallery Image'); ?>"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                    <!-- Hover overlay -->
-                                    <span class="gallery-hover-icon absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="11" cy="11" r="8"/>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                            <line x1="11" y1="8" x2="11" y2="14"/>
-                                            <line x1="8" y1="11" x2="14" y2="11"/>
-                                        </svg>
-                                    </span>
-                                </button>
+                                    data-aos-delay="<?php echo ($col * 150) + ($row * 100); ?>">
+                                    <img src="<?php echo esc_url($img_url); ?>"
+                                        alt="<?php echo esc_attr($title); ?>"
+                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                    
+                                    <!-- Hover Overlay -->
+                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                                    
+                                    <!-- Hover Content -->
+                                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-left opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-10 w-[calc(100%-2rem)]">
+                                        <h3 class="font-heading text-white text-xl md:text-2xl font-medium mb-3">
+                                            <?php echo esc_html($title); ?>
+                                        </h3>
+                                        <?php if (!empty($btn_url)) : ?>
+                                            <?php get_template_part('template-parts/components/btn-outline', null, [
+                                                'text'        => $btn_title,
+                                                'class_extra' => 'text-xs md:text-sm',
+                                                'href'        => $btn_url,
+                                                'color'       => 'light',
+                                            ]); ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             <?php endfor; ?>
                         </div>
                     <?php endfor; ?>
                 </div>
             <?php endif; ?>
-        </div>
-
-        <!-- ═══════════════════════════════════════════
-             GALLERY LIGHTBOX MODAL
-        ═══════════════════════════════════════════ -->
-        <div
-            x-show="isOpen"
-            x-cloak
-            @click.self="closeModal()"
-            class="gallery-lightbox-overlay"
-            x-transition:enter="transition ease-out duration-250"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Visor de imagen">
-
-            <!-- Modal shell -->
-            <div class="gallery-lightbox-shell"
-                x-transition:enter="transition ease-out duration-250"
-                x-transition:enter-start="opacity-0 scale-95"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-90">
-
-
-                <!-- Close button (floating) -->
-                <button
-                    type="button"
-                    @click="closeModal()"
-                    class="gallery-lightbox-close"
-                    aria-label="Cerrar">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
-
-
-                <!-- Image area (pinch-to-zoom container) -->
-                <div class="gallery-lightbox-img-wrap"
-                    x-ref="zoomWrap"
-                    @touchstart.passive="onTouchStart($event)"
-                    @touchmove.passive="onTouchMove($event)"
-                    @touchend.passive="onTouchEnd($event)"
-                    @dblclick="toggleZoom()">
-
-                    <img
-                        x-ref="lightboxImg"
-                        :src="images[currentIndex]?.src"
-                        :alt="images[currentIndex]?.alt"
-                        class="gallery-lightbox-img"
-                        :style="{ transform: `scale(${zoomScale}) translate(${panX}px, ${panY}px)`, cursor: zoomScale > 1 ? 'grab' : 'default' }"
-                        draggable="false">
-                </div>
-
-                <!-- Footer bar: caption + counter -->
-                <div class="gallery-lightbox-footer">
-                    <p class="gallery-lightbox-caption" x-text="images[currentIndex]?.alt" x-show="images[currentIndex]?.alt"></p>
-                    <span class="gallery-lightbox-counter" x-text="(currentIndex + 1) + ' / ' + images.length"></span>
-                </div>
-
-
-                <!-- Navigation: Prev -->
-                <button
-                    type="button"
-                    @click="prev()"
-                    x-show="images.length > 1"
-                    class="gallery-lightbox-nav gallery-lightbox-nav--prev"
-                    aria-label="Imagen anterior">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"/>
-                    </svg>
-                </button>
-
-                <!-- Navigation: Next -->
-                <button
-                    type="button"
-                    @click="next()"
-                    x-show="images.length > 1"
-                    class="gallery-lightbox-nav gallery-lightbox-nav--next"
-                    aria-label="Siguiente imagen">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                </button>
-
-                <!-- Mobile zoom hint (shows briefly on first open) -->
-                <div class="gallery-lightbox-zoom-hint" x-show="showZoomHint" x-transition>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3H7m3 0h3"/></svg>
-                    Pellizca para hacer zoom
-                </div>
-            </div>
         </div>
     </section>
 
@@ -542,7 +438,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
     </section>
 
     <!-- I. Travel Guides Download -->
-    <section class="md:py-20 py-12">
+    <section class="md:py-20 py-12 mb-12">
         <div class="container-site">
             <div class="flex flex-col-reverse md:flex-row items-center gap-12">
                 <!-- Image -->
@@ -699,144 +595,6 @@ $download_button         = $travel_guides['download_button'] ?? [];
     </div>
 
     <script>
-        /* ─── Gallery Lightbox ─────────────────────────────────────────── */
-        function galleryLightbox(images) {
-            return {
-                images: images || [],
-                isOpen: false,
-                currentIndex: 0,
-
-                // Zoom / Pan state
-                zoomScale: 1,
-                panX: 0,
-                panY: 0,
-                minZoom: 1,
-                maxZoom: 4,
-
-                // Touch tracking
-                _touches: [],
-                _startDist: 0,
-                _startScale: 1,
-                _startPanX: 0,
-                _startPanY: 0,
-                _midX: 0,
-                _midY: 0,
-                _isPanning: false,
-                _panStartX: 0,
-                _panStartY: 0,
-
-                // UI hint
-                showZoomHint: false,
-                _hintShown: false,
-
-                openModal(index) {
-                    this.currentIndex = index;
-                    this.resetZoom();
-                    this.isOpen = true;
-                    document.body.style.overflow = 'hidden';
-                    if (!this._hintShown && window.matchMedia('(pointer: coarse)').matches) {
-                        this.showZoomHint = true;
-                        this._hintShown = true;
-                        setTimeout(() => { this.showZoomHint = false; }, 2800);
-                    }
-                },
-
-                closeModal() {
-                    this.isOpen = false;
-                    document.body.style.overflow = '';
-                    this.resetZoom();
-                },
-
-                prev() {
-                    if (!this.isOpen) return;
-                    this.resetZoom();
-                    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
-                },
-
-                next() {
-                    if (!this.isOpen) return;
-                    this.resetZoom();
-                    this.currentIndex = (this.currentIndex + 1) % this.images.length;
-                },
-
-                resetZoom() {
-                    this.zoomScale = 1;
-                    this.panX = 0;
-                    this.panY = 0;
-                },
-
-                toggleZoom() {
-                    if (this.zoomScale > 1) {
-                        this.resetZoom();
-                    } else {
-                        this.zoomScale = 2.5;
-                    }
-                },
-
-                /* ── Touch handlers ── */
-                onTouchStart(e) {
-                    this._touches = Array.from(e.touches);
-                    if (this._touches.length === 2) {
-                        // Pinch start
-                        this._startDist = this._getDist(this._touches[0], this._touches[1]);
-                        this._startScale = this.zoomScale;
-                        const rect = this.$refs.zoomWrap.getBoundingClientRect();
-                        this._midX = ((this._touches[0].clientX + this._touches[1].clientX) / 2) - rect.left;
-                        this._midY = ((this._touches[0].clientY + this._touches[1].clientY) / 2) - rect.top;
-                        this._isPanning = false;
-                    } else if (this._touches.length === 1 && this.zoomScale > 1) {
-                        // Pan start (only when zoomed)
-                        this._isPanning = true;
-                        this._panStartX = this._touches[0].clientX - this.panX;
-                        this._panStartY = this._touches[0].clientY - this.panY;
-                    } else {
-                        this._isPanning = false;
-                    }
-                },
-
-                onTouchMove(e) {
-                    const touches = Array.from(e.touches);
-                    if (touches.length === 2) {
-                        // Pinch zoom
-                        const dist = this._getDist(touches[0], touches[1]);
-                        let newScale = this._startScale * (dist / this._startDist);
-                        newScale = Math.min(Math.max(newScale, this.minZoom), this.maxZoom);
-                        this.zoomScale = newScale;
-                        if (newScale <= 1) { this.panX = 0; this.panY = 0; }
-                    } else if (touches.length === 1 && this._isPanning && this.zoomScale > 1) {
-                        // Pan
-                        const maxPan = this._getMaxPan();
-                        let nx = touches[0].clientX - this._panStartX;
-                        let ny = touches[0].clientY - this._panStartY;
-                        this.panX = Math.min(Math.max(nx, -maxPan.x), maxPan.x);
-                        this.panY = Math.min(Math.max(ny, -maxPan.y), maxPan.y);
-                    }
-                },
-
-                onTouchEnd(e) {
-                    if (Array.from(e.touches).length === 0) {
-                        this._isPanning = false;
-                        if (this.zoomScale < 1.05) this.resetZoom();
-                    }
-                    this._touches = Array.from(e.touches);
-                },
-
-                _getDist(t1, t2) {
-                    return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-                },
-
-                _getMaxPan() {
-                    const wrap = this.$refs.zoomWrap;
-                    if (!wrap) return { x: 200, y: 200 };
-                    const { width, height } = wrap.getBoundingClientRect();
-                    return {
-                        x: (width  * (this.zoomScale - 1)) / 2,
-                        y: (height * (this.zoomScale - 1)) / 2,
-                    };
-                },
-            };
-        }
-
         /* ─── Brochure Modal ───────────────────────────────────────────── */
         function brochureModal() {
             return {

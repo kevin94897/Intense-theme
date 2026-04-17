@@ -55,8 +55,8 @@ function intense_nerd_scripts()
   $is_dev = defined('VITE_DEV') && VITE_DEV;
 
   if ($is_dev) {
-    echo '<script type="module" src="http://localhost:5173/@vite/client"></script>' . "\n";
-    echo '<script type="module" src="http://localhost:5173/src/main.js"></script>' . "\n";
+    echo '<script type="module" src="http://localhost:5174/@vite/client"></script>' . "\n";
+    echo '<script type="module" src="http://localhost:5174/src/main.js"></script>' . "\n";
     return;
   }
 
@@ -347,7 +347,7 @@ function intense_mega_journeys()
       return '<li><span class="text-dark/30 text-sm italic">—</span></li>';
     $out = '';
     foreach ($items as $p) {
-      $out .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="lg:text-sm text-xs font-body text-dark/70 hover:text-primary leading-none transition-colors underline-offset-2 hover:underline">' . esc_html($p->post_title) . '</a></li>';
+      $out .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-xs lg:text-sm font-body text-dark/70 hover:text-primary leading-none transition-colors underline-offset-2 hover:underline">' . esc_html($p->post_title) . '</a></li>';
     }
     return $out;
   };
@@ -358,7 +358,7 @@ function intense_mega_journeys()
       $img = get_the_post_thumbnail_url($p->ID, 'full');
       $out .= '<div class="w-full shrink-0">';
       $out .= $img
-        ? '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-3 relative group"><div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden group-hover:opacity-90 transition-opacity" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>'
+        ? '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-3 relative group"><div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat relative overflow-hidden group-hover:opacity-90 transition-opacity" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>'
         : '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2"><div class="w-full h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden"></div></a>';
       $out .= '<a href="' . esc_url(get_permalink($p)) . '" class="text-xs font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline line-clamp-2 leading-snug">' . esc_html($p->post_title) . '</a>';
       $out .= '</div>';
@@ -429,7 +429,7 @@ function intense_mega_blog()
     $img = get_the_post_thumbnail_url($p->ID, 'full');
     $cards_html .= '<div>';
     $cards_html .= $img
-      ? '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-3 relative group"><div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat rounded-lg relative overflow-hidden group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>'
+      ? '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-3 relative group"><div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat relative overflow-hidden group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>'
       : '<a href="' . esc_url(get_permalink($p)) . '" class="block mb-2"><div class="w-full h-[300px] shrink-0 bg-dark/10 rounded-lg relative overflow-hidden"></div></a>';
     $cards_html .= '<a href="' . esc_url(get_permalink($p)) . '" class="text-xs font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline line-clamp-2 leading-snug">' . esc_html($p->post_title) . '</a>';
     $cards_html .= '</div>';

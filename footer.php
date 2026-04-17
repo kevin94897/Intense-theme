@@ -9,7 +9,8 @@
             <?php
             $phone = get_theme_mod('contact_phone', '18006709510');
             $phone_text = get_theme_mod('contact_phone_text', '1 800 670 9510 Toll Free (US, CAN)');
-            $whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+            $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+            $whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
             $email = get_theme_mod('contact_email', 'sales@intenseperu.com');
             ?>
 

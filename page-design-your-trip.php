@@ -361,7 +361,7 @@ get_header();
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
             @click.outside="open = false"
-            class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-auto p-10 text-center relative">
+            class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto p-10 text-center relative">
 
             <!-- Close -->
             <button @click="open = false"
@@ -410,7 +410,7 @@ get_header();
     <!-- Alpine.js bookingForm component uses src/modules/bookingForm.js -->
 
     <!-- FAQ Section -->
-    <section class="py-16 bg-cream border-t border-neutral-gray">
+    <section class="py-16 bg-cream">
         <div class="container-site max-w-6xl mx-auto px-4">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
 

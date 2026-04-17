@@ -27,10 +27,26 @@ $link = $args['link'] ?? '#';
 $link_text = $args['link_text'] ?? 'Explore itineraries';
 $aos_delay = $args['aos_delay'] ?? 0;
 $badges = $args['badges'] ?? [];
+$days = $args['days'] ?? '';
+
+// Obtenemos los días desde el argumento, o intentamos extraer del duration o el título
+if (empty($days)) {
+    if (preg_match('/(\d+)\s*(?:Day|Days|D[íi]as?)/i', $duration, $m)) {
+        $days = $m[1];
+    } elseif (preg_match('/(\d+)\s*(?:Day|Days|D[íi]as?)/i', $title, $m)) {
+        $days = $m[1];
+    } else {
+        $days = 0;
+    }
+}
 ?>
 
-<article class="flex flex-col group w-full h-full" data-aos="fade-up"
-    data-aos-delay="<?php echo esc_attr($aos_delay); ?>">
+<article class="flex flex-col group w-full h-full journey-card-item" data-aos="fade-up"
+    data-aos-delay="<?php echo esc_attr($aos_delay); ?>" data-days="<?php echo esc_attr($days); ?>">
+    
+    <!-- Hidden days for JS usage if needed -->
+    <span class="hidden itinerary-hidden-days" data-val="<?php echo esc_attr($days); ?>"><?php echo esc_html($days); ?></span>
+
     <!-- Image Wrapper -->
     <div class="relative w-full aspect-[4/5] overflow-hidden mb-6 rounded-sm">
         <?php if ($image): ?>

@@ -65,7 +65,7 @@ if (empty($team_members_data)) {
 
             <!-- Group Photo -->
             <div class="team-photo-wrap relative" data-aos="fade-right">
-                <div class="team-photo-frame overflow-hidden rounded-2xl aspect-[3/4] lg:aspect-auto lg:h-[560px]">
+                <div class="team-photo-frame overflow-hidden rounded-lg aspect-[3/4] lg:aspect-auto lg:h-[560px]">
                     <img
                         src="<?php echo esc_url($group_photo_url); ?>"
                         alt="<?php echo esc_attr($title); ?>"
@@ -144,9 +144,9 @@ if (empty($team_members_data)) {
 function intense_nerd_team_card(string $name, string $role, string $img): string
 {
     ob_start(); ?>
-    <div class="team-card group relative overflow-hidden rounded-xl cursor-pointer select-none">
+    <div class="team-card group relative overflow-hidden rounded-lg cursor-pointer select-none">
         <!-- Foto -->
-        <div class="team-card__img overflow-hidden rounded-xl aspect-[3/4]">
+        <div class="team-card__img overflow-hidden rounded-lg aspect-[3/4]">
             <img
                 src="<?php echo esc_url($img); ?>"
                 alt="<?php echo esc_attr($name); ?>"

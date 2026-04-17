@@ -34,9 +34,9 @@ export default defineConfig(({ command }) => ({
     manifest: true, // genera dist/.vite/manifest.json
   },
   server: {
-    port: 5173,
+    port: 5174,
     strictPort: true,
     cors: true,
-    origin: 'http://localhost:5173', // Resuelve rutas relativas a assets (fuentes/imagenes) en dev mode
+    origin: 'http://localhost:5174', // Resuelve rutas relativas a assets (fuentes/imagenes) en dev mode
   },
 }))
