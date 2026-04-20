@@ -7,9 +7,10 @@
  *
  * @package intense-nerd-theme
  */
-$numero = intense_nerd_whatsapp_number();
+$raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+$clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
 ?>
-<a href="https://wa.me/<?php echo esc_attr($numero); ?>"
+<a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="<?php esc_attr_e('Contactar por WhatsApp', 'intense-nerd-theme'); ?>"

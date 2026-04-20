@@ -52,8 +52,8 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
         'post_type'      => 'hotel',
         'post_status'    => 'publish',
         'posts_per_page' => -1,
-        'orderby'        => 'title',
-        'order'          => 'ASC',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
         'tax_query'      => [[
             'taxonomy' => 'category',
             'field'    => 'slug',
@@ -111,8 +111,8 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
         'post_type'      => 'activity',
         'post_status'    => 'publish',
         'posts_per_page' => -1,
-        'orderby'        => 'title',
-        'order'          => 'ASC',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
         'tax_query'      => [[
             'taxonomy' => 'category',
             'field'    => 'slug',
@@ -300,10 +300,10 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                 <div class="embla journey-gallery-embla overflow-hidden cursor-grab active:cursor-grabbing">
                     <div class="embla__container flex">
                         <?php foreach ($journey_gallery as $img): ?>
-                            <div class="embla__slide flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_33.333%] min-w-0">
+                            <div class="embla__slide flex-[0_0_70%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] min-w-0">
                                 <div class="relative">
                                     <img src="<?php echo esc_url($img['url']); ?>" alt="<?php echo esc_attr($img['alt']); ?>"
-                                        class="w-full h-[250px] object-cover">
+                                        class="w-full h-[200px] object-cover">
                                     <!-- <div class="absolute inset-0 bg-primary/20"></div> -->
                                     <?php if (!empty($img['caption'])): ?>
                                         <p class="font-body text-sm font-light text-dark mt-3 px-2 text-left">
@@ -325,7 +325,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-18 items-start">
 
                     <!-- Left: Sticky Navigation -->
-                    <aside class="hidden md:block lg:col-span-4 md:sticky md:top-32" data-aos="fade-right">
+                    <aside class="hidden md:block lg:col-span-4 lg:sticky lg:top-32" data-aos="fade-right">
                         <nav class="mb-8 font-body text-dark text-sm md:text-base">
                             <ul>
 
@@ -354,7 +354,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
-                                            Included / no included
+                                            Included / not included
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -428,11 +428,24 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             'class_extra' => 'w-full',
                         ]); ?>
 
+                         <?php 
+                            $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+                            $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+                        ?>
+
                         <div class="text-center mt-6 text-[12px] font-body">
-                            <p class="mb-1">Do you need help? contact us?</p>
-                            <p class="font-medium text-dark mb-3">+51 994 008 833</p>
+                            <p class="mb-1">Do you need help? Contact Us</p>
+                            <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                class="pr-5 pl-5 hover:text-primary transition-colors justify-center flex items-center gap-2">
+                                <span class="md:block hidden">+<?php echo esc_html($raw_whatsapp); ?></span>
+                            </a>
                             <div class="flex items-center justify-center gap-3">
-                                <a href="#" aria-label="WhatsApp"
+                                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    aria-label="WhatsApp"
                                     class="text-neutral-gray hover:text-green-500 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none">
@@ -451,7 +464,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         </defs>
                                     </svg>
                                 </a>
-                                <a href="#" aria-label="Email" class="hover:text-dark transition-colors">
+                                <a href="mailto:<?php echo get_theme_mod('contact_email', 'sales@intenseperu.com'); ?>" aria-label="Email" class="hover:text-dark transition-colors">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -465,7 +478,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                     </aside>
 
                     <!-- Right: Content -->
-                    <div class="lg:col-span-8">
+                    <div class="lg:col-span-8 bg-cream">
 
                         <!-- Itinerary Accordion -->
                         <?php if ($itinerary_group && !empty($itinerary_group['list_of_tours'])):
@@ -700,8 +713,9 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
                         <!-- Hotels -->
                         <?php if (!empty($hotels_data)): ?>
+                            <?php $first_hotel_tab = array_key_first($hotel_tabs) ?? 'all'; ?>
                             <div id="hotels" class="scroll-mt-32 mb-20" data-aos="fade-up"
-                                x-data="{ activeTab: 'all', visibleCount: 3, catCounts: {} }"
+                                x-data="{ activeTab: '<?php echo esc_js($first_hotel_tab); ?>', visibleCount: 3, catCounts: {} }"
                                 x-init="catCounts = JSON.parse($el.dataset.catCounts)"
                                 data-cat-counts='<?php echo wp_json_encode($hotel_cat_counts); ?>'>
 
@@ -712,12 +726,12 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 <!-- Category Tabs -->
                                 <?php if (!empty($hotel_tabs)): ?>
                                 <div class="flex items-center gap-5 overflow-x-auto no-scrollbar pb-1 mb-10">
-                                    <button
+                                    <!-- <button
                                         @click="activeTab = 'all'; visibleCount = 3"
                                         :class="activeTab === 'all' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
                                         class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
                                         All
-                                    </button>
+                                    </button> -->
                                     <?php foreach ($hotel_tabs as $slug => $name): ?>
                                     <button
                                         @click="activeTab = '<?php echo esc_js($slug); ?>'; visibleCount = 3"
@@ -735,11 +749,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                             data-cats="<?php echo esc_attr(implode(' ', $hotel['cats'])); ?>"
                                             data-global-idx="<?php echo $global_idx; ?>"
                                             data-cat-indices='<?php echo wp_json_encode($hotel['cat_indices']); ?>'
-                                            x-show="
-                                                activeTab === 'all'
-                                                    ? <?php echo $global_idx; ?> < visibleCount
-                                                    : $el.dataset.cats.split(' ').includes(activeTab) && (JSON.parse($el.dataset.catIndices)[activeTab] ?? 999) < visibleCount
-                                            "
+                                            x-show="$el.dataset.cats.split(' ').includes(activeTab) && (JSON.parse($el.dataset.catIndices)[activeTab] ?? 999) < visibleCount"
                                             x-transition>
                                             <?php get_template_part('template-parts/components/card-hotel', null, [
                                                 'image'       => $hotel['image'],
@@ -760,7 +770,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 <div class="flex justify-center">
                                     <button
                                         @click="visibleCount += 3"
-                                        x-show="visibleCount < (activeTab === 'all' ? <?php echo count($hotels_data); ?> : (catCounts[activeTab] ?? 0))"
+                                        x-show="visibleCount < (catCounts[activeTab] ?? 0)"
                                         class="btn btn-outline-dark text-md px-20">
                                         See more
                                     </button>
@@ -770,33 +780,35 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                         <?php endif; ?>
 
                         <!-- Other Activities -->
-                        <?php if (!empty($activities_data)): ?>
+                        <?php if (!empty($activities_data)):
+                            $first_itinerary_tab = array_key_first($itinerary_tabs) ?? ''; ?>
                             <div id="activities" class="scroll-mt-32" data-aos="fade-up"
-                                x-data="{ activeTab: 'all' }">
+                                x-data="{ activeTab: '<?php echo esc_attr($first_itinerary_tab); ?>' }"
+                                x-init="$nextTick(() => window.filterActivities && window.filterActivities($refs.activitiesSlider, '<?php echo esc_attr($first_itinerary_tab); ?>'))">
                                 <div
                                     class="flex flex-col md:flex-row items-center justify-center text-center gap-4 md:gap-6 overflow-hidden">
-                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp"
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title_short.webp"
                                         alt="" class="mx-auto md:mb-10">
                                     <h2 class="font-heading text-3xl md:text-5xl text-dark md:mb-10 min-w-fit"
                                         data-aos="fade-up">Other Activities</h2>
-                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title.webp"
+                                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_decoration_title_short.webp"
                                         alt="" class="mx-auto mb-10 hidden md:block">
                                 </div>
 
                                 <!-- Slider Wrapper -->
                                 <div class="embla-activities relative -mx-6 md:mx-0">
                                     <!-- Category Tabs + Navigation -->
-                                    <div class="flex items-center justify-between gap-4 mb-8">
+                                    <div class="flex items-center justify-between gap-4 mb-8 px-4 md:px-0">
 
                                         <!-- Tabs: always show when itinerary has tour days -->
                                         <?php if (!empty($itinerary_tabs)): ?>
                                         <div class="flex items-center gap-5 overflow-x-auto no-scrollbar pb-1">
-                                            <button
+                                            <!-- <button
                                                 @click="activeTab = 'all'; window.filterActivities($refs.activitiesSlider, 'all')"
                                                 :class="activeTab === 'all' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
                                                 class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
                                                 All
-                                            </button>
+                                            </button> -->
                                             <?php foreach ($itinerary_tabs as $slug => $label): ?>
                                             <button
                                                 @click="activeTab = '<?php echo esc_js($slug); ?>'; window.filterActivities($refs.activitiesSlider, '<?php echo esc_js($slug); ?>')"
@@ -961,7 +973,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 </li>
                             <?php endif; ?>
 
-                            <?php if (!empty($selected_hotels)): ?>
+                            <?php if (!empty($hotels_data)): ?>
                                 <li class="border-b border-neutral-gray/20">
                                     <a href="#hotels" @click="drawerOpen = false"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
@@ -975,7 +987,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 </li>
                             <?php endif; ?>
 
-                            <?php if (!empty($selected_activities)): ?>
+                            <?php if (!empty($activities_data)): ?>
                                 <li class="border-b border-neutral-gray/20">
                                     <a href="#activities" @click="drawerOpen = false"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
@@ -1106,7 +1118,9 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
                 <!-- Right: Actually Form -->
                 <div class="lg:col-span-8" data-aos="fade-left">
-                    <form x-data="bookingForm()" @submit="submitForm" class="space-y-8 md:space-y-10">
+                    <form x-data="bookingForm()" @submit="submitForm" class="space-y-8 md:space-y-10"
+                        data-page-source="<?php echo esc_attr(get_the_title()); ?>"
+                        data-page-url="<?php echo esc_attr(get_permalink()); ?>">
                         <!-- Name Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                             <div class="input-wrapper" :class="{ 'has-error': errors.firstName }">
@@ -1144,7 +1158,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 x-data="{ dateFocused: false }"
                                 @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
-                                    x-show="!dateFocused && !formData.startDate">
+                                    x-show="!formData.startDate">
                                     <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
@@ -1236,57 +1250,68 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
                         <!-- Hotel Category Row -->
                         <div class="pt-2 input-wrapper" :class="{ 'has-error': errors.hotelCategory }">
-                            <p class="font-body text-sm text-dark mb-6">Hotel Category</p>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-6">Hotel Category</p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
                                 <!-- Boutique -->
-                                <div class="cursor-pointer group" @click="setHotelCategory('boutique')">
-                                    <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'boutique' ? 'text-dark font-medium' : 'text-dark'">Boutique</span>
-                                    <div class="flex justify-center gap-1.5 transition-colors"
-                                        :class="formData.hotelCategory === 'boutique' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
-                                        <template x-for="i in 5"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <button type="button" @click="setHotelCategory('boutique')"
+                                    class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer border transition-all duration-200"
+                                    :class="formData.hotelCategory === 'boutique'
+                                        ? 'border-primary bg-primary/10'
+                                        : 'border-dark hover:border-dark/40'">
+                                    <span class="font-body text-sm transition-colors"
+                                        :class="formData.hotelCategory === 'boutique' ? 'text-primary font-medium' : 'text-dark'">Boutique</span>
+                                    <div class="flex gap-0.5"
+                                        :class="formData.hotelCategory === 'boutique' ? 'text-primary' : 'text-neutral-gray'">
+                                        <template x-for="i in 5"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg></template>
                                     </div>
-                                </div>
+                                </button>
                                 <!-- Luxury -->
-                                <div class="cursor-pointer group" @click="setHotelCategory('luxury')">
-                                    <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'luxury' ? 'text-dark font-medium' : 'text-dark'">Luxury</span>
-                                    <div class="flex justify-center gap-1.5 transition-colors"
-                                        :class="formData.hotelCategory === 'luxury' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
-                                        <template x-for="i in 5"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <button type="button" @click="setHotelCategory('luxury')"
+                                    class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer border transition-all duration-200"
+                                    :class="formData.hotelCategory === 'luxury'
+                                        ? 'border-primary bg-primary/10'
+                                        : 'border-dark hover:border-dark/40'">
+                                    <span class="font-body text-sm transition-colors"
+                                        :class="formData.hotelCategory === 'luxury' ? 'text-primary font-medium' : 'text-dark'">Luxury</span>
+                                    <div class="flex gap-0.5"
+                                        :class="formData.hotelCategory === 'luxury' ? 'text-primary' : 'text-neutral-gray'">
+                                        <template x-for="i in 5"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg></template>
                                     </div>
-                                </div>
+                                </button>
                                 <!-- Superior -->
-                                <div class="cursor-pointer group" @click="setHotelCategory('superior')">
-                                    <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'superior' ? 'text-dark font-medium' : 'text-dark'">Superior</span>
-                                    <div class="flex justify-center gap-1.5 transition-colors"
-                                        :class="formData.hotelCategory === 'superior' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
-                                        <template x-for="i in 4"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <button type="button" @click="setHotelCategory('superior')"
+                                    class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer border transition-all duration-200"
+                                    :class="formData.hotelCategory === 'superior'
+                                        ? 'border-primary bg-primary/10'
+                                        : 'border-dark hover:border-dark/40'">
+                                    <span class="font-body text-sm transition-colors"
+                                        :class="formData.hotelCategory === 'superior' ? 'text-primary font-medium' : 'text-dark'">Superior</span>
+                                    <div class="flex gap-0.5"
+                                        :class="formData.hotelCategory === 'superior' ? 'text-primary' : 'text-neutral-gray'">
+                                        <template x-for="i in 4"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg></template>
                                     </div>
-                                </div>
+                                </button>
                                 <!-- Best Value -->
-                                <div class="cursor-pointer group" @click="setHotelCategory('value')">
-                                    <span class="block font-body text-[15px] font-light mb-3 transition-colors"
-                                        :class="formData.hotelCategory === 'value' ? 'text-dark font-medium' : 'text-dark'">Best
-                                        Value</span>
-                                    <div class="flex justify-center gap-1.5 transition-colors"
-                                        :class="formData.hotelCategory === 'value' ? 'text-dark' : 'text-neutral-gray/50 group-hover:text-dark'">
-                                        <template x-for="i in 3"><svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                <button type="button" @click="setHotelCategory('value')"
+                                    class="group flex flex-col items-center gap-2.5 px-3 py-2 rounded-md cursor-pointer border transition-all duration-200"
+                                    :class="formData.hotelCategory === 'value'
+                                        ? 'border-primary bg-primary/10'
+                                        : 'border-dark hover:border-dark/40'">
+                                    <span class="font-body text-sm transition-colors"
+                                        :class="formData.hotelCategory === 'value' ? 'text-primary font-medium' : 'text-dark'">Best Value</span>
+                                    <div class="flex gap-0.5"
+                                        :class="formData.hotelCategory === 'value' ? 'text-primary' : 'text-neutral-gray'">
+                                        <template x-for="i in 3"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg></template>
                                     </div>
-                                </div>
+                                </button>
                             </div>
                             <span x-show="errors.hotelCategory" x-text="errors.hotelCategory"
                                 class="input-error-msg"></span>
@@ -1429,6 +1454,70 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
         </div>
     </section>
 
+    <!-- ── SUCCESS MODAL ───────────────────────────────────────── -->
+    <div
+        x-data="{ open: false }"
+        x-init="window.addEventListener('ccp:quoteSuccess', () => open = true)"
+        x-show="open"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+        style="display: none;">
+
+        <div
+            x-show="open"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            @click.outside="open = false"
+            class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto p-10 text-center relative">
+
+            <!-- Close -->
+            <button @click="open = false"
+                class="absolute top-4 right-5 text-dark/30 hover:text-dark/60 transition-colors text-xl leading-none font-light">
+                ×
+            </button>
+
+            <!-- Luggage Icon -->
+            <div class="flex justify-center mb-6">
+                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="8" y="20" width="40" height="30" rx="3" stroke="#1a1a1a" stroke-width="1.8" fill="none" />
+                    <path d="M20 20V15a8 8 0 0116 0v5" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                    <line x1="28" y1="20" x2="28" y2="50" stroke="#1a1a1a" stroke-width="1.4" />
+                    <line x1="8" y1="33" x2="48" y2="33" stroke="#1a1a1a" stroke-width="1.4" />
+                    <circle cx="16" cy="51" r="2" fill="#1a1a1a" />
+                    <circle cx="40" cy="51" r="2" fill="#1a1a1a" />
+                </svg>
+            </div>
+
+            <h3 class="font-heading text-2xl md:text-3xl text-dark font-light mb-3 leading-snug">
+                Quote request<br>received!
+            </h3>
+            <p class="font-body text-sm text-dark/60 leading-relaxed mb-8 max-w-[220px] mx-auto">
+                One of our travel designers will reach out within 24 hours to tailor this itinerary for you.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="<?php echo esc_url(home_url('/')); ?>"
+                    class="px-6 py-2.5 rounded-full border border-dark/40 text-dark font-body text-sm hover:bg-dark hover:text-white transition-all duration-300">
+                    Back to Home
+                </a>
+                <a href="<?php echo esc_url(home_url('/destinations')); ?>"
+                    class="px-6 py-2.5 rounded-full bg-primary text-white font-body text-sm hover:bg-hover transition-all duration-300">
+                    Explore other journeys
+                </a>
+            </div>
+
+        </div>
+    </div>
+
 </main>
 
 <style>
@@ -1474,8 +1563,8 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
     @media (min-width: 1024px) {
         .journey-gallery-embla .embla__slide {
-            flex: 0 0 33.333%;
-            /* Desktop: 3 slides visibles */
+            flex: 0 0 25%;
+            /* Desktop: 4 slides visibles */
         }
     }
 
@@ -1483,6 +1572,15 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
     .journey-gallery-embla .embla__slide>* {
         height: 100%;
         /* Card ocupa todo el alto del slide */
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        width: 2rem;
+        height: 100%;
+        cursor: pointer;
     }
 </style>
 

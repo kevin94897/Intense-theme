@@ -418,34 +418,34 @@
             class="mega-panel absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 z-40"
             @mouseenter="cancelClose()" @mouseleave="scheduleClose()">
 
-            <div class="container-site-wide py-8 xl:py-10">
+            <div class="container-site-wide py-4 md:py-8 xl:py-10">
                 <div class="flex gap-4 xl:gap-6 2xl:gap-8">
 
                     <!-- Listas — más compactas en xl -->
                     <div class="w-28 xl:w-32 2xl:w-44 shrink-0">
                         <h3 class="font-heading text-dark text-base xl:text-lg mb-3 xl:mb-4">Grand discovery</h3>
-                        <ul class="flex flex-col gap-1 xl:gap-2.5 leading-relaxed" id="mega-grand-list">
+                        <ul class="flex flex-col gap-1 xl:gap-2.5 leading-relaxed pl-0 md:pl-2" id="mega-grand-list">
                             <li><span class="text-dark/30 text-xs xl:text-sm">Loading…</span></li>
                         </ul>
                     </div>
 
                     <div class="w-28 xl:w-32 2xl:w-44 shrink-0">
                         <h3 class="font-heading text-dark text-base xl:text-lg mb-3 xl:mb-4">Compact Journeys</h3>
-                        <ul class="flex flex-col gap-1 xl:gap-2.5" id="mega-compact-list">
+                        <ul class="flex flex-col gap-1 xl:gap-2.5 leading-relaxed pl-0 md:pl-2" id="mega-compact-list">
                             <li><span class="text-dark/30 text-xs xl:text-sm">Loading…</span></li>
                         </ul>
                     </div>
 
                     <div class="w-28 xl:w-32 2xl:w-44 shrink-0">
                         <h3 class="font-heading text-dark text-base xl:text-lg mb-3 xl:mb-4">Short Escapes</h3>
-                        <ul class="flex flex-col gap-1 xl:gap-2.5" id="mega-short-list">
+                        <ul class="flex flex-col gap-1 xl:gap-2.5 leading-relaxed pl-0 md:pl-2" id="mega-short-list">
                             <li><span class="text-dark/30 text-xs xl:text-sm">Loading…</span></li>
                         </ul>
                     </div>
 
                     <!-- Cards — siempre 3, ancho se ajusta al espacio disponible -->
                     <div class="flex-1 min-w-0 flex flex-col gap-3">
-                        <div class="flex items-center justify-end mb-1">
+                        <div class="flex items-center justify-end">
                             <a href="<?php echo esc_url(home_url('/journeys/')); ?>"
                                 class="flex items-center gap-2 text-sm font-body text-dark hover:text-primary transition-colors">
                                 See All
@@ -479,7 +479,7 @@
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="mega-panel absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 z-40"
             @mouseenter="cancelClose()" @mouseleave="scheduleClose()">
-            <div class="container-site-wide py-10">
+            <div class="container-site-wide py-4 md:py-10">
                 <div class="flex justify-end mb-6">
                     <a href="<?php echo esc_url(home_url('/destinations/')); ?>"
                         class="flex items-center gap-2 text-sm font-body text-dark hover:text-primary transition-colors">
@@ -510,7 +510,7 @@
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="mega-panel absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 z-40"
             @mouseenter="cancelClose()" @mouseleave="scheduleClose()">
-            <div class="container-site-wide py-10">
+            <div class="container-site-wide py-4 md:py-10">
                 <div class="flex gap-6 xl:gap-10">
                     <div class="w-48 xl:w-64 shrink-0">
                         <h3 class="font-heading text-dark text-lg mb-4">Featured Blogs</h3>
@@ -519,7 +519,7 @@
                         </ul>
                     </div>
                     <div class="flex-1 flex flex-col gap-3 min-w-0">
-                        <div class="flex items-center justify-end mb-1">
+                        <div class="flex items-center justify-end">
                             <a href="<?php echo esc_url(home_url('/blog/')); ?>"
                                 class="flex items-center gap-2 text-sm font-body text-dark hover:text-primary transition-colors">
                                 See All

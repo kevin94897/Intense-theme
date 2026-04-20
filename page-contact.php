@@ -6,6 +6,8 @@
 get_header(); 
 
 $image_faq = get_field('image_faq');
+$raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+$clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
 ?>
 
 <main id="primary" class="site-main bg-cream">
@@ -30,7 +32,7 @@ $image_faq = get_field('image_faq');
 
             <div class="flex flex-wrap justify-center items-center gap-2 md:gap-5 font-body body-small text-dark">
                 <p class="font-body body-small text-dark">Prefer to talk? You can call us at</p>
-                <a href="https://wa.me/<?php echo esc_attr(intense_nerd_whatsapp_number()); ?>"
+                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>"
                     target="_blank" rel="noopener"
                     class="flex items-center gap-1.5 hover:text-primary transition-colors duration-200">
                     <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -45,7 +47,7 @@ $image_faq = get_field('image_faq');
                         </defs>
                     </svg>
 
-                    +<?php echo esc_html(intense_nerd_whatsapp_number()); ?>
+                    +<?php echo get_theme_mod('contact_whatsapp', '51994008833'); ?>
                 </a>
                 <span class="text-dark hidden sm:inline">/</span>
                 <a href="tel:<?php echo esc_attr(get_theme_mod('contact_phone', '18006709510')); ?>"

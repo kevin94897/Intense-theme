@@ -103,26 +103,22 @@ while (have_posts()) : the_post();
          Sticky TOC (desktop) + Article body
     ═══════════════════════════════════════ -->
         <div class="container mx-auto px-4 py-14 md:py-20">
-            <div class="flex gap-16 items-start max-w-6xl mx-auto">
+            <div class="flex gap-16 items-center justify-center max-w-6xl mx-auto">
 
                 <!-- ── Sticky Sidebar (TOC + Share) ──────────────────────────── -->
-                <aside class="hidden lg:flex flex-col gap-8 w-56 shrink-0 sticky top-28"
+                <!-- <aside class="hidden lg:flex flex-col gap-8 w-56 shrink-0 sticky top-28"
                     data-aos="fade-right" data-aos-delay="150">
 
-                    <!-- Table of Contents (built by JS) -->
                     <div x-data="tocBuilder()" x-init="build()">
                         <p class="text-xs font-body font-semibold tracking-widest uppercase text-dark mb-4">
                             On this page
                         </p>
                         <nav id="toc-nav" class="flex flex-col gap-2">
-                            <!-- Filled by JS -->
                         </nav>
                     </div>
 
-                    <!-- Divider -->
                     <div class="h-px bg-dark/10"></div>
 
-                    <!-- Share -->
                     <div>
                         <p class="text-xs font-body font-semibold tracking-widest uppercase text-dark mb-4">
                             Share
@@ -160,7 +156,7 @@ while (have_posts()) : the_post();
                         </div>
                     </div>
 
-                </aside>
+                </aside> -->
 
                 <!-- ── Main Article ────────────────────────────────────────────── -->
                 <article id="post-<?php the_ID(); ?>"
@@ -248,7 +244,7 @@ while (have_posts()) : the_post();
 
         <!-- ── Back to Blog ──────────────────────────────────────────────────────── -->
         <div class="flex justify-center py-10" data-aos="fade-up">
-            <a href="<?php echo get_post_type_archive_link('post'); ?>"
+            <a href="<?php echo home_url('/blog'); ?>"
                 class="btn btn-outline px-8 py-3 rounded-full text-sm transition-all hover:bg-primary hover:text-cream hover:border-primary">
                 ← Back to all articles
             </a>

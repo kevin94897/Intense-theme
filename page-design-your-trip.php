@@ -60,7 +60,9 @@ get_header();
                 <form
                     x-data="bookingForm()"
                     @submit.prevent="submitForm"
-                    class="space-y-8 md:space-y-10">
+                    class="space-y-8 md:space-y-10"
+                    data-page-source="Design Your Trip"
+                    data-page-url="<?php echo esc_attr(get_permalink()); ?>">
 
                     <!-- Name Row -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
@@ -102,7 +104,7 @@ get_header();
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                         <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }" x-data="{ dateFocused: false }" @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
-                                x-show="!dateFocused && !formData.startDate">
+                                x-show="!formData.startDate">
                                 <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
@@ -512,5 +514,16 @@ get_header();
     <?php get_template_part('template-parts/home/section-testimonials'); ?>
 
 </main>
+
+<style>
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    width: 2rem;
+    height: 100%;
+    cursor: pointer;
+}
+</style>
 
 <?php get_footer(); ?>

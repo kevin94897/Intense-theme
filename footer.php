@@ -309,7 +309,7 @@
             </div>
 
             <!-- Social Links -->
-            <div class="flex items-center gap-5">
+            <!-- <div class="flex items-center gap-5">
                 <?php if (get_theme_mod('social_instagram')): ?>
                     <a href="<?php echo esc_url(get_theme_mod('social_instagram')); ?>" target="_blank" rel="noopener"
                         aria-label="Instagram" class="text-cream/60 hover:text-cream transition-colors duration-200">
@@ -340,7 +340,7 @@
                         </svg>
                     </a>
                 <?php endif; ?>
-            </div>
+            </div> -->
 
             <p class="body-small text-xs text-cream/70 text-center">
                 &copy; Intense Peru 2007 &ndash; <?php echo esc_html(date('Y')); ?> &middot; All rights reserved.

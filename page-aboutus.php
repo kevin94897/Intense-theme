@@ -188,10 +188,8 @@ $alt_msg      = $alternative_txt['message'] ?? '';
                                         </h2>
                                     <?php endif; ?>
                                     <?php if (!empty($purpose['purpose_description'])) : ?>
-                                        <div class="space-y-6">
-                                            <p class="font-body text-cream/80 font-light">
-                                                <?php echo apply_filters('the_content', $purpose['purpose_description']); ?>
-                                            </p>
+                                        <div class="space-y-6 font-body text-cream/80 font-light">
+                                            <?php echo apply_filters('the_content', $purpose['purpose_description']); ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>

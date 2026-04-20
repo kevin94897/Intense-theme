@@ -107,12 +107,6 @@ function intense_nerd_widgets_init()
 }
 add_action('widgets_init', 'intense_nerd_widgets_init');
 
-// ── Helper: Número de WhatsApp ────────────────────────────────────────────────
-function intense_nerd_whatsapp_number()
-{
-  return defined('WHATSAPP_NUMBER') ? WHATSAPP_NUMBER : '51999999999';
-}
-
 // ── Helper: Obtener imagen de portada con fallback ────────────────────────────
 function intense_nerd_get_thumbnail($post_id = null, $size = 'large')
 {
@@ -714,18 +708,20 @@ HTML;
  */
 function intense_email_booking_internal($data)
 {
-  $name = esc_html($data['first_name'] . ' ' . $data['last_name']);
-  $email = esc_html($data['email']);
-  $whatsapp = $data['whatsapp'] ? esc_html($data['whatsapp']) : '<em style="color:#776c60;">—</em>';
-  $start_date = $data['start_date'] ? esc_html($data['start_date']) : '<em style="color:#776c60;">—</em>';
+  $name        = esc_html($data['first_name'] . ' ' . $data['last_name']);
+  $email       = esc_html($data['email']);
+  $whatsapp    = $data['whatsapp'] ? esc_html($data['whatsapp']) : '<em style="color:#776c60;">—</em>';
+  $start_date  = $data['start_date'] ? esc_html($data['start_date']) : '<em style="color:#776c60;">—</em>';
   $trip_length = $data['trip_length'] ? esc_html($data['trip_length']) . ' days' : '<em style="color:#776c60;">—</em>';
-  $adults = esc_html($data['adults'] ?: '0');
-  $children = esc_html($data['children'] ?: '0');
-  $enfants = esc_html($data['enfants'] ?: '0');
-  $hotel_cat = $data['hotel_cat'] ? esc_html($data['hotel_cat']) : '<em style="color:#776c60;">—</em>';
-  $hear_about = $data['hear_about'] ? esc_html($data['hear_about']) : '<em style="color:#776c60;">—</em>';
-  $mensaje = $data['mensaje'] ? nl2br(esc_html($data['mensaje'])) : '<em style="color:#776c60;">—</em>';
-  $timestamp = current_time('d M Y · H:i');
+  $adults      = esc_html($data['adults'] ?: '0');
+  $children    = esc_html($data['children'] ?: '0');
+  $enfants     = esc_html($data['enfants'] ?: '0');
+  $hotel_cat   = $data['hotel_cat'] ? esc_html($data['hotel_cat']) : '<em style="color:#776c60;">—</em>';
+  $hear_about  = $data['hear_about'] ? esc_html($data['hear_about']) : '<em style="color:#776c60;">—</em>';
+  $mensaje     = $data['mensaje'] ? nl2br(esc_html($data['mensaje'])) : '<em style="color:#776c60;">—</em>';
+  $timestamp   = current_time('d M Y · H:i');
+  $page_source = !empty($data['page_source']) ? esc_html($data['page_source']) : '<em style="color:#776c60;">—</em>';
+  $page_url    = !empty($data['page_url']) ? '<a href="' . esc_url($data['page_url']) . '" style="color:#b76739;text-decoration:none;">' . esc_html($data['page_url']) . '</a>' : '';
 
   $rows = intense_email_header_html();
   $rows .= <<<HTML
@@ -773,6 +769,12 @@ function intense_email_booking_internal($data)
       <div style="display:inline-block;background:#fcf1eb;color:#b76739;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;margin-bottom:20px;">Trip Details</div>
 
       <table width="100%" cellpadding="0" cellspacing="0">
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Source</td>
+            <td style="font-size:14px;color:#161616;">{$page_source}{$page_url}</td>
+          </tr></table>
+        </td></tr>
         <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
           <table width="100%" cellpadding="0" cellspacing="0"><tr>
             <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Start Date</td>
@@ -985,9 +987,11 @@ function intense_handle_booking()
   $adults = sanitize_text_field($_POST['adults'] ?? '');
   $children = sanitize_text_field($_POST['children'] ?? '');
   $enfants = sanitize_text_field($_POST['enfants'] ?? '');
-  $hotel_cat = sanitize_text_field($_POST['hotelCategory'] ?? '');
-  $hear_about = sanitize_text_field($_POST['hearAboutUs'] ?? '');
-  $mensaje = sanitize_textarea_field($_POST['mensaje'] ?? '');
+  $hotel_cat   = sanitize_text_field($_POST['hotelCategory'] ?? '');
+  $hear_about  = sanitize_text_field($_POST['hearAboutUs'] ?? '');
+  $mensaje     = sanitize_textarea_field($_POST['mensaje'] ?? '');
+  $page_source = sanitize_text_field($_POST['pageSource'] ?? '');
+  $page_url    = esc_url_raw($_POST['pageUrl'] ?? '');
 
   if (!$first_name || !$email) {
     wp_send_json_error(['message' => 'Missing required fields.'], 400);
@@ -1005,7 +1009,9 @@ function intense_handle_booking()
     'enfants',
     'hotel_cat',
     'hear_about',
-    'mensaje'
+    'mensaje',
+    'page_source',
+    'page_url'
   );
 
   $html_headers = [
@@ -1014,10 +1020,11 @@ function intense_handle_booking()
   ];
 
   // 1. Email interno al equipo
-  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
+  $team_to      = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
+  $subject_src  = $page_source ? " [{$page_source}]" : '';
   $sent = wp_mail(
     $team_to,
-    "New Quote Request — {$first_name} {$last_name}",
+    "New Quote Request — {$first_name} {$last_name}{$subject_src}",
     intense_email_booking_internal($data),
     $html_headers
   );

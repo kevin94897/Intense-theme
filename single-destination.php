@@ -106,7 +106,49 @@ get_header();
                             3 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
                             4 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
                             5 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]']
-                        ]
+                        ],
+                        7 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            2 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            3 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            4 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            5 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            6 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                        ],
+                        8 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            2 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            3 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            4 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            5 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            6 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            7 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                        ],
+                        9 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            2 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            3 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            4 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            5 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            6 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            7 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            8 => ['class' => 'md:col-span-4 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                        ],
+                        10 => [
+                            0 => ['class' => 'md:col-span-2 md:row-span-2', 'mobile_h' => 'h-[400px]'],
+                            1 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            2 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            3 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            4 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            5 => ['class' => 'md:col-span-2 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            6 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            7 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            8 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                            9 => ['class' => 'md:col-span-1 md:row-span-1', 'mobile_h' => 'h-[250px]'],
+                        ],
                     ];
 
                     // Fallback for more than 6 items: simple rows

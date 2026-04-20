@@ -36,11 +36,18 @@ export default function bookingForm() {
             hotelCategory: '',
             whatsapp: '',
             hearAboutUs: '',
-            mensaje: ''
+            mensaje: '',
+            pageSource: '',
+            pageUrl: '',
         },
         errors: {},
         isSubmitting: false,
         submitSuccess: false,
+
+        init() {
+            this.formData.pageSource = this.$el.dataset.pageSource || '';
+            this.formData.pageUrl    = this.$el.dataset.pageUrl    || window.location.href;
+        },
 
         setHotelCategory(cat) {
             this.formData.hotelCategory = cat;
