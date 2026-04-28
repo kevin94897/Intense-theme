@@ -10,7 +10,7 @@ $testimonials_desc = get_field('testimonials_description', 'option') ?: 'Authent
 $testimonials_list = get_field('list_of_testimonials', 'option');
 ?>
 
-<section class="md:py-24 py-12 bg-cream border-t border-neutral-gray/20">
+<section class="md:py-24 py-12 bg-cream">
     <div class="container-site">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 md:mb-10">
             <h2 class="font-heading text-3xl md:text-5xl text-dark min-w-fit mb-4 md:mb-0" data-aos="fade-up">
@@ -31,7 +31,7 @@ $testimonials_list = get_field('list_of_testimonials', 'option');
                     <div class="embla__container flex">
                         <?php foreach ($testimonials_list as $index => $testimonial):
                             $image_url = isset($testimonial['testimony_image']['url']) && $testimonial['testimony_image']['url'] ? $testimonial['testimony_image']['url'] : get_template_directory_uri() . '/assets/images/intense_05.webp';
-                        ?>
+                            ?>
                             <?php get_template_part('template-parts/components/card-testimonial', null, [
                                 'image' => $image_url,
                                 'quote' => $testimonial['testimony'],

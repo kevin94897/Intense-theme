@@ -223,15 +223,15 @@ function load_more_journeys_handler()
       <div class="journey-card" data-days="<?php echo esc_attr($days_val); ?>">
         <?php
         get_template_part('template-parts/components/card-itinerary', null, [
-          'image'     => $image,
-          'title'     => $title,
-          'price'     => $price,
-          'duration'  => $duration,
-          'post_id'   => get_the_ID(),
-          'link'      => $link,
+          'image' => $image,
+          'title' => $title,
+          'price' => $price,
+          'duration' => $duration,
+          'post_id' => get_the_ID(),
+          'link' => $link,
           'link_text' => 'Explore itinerary',
           'aos_delay' => ($index % 3) * 100,
-          'badges'    => [],
+          'badges' => [],
         ]);
         ?>
       </div>
@@ -269,12 +269,12 @@ function theme_customize_contact_section($wp_customize)
 }
 add_action('customize_register', 'theme_customize_contact_section');
 
-add_filter('get_terms_args', function($args, $taxonomies) {
-    if (in_array('post_tag', $taxonomies)) {
-        $args['orderby'] = 'term_order';
-        $args['order'] = 'ASC';
-    }
-    return $args;
+add_filter('get_terms_args', function ($args, $taxonomies) {
+  if (in_array('post_tag', $taxonomies)) {
+    $args['orderby'] = 'term_order';
+    $args['order'] = 'ASC';
+  }
+  return $args;
 }, 10, 2);
 
 // ── Customizer: Redes Sociales ────────────────────────────────────────────────
@@ -330,9 +330,9 @@ function intense_mega_journeys()
   }
 
   $sort_by_days = fn($a, $b) => $b->_days - $a->_days;
-  usort($grand,   $sort_by_days);
+  usort($grand, $sort_by_days);
   usort($compact, $sort_by_days);
-  usort($short,   $sort_by_days);
+  usort($short, $sort_by_days);
 
   $recent = get_posts(['post_type' => 'journey', 'posts_per_page' => 3, 'orderby' => 'date', 'order' => 'DESC']);
 
@@ -708,20 +708,20 @@ HTML;
  */
 function intense_email_booking_internal($data)
 {
-  $name        = esc_html($data['first_name'] . ' ' . $data['last_name']);
-  $email       = esc_html($data['email']);
-  $whatsapp    = $data['whatsapp'] ? esc_html($data['whatsapp']) : '<em style="color:#776c60;">—</em>';
-  $start_date  = $data['start_date'] ? esc_html($data['start_date']) : '<em style="color:#776c60;">—</em>';
+  $name = esc_html($data['first_name'] . ' ' . $data['last_name']);
+  $email = esc_html($data['email']);
+  $whatsapp = $data['whatsapp'] ? esc_html($data['whatsapp']) : '<em style="color:#776c60;">—</em>';
+  $start_date = $data['start_date'] ? esc_html($data['start_date']) : '<em style="color:#776c60;">—</em>';
   $trip_length = $data['trip_length'] ? esc_html($data['trip_length']) . ' days' : '<em style="color:#776c60;">—</em>';
-  $adults      = esc_html($data['adults'] ?: '0');
-  $children    = esc_html($data['children'] ?: '0');
-  $enfants     = esc_html($data['enfants'] ?: '0');
-  $hotel_cat   = $data['hotel_cat'] ? esc_html($data['hotel_cat']) : '<em style="color:#776c60;">—</em>';
-  $hear_about  = $data['hear_about'] ? esc_html($data['hear_about']) : '<em style="color:#776c60;">—</em>';
-  $mensaje     = $data['mensaje'] ? nl2br(esc_html($data['mensaje'])) : '<em style="color:#776c60;">—</em>';
-  $timestamp   = current_time('d M Y · H:i');
+  $adults = esc_html($data['adults'] ?: '0');
+  $children = esc_html($data['children'] ?: '0');
+  $enfants = esc_html($data['enfants'] ?: '0');
+  $hotel_cat = $data['hotel_cat'] ? esc_html($data['hotel_cat']) : '<em style="color:#776c60;">—</em>';
+  $hear_about = $data['hear_about'] ? esc_html($data['hear_about']) : '<em style="color:#776c60;">—</em>';
+  $mensaje = $data['mensaje'] ? nl2br(esc_html($data['mensaje'])) : '<em style="color:#776c60;">—</em>';
+  $timestamp = current_time('d M Y · H:i');
   $page_source = !empty($data['page_source']) ? esc_html($data['page_source']) : '<em style="color:#776c60;">—</em>';
-  $page_url    = !empty($data['page_url']) ? '<a href="' . esc_url($data['page_url']) . '" style="color:#b76739;text-decoration:none;">' . esc_html($data['page_url']) . '</a>' : '';
+  $page_url = !empty($data['page_url']) ? '<a href="' . esc_url($data['page_url']) . '" style="color:#b76739;text-decoration:none;">' . esc_html($data['page_url']) . '</a>' : '';
 
   $rows = intense_email_header_html();
   $rows .= <<<HTML
@@ -987,11 +987,11 @@ function intense_handle_booking()
   $adults = sanitize_text_field($_POST['adults'] ?? '');
   $children = sanitize_text_field($_POST['children'] ?? '');
   $enfants = sanitize_text_field($_POST['enfants'] ?? '');
-  $hotel_cat   = sanitize_text_field($_POST['hotelCategory'] ?? '');
-  $hear_about  = sanitize_text_field($_POST['hearAboutUs'] ?? '');
-  $mensaje     = sanitize_textarea_field($_POST['mensaje'] ?? '');
+  $hotel_cat = sanitize_text_field($_POST['hotelCategory'] ?? '');
+  $hear_about = sanitize_text_field($_POST['hearAboutUs'] ?? '');
+  $mensaje = sanitize_textarea_field($_POST['mensaje'] ?? '');
   $page_source = sanitize_text_field($_POST['pageSource'] ?? '');
-  $page_url    = esc_url_raw($_POST['pageUrl'] ?? '');
+  $page_url = esc_url_raw($_POST['pageUrl'] ?? '');
 
   if (!$first_name || !$email) {
     wp_send_json_error(['message' => 'Missing required fields.'], 400);
@@ -1020,8 +1020,8 @@ function intense_handle_booking()
   ];
 
   // 1. Email interno al equipo
-  $team_to      = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
-  $subject_src  = $page_source ? " [{$page_source}]" : '';
+  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
+  $subject_src = $page_source ? " [{$page_source}]" : '';
   $sent = wp_mail(
     $team_to,
     "New Quote Request — {$first_name} {$last_name}{$subject_src}",
@@ -1064,6 +1064,19 @@ function intense_handle_brochure()
     'Content-Type: text/html; charset=UTF-8',
     "Reply-To: {$first_name} <{$email}>",
   ];
+
+  // 0. Guardar en base de datos como CPT
+  $post_id = wp_insert_post([
+    'post_type' => 'brochure_lead',
+    'post_title' => sprintf('%s — %s', $first_name, $email),
+    'post_status' => 'publish',
+  ]);
+
+  if ($post_id && !is_wp_error($post_id)) {
+    update_post_meta($post_id, 'first_name', $first_name);
+    update_post_meta($post_id, 'email', $email);
+    update_post_meta($post_id, 'brochure_url', $brochure);
+  }
 
   // 1. Email interno al equipo
   $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
@@ -1185,6 +1198,53 @@ HTML;
 
   return intense_email_wrap('Your Peru Travel Guide — Intense Peru', $rows);
 }
+
+// ── CPT: Brochure Leads ───────────────────────────────────────────────────────
+add_action('init', function () {
+  register_post_type('brochure_lead', [
+    'labels' => [
+      'name' => 'DB Records',
+      'singular_name' => 'DB Record',
+      'menu_name' => 'DB Records',
+    ],
+    'public' => false,
+    'show_ui' => true,
+    'show_in_menu' => true,
+    'menu_icon' => 'dashicons-download',
+    'supports' => ['title'],
+    'capability_type' => 'post',
+    'capabilities' => [
+      'create_posts' => 'do_not_allow', // Evita crear posts manualmente
+    ],
+    'map_meta_cap' => true,
+  ]);
+});
+
+add_filter('manage_brochure_lead_posts_columns', function ($columns) {
+  $new_columns = [];
+  foreach ($columns as $key => $title) {
+    if ($key === 'date') {
+      $new_columns['email'] = 'Email';
+      $new_columns['brochure'] = 'Brochure';
+    }
+    $new_columns[$key] = $title;
+  }
+  return $new_columns;
+});
+
+add_action('manage_brochure_lead_posts_custom_column', function ($column, $post_id) {
+  if ($column === 'email') {
+    echo esc_html(get_post_meta($post_id, 'email', true));
+  }
+  if ($column === 'brochure') {
+    $url = get_post_meta($post_id, 'brochure_url', true);
+    if ($url) {
+      echo '<a href="' . esc_url($url) . '" target="_blank">Ver Link</a>';
+    } else {
+      echo '—';
+    }
+  }
+}, 10, 2);
 
 // ── Gutenberg: solo en posts, Classic en el resto ─────────────────────────────
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
