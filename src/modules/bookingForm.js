@@ -6,7 +6,7 @@ const formSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email address"),
     confirmEmail: z.string().min(1, "Confirm Email is required"),
     startDate: z.string().min(1, "Start Date is required"),
-    tripLength: z.string().min(1, "Trip Length is required"),
+    tripLength: z.string().optional(),
     adults: z.string().min(1, "Adults is required"),
     children: z.string().optional(),
     enfants: z.string().optional(),
@@ -119,6 +119,18 @@ export default function bookingForm() {
 
                 this.submitSuccess = true;
                 window.dispatchEvent(new CustomEvent('ccp:quoteSuccess'));
+
+                // Reset form fields after successful submission
+                const source = this.formData.pageSource;
+                const url    = this.formData.pageUrl;
+                this.formData = {
+                    firstName: '', lastName: '', email: '', confirmEmail: '',
+                    startDate: '', tripLength: '', adults: '2', children: '0',
+                    enfants: '0', hotelCategory: '', whatsapp: '',
+                    hearAboutUs: '', mensaje: '',
+                    pageSource: source, pageUrl: url,
+                };
+                this.errors = {};
 
                 setTimeout(() => { this.submitSuccess = false; }, 5000);
             } catch (err) {

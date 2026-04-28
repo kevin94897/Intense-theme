@@ -9,7 +9,7 @@
 // ── Modo de prueba de emails ───────────────────────────────────────────────────
 // Cambia a true para redirigir todos los emails internos a $INTENSE_TEST_EMAIL.
 // Cambia a false para enviar a los correos reales del equipo.
-define('INTENSE_EMAIL_TEST_MODE', false);
+define('INTENSE_EMAIL_TEST_MODE', true);
 define('INTENSE_EMAIL_TEST_ADDRESS', 'kevin.gomez@nerd.pe');
 
 // Correos reales del equipo (se usan cuando TEST_MODE = false)
@@ -341,7 +341,7 @@ function intense_mega_journeys()
       return '<li><span class="text-dark/30 text-sm italic">—</span></li>';
     $out = '';
     foreach ($items as $p) {
-      $out .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-xs lg:text-sm font-body text-dark/70 hover:text-primary leading-none transition-colors underline-offset-2 hover:underline">' . esc_html($p->post_title) . '</a></li>';
+      $out .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-xs lg:text-sm font-body font-light text-dark/70 hover:text-primary leading-none transition-colors underline-offset-2 hover:underline">' . esc_html($p->post_title) . '</a></li>';
     }
     return $out;
   };
@@ -415,7 +415,7 @@ function intense_mega_blog()
   $list_html = $cards_html = $mobile_list = '';
 
   foreach ($list_posts as $p) {
-    $list_html .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-sm font-body text-dark/70 hover:text-primary transition-colors underline-offset-2 hover:underline leading-snug">' . esc_html($p->post_title) . '</a></li>';
+    $list_html .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-sm font-light font-body text-dark/70 hover:text-primary transition-colors underline-offset-2 hover:underline leading-snug">' . esc_html($p->post_title) . '</a></li>';
     $mobile_list .= '<li class="border-b border-dark/10"><a href="' . esc_url(get_permalink($p)) . '" class="flex py-4 font-body text-dark text-xs hover:text-primary transition-colors">' . esc_html($p->post_title) . '</a></li>';
   }
 
@@ -1245,6 +1245,174 @@ add_action('manage_brochure_lead_posts_custom_column', function ($column, $post_
     }
   }
 }, 10, 2);
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  NEWSLETTER — Template HTML
+// ══════════════════════════════════════════════════════════════════════════════
+
+function intense_email_newsletter_welcome($data)
+{
+  $first_name = esc_html($data['name'] ?: 'Traveler');
+
+  $rows = intense_email_header_html();
+  $rows .= <<<HTML
+
+  <tr>
+    <td style="background:#b76739;padding:32px 40px;text-align:center;">
+      <h1 style="color:#ffffff;font-size:24px;font-weight:normal;font-family:Georgia,serif;margin:0 0 6px;letter-spacing:0.04em;">Welcome to Intense Peru</h1>
+      <p style="color:rgba(255,255,255,0.85);font-size:13px;margin:0;line-height:1.5;">You're now part of our travel community</p>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:36px 40px;background:#ffffff;">
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 14px;">Dear <strong>{$first_name}</strong>,</p>
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 20px;">Thank you for subscribing to Intense Peru. You'll be among the first to receive <strong>curated travel inspiration</strong>, exclusive journey highlights, and insider stories from the heart of Peru.</p>
+
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+        <tr><td style="background:#fcf1eb;border-left:3px solid #b76739;padding:16px 20px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#b76739;margin-bottom:8px;">What to expect</div>
+          <div style="font-size:14px;color:#161616;line-height:1.8;">
+            · Signature journey features &amp; new itineraries<br>
+            · Destination spotlights — from Cusco to the Amazon<br>
+            · Travel tips crafted by our expert designers<br>
+            · Exclusive early access to special experiences
+          </div>
+        </td></tr>
+      </table>
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 24px;">In the meantime, explore our collection of private journeys — each one designed to reveal the real Peru at your own pace.</p>
+
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+        <tr><td align="center">
+          <a href="https://intenseperu.com/journeys" style="display:inline-block;background:#b76739;color:#ffffff;text-decoration:none;padding:13px 32px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;">Explore Journeys</a>
+        </td></tr>
+      </table>
+
+      <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="height:1px;background:#c7c7c7;padding:0;font-size:0;">&nbsp;</td></tr></table>
+      <br>
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 14px;">Ready to start planning? Reach out anytime:</p>
+
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Toll Free</td>
+            <td style="font-size:14px;color:#b76739;font-weight:600;">1 800 670 9510 <span style="color:#776c60;font-weight:normal;font-size:12px;">(US, CAN)</span></td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">WhatsApp</td>
+            <td style="font-size:14px;color:#b76739;font-weight:600;">+51 994 008 833</td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Email</td>
+            <td style="font-size:14px;color:#161616;">sales@intenseperu.com</td>
+          </tr></table>
+        </td></tr>
+      </table>
+
+    </td>
+  </tr>
+
+HTML;
+  $rows .= intense_email_footer_html();
+
+  return intense_email_wrap('Welcome to Intense Peru', $rows);
+}
+
+// ── CPT: Newsletter Leads ─────────────────────────────────────────────────────
+add_action('init', function () {
+  register_post_type('newsletter_lead', [
+    'labels' => [
+      'name' => 'Newsletter Subscribers',
+      'singular_name' => 'Newsletter Subscriber',
+      'menu_name' => 'Newsletter',
+    ],
+    'public' => false,
+    'show_ui' => true,
+    'show_in_menu' => 'edit.php?post_type=brochure_lead',
+    'supports' => ['title'],
+    'capability_type' => 'post',
+    'capabilities' => ['create_posts' => 'do_not_allow'],
+    'map_meta_cap' => true,
+  ]);
+});
+
+add_filter('manage_newsletter_lead_posts_columns', function ($columns) {
+  $new = [];
+  foreach ($columns as $key => $title) {
+    if ($key === 'date') {
+      $new['subscriber_name'] = 'Name';
+      $new['subscriber_email'] = 'Email';
+    }
+    $new[$key] = $title;
+  }
+  return $new;
+});
+
+add_action('manage_newsletter_lead_posts_custom_column', function ($column, $post_id) {
+  if ($column === 'subscriber_name')
+    echo esc_html(get_post_meta($post_id, 'subscriber_name', true));
+  if ($column === 'subscriber_email')
+    echo esc_html(get_post_meta($post_id, 'subscriber_email', true));
+}, 10, 2);
+
+// ── AJAX: Newsletter subscribe ────────────────────────────────────────────────
+add_action('wp_ajax_nopriv_newsletter_subscribe', 'intense_newsletter_subscribe');
+add_action('wp_ajax_newsletter_subscribe', 'intense_newsletter_subscribe');
+
+function intense_newsletter_subscribe()
+{
+  check_ajax_referer('intense_forms_nonce', 'nonce');
+
+  $name = sanitize_text_field(wp_unslash($_POST['name'] ?? ''));
+  $email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+
+  if (!$email || !is_email($email)) {
+    wp_send_json_error(['message' => 'Please enter a valid email.']);
+  }
+
+  // Guardar en DB
+  $post_id = wp_insert_post([
+    'post_type' => 'newsletter_lead',
+    'post_title' => $name ?: $email,
+    'post_status' => 'publish',
+  ]);
+
+  if ($post_id && !is_wp_error($post_id)) {
+    update_post_meta($post_id, 'subscriber_name', $name);
+    update_post_meta($post_id, 'subscriber_email', $email);
+  }
+
+  // Email al equipo (solo juanpablo recibe notificaciones de newsletter)
+  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : 'juanpablo@intenseperu.com';
+  $subject = 'New Newsletter Subscriber – ' . ($name ?: $email);
+  $body = '<div style="font-family:sans-serif;font-size:15px;color:#1a1a1a;max-width:560px;margin:0 auto">';
+  $body .= '<h2 style="font-size:20px;margin-bottom:16px">New Newsletter Subscriber</h2>';
+  $body .= '<table style="border-collapse:collapse;width:100%">';
+  $body .= '<tr><td style="padding:8px 0;border-bottom:1px solid #eee;width:120px;color:#666">Name</td><td style="padding:8px 0;border-bottom:1px solid #eee">' . esc_html($name) . '</td></tr>';
+  $body .= '<tr><td style="padding:8px 0;color:#666">Email</td><td style="padding:8px 0">' . esc_html($email) . '</td></tr>';
+  $body .= '</table></div>';
+
+  $sent = wp_mail($team_to, $subject, $body, ['Content-Type: text/html; charset=UTF-8']);
+
+  // Correo de bienvenida al suscriptor
+  wp_mail(
+    $email,
+    'Welcome to Intense Peru — You\'re in!',
+    intense_email_newsletter_welcome(['name' => $name, 'email' => $email]),
+    ['Content-Type: text/html; charset=UTF-8']
+  );
+
+  $sent
+    ? wp_send_json_success(['message' => 'Subscribed!'])
+    : wp_send_json_error(['message' => 'Saved, but email could not be sent.'], 500);
+}
 
 // ── Gutenberg: solo en posts, Classic en el resto ─────────────────────────────
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {

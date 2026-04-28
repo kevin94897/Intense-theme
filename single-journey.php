@@ -313,10 +313,10 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                 <div class="embla journey-gallery-embla overflow-hidden cursor-grab active:cursor-grabbing">
                     <div class="embla__container flex">
                         <?php foreach ($journey_gallery as $img): ?>
-                            <div class="embla__slide flex-[0_0_70%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] min-w-0">
+                            <div class="embla__slide min-w-0">
                                 <div class="relative">
                                     <img src="<?php echo esc_url($img['url']); ?>" alt="<?php echo esc_attr($img['alt']); ?>"
-                                        class="w-full h-[200px] object-cover">
+                                        class="w-full object-cover block">
                                     <!-- <div class="absolute inset-0 bg-primary/20"></div> -->
                                     <?php if (!empty($img['caption'])): ?>
                                         <p class="font-body text-sm font-light text-dark mt-3 px-2 text-left">
@@ -383,7 +383,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                                     fill="#161616" />
                                             </svg>
 
-                                            Price
+                                            Prices
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -549,7 +549,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                             </button>
 
                                             <div x-show="expanded" x-collapse x-cloak>
-                                                <div class="pt-8 pr-4"> <!-- Indented content -->
+                                                <div class="pt-8 pr-4 contenido-journey"> <!-- Indented content -->
                                                     <?php if (!empty($tour['itinerary_image']) && is_array($tour['itinerary_image'])): ?>
                                                         <img src="<?php echo esc_url($tour['itinerary_image']['url']); ?>"
                                                             alt="<?php echo esc_attr($tour['itinerary_image']['alt']); ?>"
@@ -980,7 +980,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                                 d="M4.37348 21V18.4868C3.32703 18.3505 2.42801 17.9838 1.67643 17.3868C0.924842 16.7897 0.366032 15.9638 0 14.9091L1.13073 14.4103C1.48274 15.3351 1.96651 16.047 2.58205 16.5458C3.1976 17.0447 4.03256 17.2941 5.08693 17.2941C6.01442 17.2941 6.86178 17.0601 7.62903 16.5922C8.39627 16.1242 8.77989 15.3699 8.77989 14.3294C8.77989 13.4505 8.49754 12.7445 7.93283 12.2115C7.36813 11.6787 6.31151 11.1605 4.76299 10.6569C3.18621 10.1484 2.07642 9.56746 1.43363 8.91419C0.79063 8.26093 0.469131 7.41012 0.469131 6.36176C0.469131 5.21356 0.903999 4.29656 1.77373 3.61076C2.64347 2.92518 3.51005 2.55459 4.37348 2.499V0H5.59358V2.499C6.4383 2.58465 7.16376 2.82182 7.76995 3.21053C8.37614 3.59944 8.87862 4.15254 9.27739 4.86984L8.19333 5.43066C7.90233 4.89846 7.50193 4.46765 6.99213 4.13824C6.48213 3.80882 5.83293 3.64412 5.04453 3.64412C4.10281 3.64412 3.30822 3.89632 2.66075 4.40074C2.01308 4.90515 1.68924 5.55882 1.68924 6.36176C1.68924 7.12044 1.95522 7.7349 2.48719 8.20513C3.01895 8.67557 4.08411 9.1665 5.68265 9.67791C7.16406 10.1531 8.25403 10.7632 8.95254 11.5083C9.65085 12.2536 10 13.1892 10 14.3152C10 15.5552 9.5691 16.5403 8.7073 17.2703C7.84529 18.0004 6.80739 18.4106 5.59358 18.501V21H4.37348Z"
                                                 fill="#161616" />
                                         </svg>
-                                        Price
+                                        Prices
                                     </a>
                                 </li>
                             <?php endif; ?>
@@ -1165,52 +1165,33 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             </div>
                         </div>
 
-                        <!-- Date & Trip Length Row -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }"
-                                x-data="{ dateFocused: false }"
-                                @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
-                                    x-show="!formData.startDate">
-                                    <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
-                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <input type="text" x-ref="startDateInput"
-                                    @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
-                                    @blur="if(!$el.value) $el.type='text'; dateFocused = false"
-                                    @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
-                                    x-model="formData.startDate" @input="validateField('startDate')"
-                                    class="input-field cursor-pointer" placeholder="Start Date">
-                                <span x-show="errors.startDate" x-text="errors.startDate"
-                                    class="input-error-msg"></span>
+                        <!-- Date Row -->
+                        <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }"
+                            x-data="{ dateFocused: false }"
+                            @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
+                            <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
+                                x-show="!formData.startDate">
+                                <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
                             </div>
-                            <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </div>
-                                <select x-model="formData.tripLength" @change="validateField('tripLength')"
-                                    class="input-field"
-                                    :class="{'text-dark/40': !formData.tripLength, 'text-dark': formData.tripLength}">
-                                    <option value="" disabled selected hidden>Trip Length</option>
-                                    <option value="1-4">1 to 4 days</option>
-                                    <option value="5-8">5 to 8 days</option>
-                                    <option value="9-14">9 to 14 days</option>
-                                </select>
-                                <span x-show="errors.tripLength" x-text="errors.tripLength"
-                                    class="input-error-msg"></span>
-                            </div>
+                            <input type="text" x-ref="startDateInput"
+                                @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
+                                @blur="if(!$el.value) $el.type='text'; dateFocused = false"
+                                @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
+                                x-model="formData.startDate" @input="validateField('startDate')"
+                                class="input-field cursor-pointer" placeholder="Start Date">
+                            <span x-show="errors.startDate" x-text="errors.startDate"
+                                class="input-error-msg"></span>
                         </div>
 
                         <!-- Passengers Row -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                            <div>
+                                <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Adults</p>
                             <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
@@ -1220,14 +1201,24 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     </svg>
                                 </div>
                                 <select x-model="formData.adults" @change="validateField('adults')" class="input-field">
-                                    <option value="0" disabled>Adults</option>
-                                    <option value="1">1 Adult</option>
-                                    <option value="2">2 Adults</option>
-                                    <option value="3">3 Adults</option>
-                                    <option value="4+">4+ Adults</option>
+                                    <option value="" disabled selected>Adults</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
                                 </select>
                                 <span x-show="errors.adults" x-text="errors.adults" class="input-error-msg"></span>
                             </div>
+                            </div>
+                            <div>
+                                <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Children &lt;12</p>
                             <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
@@ -1237,13 +1228,23 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     </svg>
                                 </div>
                                 <select x-model="formData.children" class="input-field">
-                                    <option value="0" disabled>Children</option>
-                                    <option value="none">0 Children</option>
-                                    <option value="1">1 Child</option>
-                                    <option value="2">2 Children</option>
-                                    <option value="3+">3+ Children</option>
+                                    <option value="" disabled selected>Children &lt;12</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
                                 </select>
                             </div>
+                            </div>
+                            <div>
+                                <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Infants &lt;1</p>
                             <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
@@ -1253,11 +1254,20 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     </svg>
                                 </div>
                                 <select x-model="formData.enfants" class="input-field">
-                                    <option value="0" disabled>Enfants ( &lt; 1 )</option>
-                                    <option value="none">0 Enfants</option>
-                                    <option value="1">1 Enfant</option>
-                                    <option value="2">2 Enfants</option>
+                                    <option value="" disabled selected>Infants &lt;1</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
                                 </select>
+                            </div>
                             </div>
                         </div>
 
@@ -1366,9 +1376,12 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                         </div>
 
                         <!-- Mensaje Row -->
-                        <div class="pt-4 input-wrapper">
-                            <textarea rows="2" x-model="formData.mensaje" class="input-field"
-                                placeholder="Mensaje"></textarea>
+                        <div class="pt-4">
+                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Let us know if you have any special requests or would like to personalize your experience</p>
+                            <div class="input-wrapper">
+                                <textarea rows="4" x-model="formData.mensaje" class="input-field"
+                                    placeholder="Let us know if you have any special requests or would like to personalize your experience.&#10;If you are traveling with children, kindly indicate their exact ages at the time of travel."></textarea>
+                            </div>
                         </div>
 
                         <!-- Submit Button -->
@@ -1557,34 +1570,19 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
         /* Sin gap — pegados */
     }
 
-    /* ── Slides ── */
+    /* ── Slides: ancho reducido ~60% de 574px (aspect 574×283) ── */
     .journey-gallery-embla .embla__slide {
-        flex: 0 0 100%;
-        /* Mobile: 1 slide visible */
+        flex: 0 0 auto;
+        width: min(450px, 76vw);
         min-width: 0;
-        /* Padding interno para separación visual entre cards */
-        /* padding: 0 8px; */
         box-sizing: border-box;
     }
 
-    @media (min-width: 768px) {
-        .journey-gallery-embla .embla__slide {
-            flex: 0 0 50%;
-            /* Tablet: 2 slides visibles */
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .journey-gallery-embla .embla__slide {
-            flex: 0 0 25%;
-            /* Desktop: 4 slides visibles */
-        }
-    }
-
-    /* ── Card interna (ajusta a tu estructura HTML) ── */
-    .journey-gallery-embla .embla__slide>* {
-        height: 100%;
-        /* Card ocupa todo el alto del slide */
+    .journey-gallery-embla .embla__slide img {
+        aspect-ratio: 574 / 283;
+        object-fit: cover;
+        width: 100%;
+        display: block;
     }
 
     input[type="date"]::-webkit-calendar-picker-indicator {
@@ -1594,6 +1592,10 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
         width: 2rem;
         height: 100%;
         cursor: pointer;
+    }
+
+    .contenido-journey p {
+        margin-bottom: 20px;
     }
 </style>
 

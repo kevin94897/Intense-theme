@@ -51,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 // ── Alpine.js ─────────────────────────────────────────────────────────────────
+import collapse from '@alpinejs/collapse'
+
 window.Alpine = Alpine
+Alpine.plugin(collapse)
 Alpine.data('bookingForm', bookingForm)
 Alpine.start()

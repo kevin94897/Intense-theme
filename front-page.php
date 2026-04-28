@@ -68,6 +68,7 @@ $guides_image = $travel_guides['guides_image'] ?? [];
 $guides_title = $travel_guides['title'] ?? '';
 $guides_description = $travel_guides['description'] ?? '';
 $download_button = $travel_guides['download_button'] ?? [];
+$modal_image = $travel_guides['modal_image'] ?? [];
 ?>
 
 <main id="main" class="site-main" role="main">
@@ -518,8 +519,12 @@ $download_button = $travel_guides['download_button'] ?? [];
 
             <!-- Left Image -->
             <div class="hidden md:block w-full md:w-5/12 h-64 md:h-auto relative p-5">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_donwload_brochure_img.webp"
-                    alt="Peru Travel Guide" class="w-full h-full object-cover">
+                <?php
+                $modal_img_url = is_array($modal_image) ? ($modal_image['url'] ?? '') : $modal_image;
+                $fallback_img = get_template_directory_uri() . '/assets/images/intense_donwload_brochure_img.webp';
+                ?>
+                <img src="<?php echo esc_url($modal_img_url ?: $fallback_img); ?>" alt="Peru Travel Guide"
+                    class="w-full h-full object-cover">
             </div>
 
             <!-- Right Content (Form) -->

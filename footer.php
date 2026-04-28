@@ -3,7 +3,7 @@
     <div class="container-site">
 
         <!-- Footer Top: 4 Columns -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-12 mb-0 md:mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-12 mb-0 md:mb-10">
 
             <!-- Column 1: Get in Touch with Us -->
             <?php
@@ -188,28 +188,54 @@
                         Subscribe to receive curated travel inspiration from Peru.
                     </p>
 
-                    <form class="flex flex-col gap-6 mb-8 w-full max-w-sm" action="#" method="POST">
-                        <div class="input-wrapper">
-                            <!-- Custom inline styles to enforce white border logic for the dark footer -->
-                            <input type="text" placeholder="Nombre" required
-                                class="w-full bg-transparent pb-2 text-sm outline-none transition-colors"
-                                style="border: none; border-bottom: 1px solid rgba(255,252,247,0.5); color: #fffcf7;"
-                                onfocus="this.style.borderBottom='1px solid #fffcf7'"
-                                onblur="this.style.borderBottom='1px solid rgba(255,252,247,0.5)'" />
-                        </div>
-                        <div class="input-wrapper">
-                            <input type="email" placeholder="Email" required
-                                class="w-full bg-transparent pb-2 text-sm outline-none transition-colors"
-                                style="border: none; border-bottom: 1px solid rgba(255,252,247,0.5); color: #fffcf7;"
-                                onfocus="this.style.borderBottom='1px solid #fffcf7'"
-                                onblur="this.style.borderBottom='1px solid rgba(255,252,247,0.5)'" />
-                        </div>
-                        <div>
-                            <button type="submit"
-                                class="w-full cursor-pointer btn-outline-light py-3 rounded-full text-sm font-medium transition-colors hover:bg-cream hover:text-dark">
-                                Subscribe
-                            </button>
-                        </div>
+                    <form class="flex flex-col gap-6 mb-8 w-full max-w-sm"
+                        x-data="{
+                            name: '', email: '', loading: false, done: false, error: '',
+                            submit() {
+                                if (!this.email) return;
+                                this.loading = true; this.error = '';
+                                const fd = new FormData();
+                                fd.append('action', 'newsletter_subscribe');
+                                fd.append('nonce', window.intenseAjax?.nonce || '');
+                                fd.append('name', this.name);
+                                fd.append('email', this.email);
+                                fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>', { method: 'POST', body: fd })
+                                    .then(r => r.json())
+                                    .then(d => { this.loading = false; d.success ? this.done = true : this.error = d.data?.message || 'Error, try again.'; })
+                                    .catch(() => { this.loading = false; this.error = 'Error, try again.'; });
+                            }
+                        }"
+                        @submit.prevent="submit">
+
+                        <template x-if="!done">
+                            <div class="flex flex-col gap-6">
+                                <div class="input-wrapper">
+                                    <input type="text" x-model="name" placeholder="Name"
+                                        class="w-full bg-transparent pb-2 text-sm outline-none transition-colors"
+                                        style="border:none;border-bottom:1px solid rgba(255,252,247,0.5);color:#fffcf7;"
+                                        onfocus="this.style.borderBottom='1px solid #fffcf7'"
+                                        onblur="this.style.borderBottom='1px solid rgba(255,252,247,0.5)'" />
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="email" x-model="email" placeholder="Email" required
+                                        class="w-full bg-transparent pb-2 text-sm outline-none transition-colors"
+                                        style="border:none;border-bottom:1px solid rgba(255,252,247,0.5);color:#fffcf7;"
+                                        onfocus="this.style.borderBottom='1px solid #fffcf7'"
+                                        onblur="this.style.borderBottom='1px solid rgba(255,252,247,0.5)'" />
+                                </div>
+                                <p x-show="error" x-text="error" class="text-xs text-red-300 -mt-2"></p>
+                                <button type="submit" :disabled="loading"
+                                    class="w-full cursor-pointer btn-outline-light py-3 rounded-full text-sm font-medium transition-colors hover:bg-cream hover:text-dark disabled:opacity-50">
+                                    <span x-show="!loading">Subscribe</span>
+                                    <span x-show="loading">Sending…</span>
+                                </button>
+                            </div>
+                        </template>
+
+                        <template x-if="done">
+                            <p class="text-sm text-cream/90">Thanks for subscribing! We'll be in touch.</p>
+                        </template>
+
                     </form>
 
                     <div class="flex items-center gap-4">

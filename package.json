@@ -8,6 +8,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@alpinejs/collapse": "^3.15.11",
     "alpinejs": "^3.14.0",
     "aos": "^2.3.4",
     "embla-carousel": "^8.6.0",
