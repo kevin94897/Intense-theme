@@ -38,7 +38,7 @@
                                 class="md:block hidden"><?php echo esc_html(get_theme_mod('contact_phone_text', '1 800 670 9510 Toll Free (US, CAN)')); ?></span>
                         </a>
                         <?php
-                        $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+                        $raw_whatsapp = get_theme_mod('contact_whatsapp', '51 994 008 833');
                         $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
                         ?>
 
@@ -83,8 +83,15 @@
                     aria-label="<?php esc_attr_e('Navegación principal', 'intense-nerd-theme'); ?>">
 
                     <!-- Logo -->
+                    <?php $logo_dark_url = get_theme_mod('logo_dark', ''); ?>
                     <div class="flex items-center shrink-0">
-                        <?php if (has_custom_logo()): ?>
+                        <?php if ($is_light_header && $logo_dark_url): ?>
+                            <a href="<?php echo esc_url(home_url('/')); ?>" rel="home"
+                                class="w-[140px] md:w-[120px] lg:w-[150px] block">
+                                <img src="<?php echo esc_url($logo_dark_url); ?>" alt="<?php bloginfo('name'); ?>"
+                                    class="w-full h-auto object-contain">
+                            </a>
+                        <?php elseif (has_custom_logo()): ?>
                             <div
                                 class="w-[140px] md:w-[120px] lg:w-[150px] [&_img]:w-full [&_img]:h-auto [&_img]:object-contain">
                                 <?php the_custom_logo(); ?>
@@ -183,7 +190,7 @@
                     </svg>
                 </a>
                 <span class="h-4 w-px bg-dark/20"></span>
-                <a href="https://wa.me/<?php echo esc_attr(get_theme_mod('contact_whatsapp', '51994008833')); ?>"
+                <a href="https://wa.me/<?php echo esc_attr(get_theme_mod('contact_whatsapp', '51 994 008 833')); ?>"
                     target="_blank" rel="noopener" aria-label="WhatsApp" class="hover:text-primary transition-colors">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -208,7 +215,12 @@
             <!-- Logo + CTA + X -->
             <div class="flex items-center justify-between px-5 py-4 shrink-0">
                 <div class="shrink-0">
-                    <?php if (has_custom_logo()): ?>
+                    <?php if ($logo_dark_url): ?>
+                        <a href="<?php echo esc_url(home_url('/')); ?>" rel="home" class="w-[110px] block">
+                            <img src="<?php echo esc_url($logo_dark_url); ?>" alt="<?php bloginfo('name'); ?>"
+                                class="w-full h-auto object-contain">
+                        </a>
+                    <?php elseif (has_custom_logo()): ?>
                         <div class="w-[110px] [&_img]:w-full [&_img]:h-auto [&_img]:object-contain [&_img]:brightness-0">
                             <?php the_custom_logo(); ?>
                         </div>

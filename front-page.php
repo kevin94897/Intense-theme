@@ -68,7 +68,11 @@ $guides_image = $travel_guides['guides_image'] ?? [];
 $guides_title = $travel_guides['title'] ?? '';
 $guides_description = $travel_guides['description'] ?? '';
 $download_button = $travel_guides['download_button'] ?? [];
-$modal_image = $travel_guides['modal_image'] ?? [];
+
+// ── ACF: New Modal Group (Try page first, then option) ──────────────────────
+$modal_data = get_field('modal') ?: get_field('modal', 'option') ?: [];
+$modal_image = $modal_data['modal_image'] ?? [];
+$modal_title = $modal_data['title_modal'] ?? '';
 ?>
 
 <main id="main" class="site-main" role="main">
@@ -529,9 +533,11 @@ $modal_image = $travel_guides['modal_image'] ?? [];
 
             <!-- Right Content (Form) -->
             <div class="w-full md:w-7/12 p-8 md:p-14 flex flex-col justify-center">
-                <h2 class="font-heading text-3xl md:text-4xl text-dark font-light mb-10 text-center leading-snug">
-                    Download our Peru Travel<br>Guide
-                </h2>
+                <?php if ($modal_title): ?>
+                    <h2 class="font-heading text-3xl md:text-4xl text-dark font-light mb-10 text-center leading-snug">
+                        <?php echo esc_html($modal_title); ?>
+                    </h2>
+                <?php endif; ?>
 
                 <form @submit.prevent="submitForm" class="space-y-8">
 
@@ -553,7 +559,8 @@ $modal_image = $travel_guides['modal_image'] ?? [];
                                             $first_file_url = $file_url;
                                         ?>
                                         <option value="<?php echo esc_url($file_url); ?>">
-                                            <?php echo esc_html($item['file_name']); ?></option>
+                                            <?php echo esc_html($item['file_name']); ?>
+                                        </option>
                                         <?php
                                     endif;
                                 endforeach;

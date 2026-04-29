@@ -93,7 +93,7 @@ get_header();
                         <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }"
                             x-data="{ dateFocused: false }"
                             @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
-                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Start Date</p>
+                            <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Start Date</p> -->
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
                                 x-show="!formData.startDate">
                                 <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,7 +111,7 @@ get_header();
                             <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
                         </div>
                         <div>
-                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Trip Length</p>
+                            <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Trip Length</p> -->
                             <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
@@ -153,7 +153,7 @@ get_header();
                     <!-- Passengers Row -->
                     <div class="grid grid-cols-3 gap-6 md:gap-10">
                         <div>
-                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Adults</p>
+                            <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Adults</p> -->
                             <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
@@ -162,7 +162,8 @@ get_header();
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
-                                <select x-model="formData.adults" @change="validateField('adults')" class="input-field">
+                                <select x-model="formData.adults" @change="validateField('adults')" class="input-field"
+                                    :class="formData.adults ? 'text-dark' : 'text-dark/40'">
                                     <option value="" disabled selected>Adults</option>
                                     <option value="0">0</option>
                                     <option value="1">1</option>
@@ -180,7 +181,7 @@ get_header();
                             </div>
                         </div>
                         <div>
-                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Children &lt;12</p>
+                            <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Children &lt;12</p> -->
                             <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
@@ -189,7 +190,8 @@ get_header();
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
-                                <select x-model="formData.children" class="input-field">
+                                <select x-model="formData.children" class="input-field"
+                                    :class="formData.children ? 'text-dark' : 'text-dark/40'">
                                     <option value="" disabled selected>Children &lt;12</option>
                                     <option value="0">0</option>
                                     <option value="1">1</option>
@@ -206,7 +208,7 @@ get_header();
                             </div>
                         </div>
                         <div>
-                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Infants &lt;1</p>
+                            <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Infants &lt;1</p> -->
                             <div class="input-wrapper">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
@@ -215,7 +217,8 @@ get_header();
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
-                                <select x-model="formData.enfants" class="input-field">
+                                <select x-model="formData.enfants" class="input-field"
+                                    :class="formData.children ? 'text-dark' : 'text-dark/40'">
                                     <option value="" disabled selected>Infants &lt;1</option>
                                     <option value="0">0</option>
                                     <option value="1">1</option>
@@ -354,8 +357,8 @@ get_header();
 
                     <!-- Message -->
                     <div class="pt-4">
-                        <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Let us know if you have
-                            any special requests or would like to personalize your experience</p>
+                        <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Additional comments
+                            (optional)</p>
                         <div class="input-wrapper">
                             <textarea rows="4" x-model="formData.mensaje" class="input-field"
                                 placeholder="Let us know if you have any special requests or would like to personalize your experience.&#10;If you are traveling with children, kindly indicate their exact ages at the time of travel."></textarea>

@@ -30,9 +30,9 @@ export default function bookingForm() {
             confirmEmail: '',
             startDate: '',
             tripLength: '',
-            adults: '2',
-            children: '0',
-            enfants: '0',
+            adults: '',
+            children: '',
+            enfants: '',
             hotelCategory: '',
             whatsapp: '',
             hearAboutUs: '',
@@ -125,8 +125,8 @@ export default function bookingForm() {
                 const url    = this.formData.pageUrl;
                 this.formData = {
                     firstName: '', lastName: '', email: '', confirmEmail: '',
-                    startDate: '', tripLength: '', adults: '2', children: '0',
-                    enfants: '0', hotelCategory: '', whatsapp: '',
+                    startDate: '', tripLength: '', adults: '', children: '',
+                    enfants: '', hotelCategory: '', whatsapp: '',
                     hearAboutUs: '', mensaje: '',
                     pageSource: source, pageUrl: url,
                 };

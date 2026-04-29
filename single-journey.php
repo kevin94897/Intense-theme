@@ -1171,8 +1171,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
                                 x-show="!formData.startDate">
-                                <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                     </path>
@@ -1184,90 +1183,94 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
                                 x-model="formData.startDate" @input="validateField('startDate')"
                                 class="input-field cursor-pointer" placeholder="Start Date">
-                            <span x-show="errors.startDate" x-text="errors.startDate"
-                                class="input-error-msg"></span>
+                            <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
                         </div>
 
                         <!-- Passengers Row -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                             <div>
-                                <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Adults</p>
-                            <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
+                                <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Adults</p> -->
+                                <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
+                                    <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <select x-model="formData.adults" @change="validateField('adults')"
+                                        class="input-field" :class="formData.adults ? 'text-dark' : 'text-dark/40'">
+                                        <option value="" disabled selected>Adults</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                    <span x-show="errors.adults" x-text="errors.adults" class="input-error-msg"></span>
                                 </div>
-                                <select x-model="formData.adults" @change="validateField('adults')" class="input-field">
-                                    <option value="" disabled selected>Adults</option>
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </select>
-                                <span x-show="errors.adults" x-text="errors.adults" class="input-error-msg"></span>
-                            </div>
                             </div>
                             <div>
-                                <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Children &lt;12</p>
-                            <div class="input-wrapper">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
+                                <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Children &lt;12 -->
+                                </p>
+                                <div class="input-wrapper">
+                                    <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <select x-model="formData.children" class="input-field"
+                                        :class="formData.children ? 'text-dark' : 'text-dark/40'">
+                                        <option value="" disabled selected>Children &lt;12</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
                                 </div>
-                                <select x-model="formData.children" class="input-field">
-                                    <option value="" disabled selected>Children &lt;12</option>
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </select>
-                            </div>
                             </div>
                             <div>
-                                <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Infants &lt;1</p>
-                            <div class="input-wrapper">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
+                                <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Infants &lt;1 -->
+                                </p>
+                                <div class="input-wrapper">
+                                    <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <select x-model="formData.enfants" class="input-field"
+                                        :class="formData.children ? 'text-dark' : 'text-dark/40'">
+                                        <option value="" disabled selected>Infants &lt;1</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
                                 </div>
-                                <select x-model="formData.enfants" class="input-field">
-                                    <option value="" disabled selected>Infants &lt;1</option>
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </select>
-                            </div>
                             </div>
                         </div>
 
@@ -1377,7 +1380,8 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
                         <!-- Mensaje Row -->
                         <div class="pt-4">
-                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Let us know if you have any special requests or would like to personalize your experience</p>
+                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Additional comments
+                                (optional)</p>
                             <div class="input-wrapper">
                                 <textarea rows="4" x-model="formData.mensaje" class="input-field"
                                     placeholder="Let us know if you have any special requests or would like to personalize your experience.&#10;If you are traveling with children, kindly indicate their exact ages at the time of travel."></textarea>

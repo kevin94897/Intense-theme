@@ -30,7 +30,7 @@ $blog_query = new WP_Query($args);
          HEADER
     ═══════════════════════════════════════ -->
     <section class="pt-20 pb-10 text-center px-4" data-aos="fade-down">
-        <h1 class="heading-2 max-w-3xl mx-auto md:text-6xl text-4xl">
+        <h1 class="heading-2 text-dark max-w-3xl mx-auto md:text-6xl text-4xl">
             Travel insights to inspire your<br>next journey
         </h1>
         <p class="mt-8 text-dark max-w-2xl mx-auto font-light">

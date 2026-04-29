@@ -9,7 +9,7 @@
             <?php
             $phone = get_theme_mod('contact_phone', '18006709510');
             $phone_text = get_theme_mod('contact_phone_text', '1 800 670 9510 Toll Free (US, CAN)');
-            $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+            $raw_whatsapp = get_theme_mod('contact_whatsapp', '51 994 008 833');
             $whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
             $email = get_theme_mod('contact_email', 'sales@intenseperu.com');
             ?>
@@ -41,7 +41,7 @@
                                 </svg>
 
 
-                                <span class="text-sm text-cream/80 hover:text-primary transition-colors duration-200">
+                                <span class="text-sm text-cream/80 hover:text-primary transition-colors duration-200 whitespace-nowrap">
                                     <?php echo esc_html($phone_text); ?>
                                 </span>
                             </a>
@@ -69,8 +69,8 @@
                                     </defs>
                                 </svg>
 
-                                <span class="text-sm text-cream/80 hover:text-primary transition-colors duration-200">
-                                    +<?php echo esc_html($whatsapp); ?>
+                                <span class="text-sm text-cream/80 hover:text-primary transition-colors duration-200 whitespace-nowrap">
+                                    +<?php echo esc_html($raw_whatsapp); ?>
                                 </span>
                             </a>
                         </li>

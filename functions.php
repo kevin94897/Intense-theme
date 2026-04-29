@@ -243,6 +243,23 @@ function load_more_journeys_handler()
   wp_die();
 }
 
+// ── Customizer: Logo Dark ─────────────────────────────────────────────────────
+function theme_customize_logo_dark($wp_customize)
+{
+  $wp_customize->add_setting('logo_dark', [
+    'default' => '',
+    'sanitize_callback' => 'esc_url_raw',
+  ]);
+
+  $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'logo_dark', [
+    'label' => 'Logo Dark Version',
+    'description' => 'Dark version logo for light backgrounds (white header, mobile drawer, emails). Upload the dark version.',
+    'section' => 'title_tagline',
+    'priority' => 9,
+  ]));
+}
+add_action('customize_register', 'theme_customize_logo_dark');
+
 // ── Customizer: Información de Contacto ───────────────────────────────────────
 function theme_customize_contact_section($wp_customize)
 {
@@ -254,7 +271,7 @@ function theme_customize_contact_section($wp_customize)
   $fields = [
     'contact_phone' => ['label' => 'Teléfono', 'default' => '18006709510', 'type' => 'text'],
     'contact_phone_text' => ['label' => 'Texto Teléfono', 'default' => '1 800 670 9510 Toll Free (US, CAN)', 'type' => 'text'],
-    'contact_whatsapp' => ['label' => 'WhatsApp (solo número con código país)', 'default' => '51994008833', 'type' => 'text'],
+    'contact_whatsapp' => ['label' => 'WhatsApp (solo número con código país)', 'default' => '51 994 008 833', 'type' => 'text'],
     'contact_email' => ['label' => 'Correo', 'default' => 'sales@intenseperu.com', 'type' => 'text'],
   ];
 
@@ -445,8 +462,8 @@ add_action('wp_enqueue_scripts', function () {
 // ══════════════════════════════════════════════════════════════════════════════
 
 /**
- * Logo adaptado al Design System para emails en base64.
- * Prioriza PNG para máxima compatibilidad con todos los clientes (Gmail, Outlook, etc).
+ * Logo oscuro para emails (fondo blanco). Prioriza logo_dark del Customizer,
+ * luego PNG local, luego custom_logo, finalmente URL fallback.
  */
 function intense_email_logo_src()
 {
@@ -454,27 +471,41 @@ function intense_email_logo_src()
   if ($cache !== null)
     return $cache;
 
-  // 1. Intentamos usar el PNG del tema (máxima compatibilidad en correos)
+  // 1. Logo dark del Customizer (versión oscura — ideal para emails en fondo blanco)
+  $dark_url = get_theme_mod('logo_dark', '');
+  if ($dark_url) {
+    $dark_path = attachment_url_to_postid($dark_url)
+      ? get_attached_file(attachment_url_to_postid($dark_url))
+      : '';
+    if ($dark_path && file_exists($dark_path)) {
+      $mime = mime_content_type($dark_path);
+      $cache = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($dark_path));
+      return $cache;
+    }
+    // Si no se puede leer el archivo local, usar la URL directamente
+    $cache = esc_url($dark_url);
+    return $cache;
+  }
+
+  // 2. PNG local del tema
   $theme_logo = get_template_directory() . '/assets/images/intense_logo.png';
   if (file_exists($theme_logo)) {
     $cache = 'data:image/png;base64,' . base64_encode(file_get_contents($theme_logo));
     return $cache;
   }
 
-  // 2. Fallback: Usar el logo del Customizer si es imagen
+  // 3. custom_logo del Customizer
   $custom_logo_id = get_theme_mod('custom_logo');
   if ($custom_logo_id) {
     $logo_path = get_attached_file($custom_logo_id);
     if ($logo_path && file_exists($logo_path)) {
       $mime = mime_content_type($logo_path);
-      if (strpos($mime, 'image/') === 0) {
-        $cache = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($logo_path));
-        return $cache;
-      }
+      $cache = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($logo_path));
+      return $cache;
     }
   }
 
-  // URL fallback si nada funciona
+  // 4. URL fallback
   return 'http://intense.nerd-agencia.com/wp-content/uploads/2026/04/intense_logo.png';
 }
 
