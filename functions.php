@@ -462,8 +462,8 @@ add_action('wp_enqueue_scripts', function () {
 // ══════════════════════════════════════════════════════════════════════════════
 
 /**
- * Logo oscuro para emails (fondo blanco). Prioriza logo_dark del Customizer,
- * luego PNG local, luego custom_logo, finalmente URL fallback.
+ * URL del logo para emails. Usa siempre URLs externas — los clientes de email
+ * (Gmail, Outlook) bloquean data: URIs y eliminan el atributo src.
  */
 function intense_email_logo_src()
 {
@@ -471,42 +471,8 @@ function intense_email_logo_src()
   if ($cache !== null)
     return $cache;
 
-  // 1. Logo dark del Customizer (versión oscura — ideal para emails en fondo blanco)
-  $dark_url = get_theme_mod('logo_dark', '');
-  if ($dark_url) {
-    $dark_path = attachment_url_to_postid($dark_url)
-      ? get_attached_file(attachment_url_to_postid($dark_url))
-      : '';
-    if ($dark_path && file_exists($dark_path)) {
-      $mime = mime_content_type($dark_path);
-      $cache = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($dark_path));
-      return $cache;
-    }
-    // Si no se puede leer el archivo local, usar la URL directamente
-    $cache = esc_url($dark_url);
-    return $cache;
-  }
-
-  // 2. PNG local del tema
-  $theme_logo = get_template_directory() . '/assets/images/intense_logo.png';
-  if (file_exists($theme_logo)) {
-    $cache = 'data:image/png;base64,' . base64_encode(file_get_contents($theme_logo));
-    return $cache;
-  }
-
-  // 3. custom_logo del Customizer
-  $custom_logo_id = get_theme_mod('custom_logo');
-  if ($custom_logo_id) {
-    $logo_path = get_attached_file($custom_logo_id);
-    if ($logo_path && file_exists($logo_path)) {
-      $mime = mime_content_type($logo_path);
-      $cache = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($logo_path));
-      return $cache;
-    }
-  }
-
-  // 4. URL fallback
-  return 'http://intense.nerd-agencia.com/wp-content/uploads/2026/04/intense_logo.png';
+  $cache = 'https://intenseperu.com/wp-content/uploads/2026/04/intense_logo_mails.png';
+  return $cache;
 }
 
 /**

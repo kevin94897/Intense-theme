@@ -107,7 +107,7 @@ get_header();
                                 @blur="if(!$el.value) $el.type='text'; dateFocused = false"
                                 @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
                                 x-model="formData.startDate" @input="validateField('startDate')"
-                                class="input-field cursor-pointer" placeholder="Select date">
+                                class="input-field cursor-pointer" placeholder="Start date">
                             <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
                         </div>
                         <div>
