@@ -93,7 +93,7 @@
                             </a>
                         <?php elseif (has_custom_logo()): ?>
                             <div
-                                class="w-[140px] md:w-[120px] lg:w-[150px] [&_img]:w-full [&_img]:h-auto [&_img]:object-contain">
+                                class="w-[100px] md:w-[120px] lg:w-[150px] [&_img]:w-full [&_img]:h-auto [&_img]:object-contain">
                                 <?php the_custom_logo(); ?>
                             </div>
                         <?php else: ?>

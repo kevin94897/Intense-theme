@@ -1415,3 +1415,83 @@ function intense_newsletter_subscribe()
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
   return $post_type === 'post';
 }, 10, 2);
+
+// ── Sitemap XML ───────────────────────────────────────────────────────────────
+add_action('init', function () {
+    add_rewrite_rule('^sitemap\.xml$', 'index.php?intense_sitemap=1', 'top');
+});
+
+add_filter('query_vars', function ($vars) {
+    $vars[] = 'intense_sitemap';
+    return $vars;
+});
+
+add_action('template_redirect', function () {
+    if (!get_query_var('intense_sitemap')) return;
+
+    $urls = [];
+
+    $post_types = [
+        'page'        => ['changefreq' => 'monthly', 'priority' => '0.8'],
+        'post'        => ['changefreq' => 'weekly',  'priority' => '0.7'],
+        'journey'     => ['changefreq' => 'monthly', 'priority' => '0.9'],
+        'destination' => ['changefreq' => 'monthly', 'priority' => '0.8'],
+    ];
+
+    foreach ($post_types as $type => $meta) {
+        $items = get_posts([
+            'post_type'   => $type,
+            'post_status' => 'publish',
+            'numberposts' => -1,
+        ]);
+        foreach ($items as $item) {
+            $urls[] = [
+                'loc'        => get_permalink($item),
+                'lastmod'    => get_post_modified_time('c', false, $item),
+                'changefreq' => $meta['changefreq'],
+                'priority'   => $meta['priority'],
+            ];
+        }
+    }
+
+    header('Content-Type: application/xml; charset=UTF-8');
+    echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach ($urls as $url) {
+        echo "  <url>\n";
+        echo '    <loc>' . esc_url($url['loc']) . "</loc>\n";
+        echo '    <lastmod>' . esc_html($url['lastmod']) . "</lastmod>\n";
+        echo '    <changefreq>' . esc_html($url['changefreq']) . "</changefreq>\n";
+        echo '    <priority>' . esc_html($url['priority']) . "</priority>\n";
+        echo "  </url>\n";
+    }
+    echo '</urlset>';
+    exit;
+});
+
+// ── Google Analytics ─────────────────────────────────────────────────────────
+if (!INTENSE_EMAIL_TEST_MODE) {
+    add_action('wp_head', function () {
+        ?>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVWKRSGT0J"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-KVWKRSGT0J');
+        </script>
+        <?php
+    }, 1);
+}
+
+// ── Google Fonts ──────────────────────────────────────────────────────────────
+function intense_google_fonts() {
+    wp_enqueue_style(
+        'rubik-font',
+        'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap',
+        array(),
+        null
+    );
+}
+add_action('wp_enqueue_scripts', 'intense_google_fonts');
