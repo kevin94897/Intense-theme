@@ -231,7 +231,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             <?php if (!empty($feature_group['price'])): ?>
                                 <div>
                                     <span class="block font-body text-3xl md:text-4xl text-dark font-light">USD
-                                        $<?php echo esc_html($feature_group['price']); ?></span>
+                                        $<?php echo esc_html(number_format((float) $feature_group['price'], 0, '.', ',')); ?></span>
                                     <span
                                         class="block font-body text-[10px] text-neutral-gray uppercase tracking-widest mt-1">per
                                         person</span>
