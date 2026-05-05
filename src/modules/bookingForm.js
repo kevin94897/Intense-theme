@@ -6,10 +6,10 @@ const formSchema = z.object({
     email: z.string().min(1, "Email is required").email("Invalid email address"),
     confirmEmail: z.string().min(1, "Confirm Email is required"),
     startDate: z.string().min(1, "Start Date is required"),
-    tripLength: z.string().optional(),
+    tripLength: z.string().min(1, "Trip Length is required"),
     adults: z.string().min(1, "Adults is required"),
-    children: z.string().optional(),
-    enfants: z.string().optional(),
+    children: z.string().min(1, "Children is required"),
+    enfants: z.string().min(1, "Infants is required"),
     hotelCategory: z.enum(["boutique", "luxury", "superior", "value"], {
         errorMap: () => ({ message: "Please select a Hotel Category" })
     }),
@@ -117,22 +117,7 @@ export default function bookingForm() {
                 const json = await res.json();
                 if (!json.success) throw new Error(json.data?.message || 'Error');
 
-                this.submitSuccess = true;
-                window.dispatchEvent(new CustomEvent('ccp:quoteSuccess'));
-
-                // Reset form fields after successful submission
-                const source = this.formData.pageSource;
-                const url    = this.formData.pageUrl;
-                this.formData = {
-                    firstName: '', lastName: '', email: '', confirmEmail: '',
-                    startDate: '', tripLength: '', adults: '', children: '',
-                    enfants: '', hotelCategory: '', whatsapp: '',
-                    hearAboutUs: '', mensaje: '',
-                    pageSource: source, pageUrl: url,
-                };
-                this.errors = {};
-
-                setTimeout(() => { this.submitSuccess = false; }, 5000);
+                window.location.href = 'http://intense.local/thank-you/';
             } catch (err) {
                 console.error('Booking form error:', err);
             } finally {
