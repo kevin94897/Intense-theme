@@ -244,73 +244,6 @@ $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp)
         </div>
     </section>
 
-    <!-- ══════════════════════════════════════════════
-         4. SUCCESS MODAL
-    ══════════════════════════════════════════════ -->
-    <div
-        x-data="{ show: false }"
-        @ccp:quotesuccess.window="show = true"
-        x-show="show"
-        style="display:none;"
-        class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-dark/50 backdrop-blur-sm"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0">
-
-        <div
-            x-show="show"
-            @click.outside="show = false"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95 translate-y-3"
-            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
-            class="bg-white rounded-lg shadow-2xl w-full max-w-sm mx-auto px-10 pt-10 pb-10 text-center relative">
-
-            <!-- × close -->
-            <button @click="show = false"
-                class="absolute top-5 right-5 text-dark/30 hover:text-dark/60 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
-            <!-- Luggage icon -->
-            <div class="flex justify-center mb-7">
-                <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="7" y="21" width="44" height="31" rx="3.5" stroke="#423931" stroke-width="1.5" fill="none" />
-                    <path d="M21 21V16.5a8.5 8.5 0 0117 0V21" stroke="#423931" stroke-width="1.5" stroke-linecap="round" fill="none" />
-                    <line x1="29" y1="21" x2="29" y2="52" stroke="#423931" stroke-width="1.2" />
-                    <line x1="7" y1="35" x2="51" y2="35" stroke="#423931" stroke-width="1.2" />
-                    <circle cx="17" cy="54" r="2" fill="#423931" />
-                    <circle cx="41" cy="54" r="2" fill="#423931" />
-                </svg>
-            </div>
-
-            <h2 class="font-heading text-3xl md:text-4xl text-dark font-light mb-3 leading-snug">
-                Thank you for<br>reaching out!
-            </h2>
-            <p class="font-body body-small text-dark/55 leading-relaxed mb-8 max-w-[210px] mx-auto">
-                We've received your message and our travel designers will get back to you within 24 hours.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="<?php echo esc_url(home_url('/')); ?>"
-                    class="btn btn-outline px-6 py-2.5 rounded-full font-body body-small">
-                    Back to Home
-                </a>
-                <a href="<?php echo esc_url(home_url('/journeys/')); ?>"
-                    class="btn btn-primary px-6 py-2.5 rounded-full font-body body-small">
-                    Explore Journeys
-                </a>
-            </div>
-
-        </div>
-    </div>
 
     <!-- Alpine.js component -->
     <script>
@@ -358,7 +291,7 @@ $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp)
                         const res  = await fetch(intenseAjax.ajaxUrl, { method: 'POST', body });
                         const json = await res.json();
                         if (!json.success) throw new Error(json.data?.message || 'Error');
-                        window.dispatchEvent(new CustomEvent('ccp:quotesuccess'));
+                        window.location.href = 'http://intense.local/thank-you/';
                     } catch (err) {
                         console.error('Form error:', err);
                     } finally {

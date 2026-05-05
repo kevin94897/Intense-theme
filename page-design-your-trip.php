@@ -104,7 +104,7 @@ get_header();
                             </div>
                             <input type="text" x-ref="startDateInput"
                                 @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
-                                @blur="if(!$el.value) $el.type='text'; dateFocused = false"
+                                @blur="$el.type='text'; dateFocused = false"
                                 @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
                                 x-model="formData.startDate" @input="validateField('startDate')"
                                 class="input-field cursor-pointer" placeholder="Start date">
@@ -387,65 +387,6 @@ get_header();
         </div>
     </section>
 
-    <!-- ── SUCCESS MODAL ───────────────────────────────────────── -->
-    <div x-data="{ open: false }" x-init="window.addEventListener('ccp:quoteSuccess', () => open = true)" x-show="open"
-        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
-        style="display: none;">
-
-        <div x-show="open" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95" @click.outside="open = false"
-            class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto p-10 text-center relative">
-
-            <!-- Close -->
-            <button @click="open = false"
-                class="absolute top-4 right-5 text-dark/30 hover:text-dark/60 transition-colors text-xl leading-none font-light">
-                ×
-            </button>
-
-            <!-- Luggage Icon -->
-            <div class="flex justify-center mb-6">
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- suitcase body -->
-                    <rect x="8" y="20" width="40" height="30" rx="3" stroke="#1a1a1a" stroke-width="1.8" fill="none" />
-                    <!-- handle -->
-                    <path d="M20 20V15a8 8 0 0116 0v5" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round"
-                        fill="none" />
-                    <!-- center stripe -->
-                    <line x1="28" y1="20" x2="28" y2="50" stroke="#1a1a1a" stroke-width="1.4" />
-                    <!-- horizontal strap -->
-                    <line x1="8" y1="33" x2="48" y2="33" stroke="#1a1a1a" stroke-width="1.4" />
-                    <!-- wheels -->
-                    <circle cx="16" cy="51" r="2" fill="#1a1a1a" />
-                    <circle cx="40" cy="51" r="2" fill="#1a1a1a" />
-                </svg>
-            </div>
-
-            <h3 class="font-heading text-2xl md:text-3xl text-dark font-light mb-3 leading-snug">
-                Quote request<br>received!
-            </h3>
-            <p class="font-body text-sm text-dark/60 leading-relaxed mb-8 max-w-[220px] mx-auto">
-                One of our travel designers will reach out within 24 hours to tailor this itinerary for you.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="/"
-                    class="px-6 py-2.5 rounded-full border border-dark/40 text-dark font-body text-sm hover:bg-dark hover:text-white transition-all duration-300">
-                    Back to Home
-                </a>
-                <a href="/destinations"
-                    class="px-6 py-2.5 rounded-full bg-primary text-white font-body text-sm hover:bg-hover transition-all duration-300">
-                    Explore other journeys
-                </a>
-            </div>
-
-        </div>
-    </div>
 
     <!-- Alpine.js bookingForm component uses src/modules/bookingForm.js -->
 
