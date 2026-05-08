@@ -231,7 +231,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             <?php if (!empty($feature_group['price'])): ?>
                                 <div>
                                     <span class="block font-body text-3xl md:text-4xl text-dark font-light">USD
-                                        $<?php echo esc_html(number_format((float) $feature_group['price'], 0, '.', ',')); ?></span>
+                                        <?php echo esc_html(number_format((float) $feature_group['price'], 0, '.', ',')); ?></span>
                                     <span
                                         class="block font-body text-[10px] text-neutral-gray uppercase tracking-widest mt-1">per
                                         person</span>
@@ -1165,25 +1165,49 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             </div>
                         </div>
 
-                        <!-- Date Row -->
-                        <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }"
-                            x-data="{ dateFocused: false }"
-                            @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
-                            <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
-                                x-show="!formData.startDate">
-                                <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
+                        <!-- Date & Trip Length Row -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                            <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }">
+                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
+                                    x-show="!formData.startDate">
+                                    <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <input type="text" readonly
+                                    x-init="flatpickr($el, {
+                                        dateFormat: 'd/m/Y',
+                                        minDate: 'today',
+                                        disableMobile: true,
+                                        onChange(dates, dateStr) {
+                                            formData.startDate = dateStr;
+                                            validateField('startDate');
+                                        }
+                                    })"
+                                    :value="formData.startDate"
+                                    class="input-field cursor-pointer" placeholder="Start Date">
+                                <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
                             </div>
-                            <input type="text" x-ref="startDateInput"
-                                @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
-                                @blur="$el.type='text'; dateFocused = false"
-                                @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
-                                x-model="formData.startDate" @input="validateField('startDate')"
-                                class="input-field cursor-pointer" placeholder="Start Date">
-                            <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
+                            <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
+                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <select x-model="formData.tripLength" @change="validateField('tripLength')"
+                                    class="input-field" :class="formData.tripLength ? 'text-dark' : 'text-dark/40'"
+                                    x-init="formData.tripLength = '<?php echo esc_js($information['days'] ?? ''); ?>'">
+                                    <option value="" disabled>Trip Length (days)</option>
+                                    <?php for ($d = 2; $d <= 20; $d++): ?>
+                                    <option value="<?php echo $d; ?>"><?php echo $d; ?></option>
+                                    <?php endfor; ?>
+                                    <option value="20+">20+</option>
+                                </select>
+                                <span x-show="errors.tripLength" x-text="errors.tripLength" class="input-error-msg"></span>
+                            </div>
                         </div>
 
                         <!-- Passengers Row -->
@@ -1219,7 +1243,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             <div>
                                 <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Children &lt;12 -->
                                 </p>
-                                <div class="input-wrapper">
+                                <div class="input-wrapper" :class="{ 'has-error': errors.children }">
                                     <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -1227,7 +1251,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                                 d="M19 9l-7 7-7-7"></path>
                                         </svg>
                                     </div>
-                                    <select x-model="formData.children" class="input-field"
+                                    <select x-model="formData.children" @change="validateField('children')" class="input-field"
                                         :class="formData.children ? 'text-dark' : 'text-dark/40'">
                                         <option value="" disabled selected>Children &lt;12</option>
                                         <option value="0">0</option>
@@ -1242,12 +1266,13 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         <option value="9">9</option>
                                         <option value="10">10</option>
                                     </select>
+                                    <span x-show="errors.children" x-text="errors.children" class="input-error-msg"></span>
                                 </div>
                             </div>
                             <div>
                                 <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Infants &lt;1 -->
                                 </p>
-                                <div class="input-wrapper">
+                                <div class="input-wrapper" :class="{ 'has-error': errors.enfants }">
                                     <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -1255,8 +1280,8 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                                 d="M19 9l-7 7-7-7"></path>
                                         </svg>
                                     </div>
-                                    <select x-model="formData.enfants" class="input-field"
-                                        :class="formData.children ? 'text-dark' : 'text-dark/40'">
+                                    <select x-model="formData.enfants" @change="validateField('enfants')" class="input-field"
+                                        :class="formData.enfants ? 'text-dark' : 'text-dark/40'">
                                         <option value="" disabled selected>Infants &lt;1</option>
                                         <option value="0">0</option>
                                         <option value="1">1</option>
@@ -1270,6 +1295,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         <option value="9">9</option>
                                         <option value="10">10</option>
                                     </select>
+                                    <span x-show="errors.enfants" x-text="errors.enfants" class="input-error-msg"></span>
                                 </div>
                             </div>
                         </div>

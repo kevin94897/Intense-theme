@@ -671,7 +671,7 @@
     /* Alto aproximado */
     opacity: 1;
     overflow: hidden;
-    background: transparent;
+    background: #0000005c;
   }
 
   .site-header.scrolled .top-header {
@@ -1731,4 +1731,25 @@ figure.wp-block-gallery.has-nested-images {
       max-height: 88vh;
     }
   }
+}
+
+/* ── Flatpickr overrides ─────────────────────────────────────────────────── */
+.flatpickr-months .flatpickr-month {
+  height: 36px;
+}
+.flatpickr-current-month {
+  font-size: 13px !important;
+  padding-top: 6px;
+}
+.flatpickr-current-month .cur-month,
+.flatpickr-current-month input.cur-year {
+  font-size: 13px !important;
+  font-weight: 600;
+}
+.flatpickr-weekdays,
+span.flatpickr-weekday {
+  font-size: 11px;
+}
+.flatpickr-day {
+  font-size: 13px;
 }

@@ -13,7 +13,7 @@ define('INTENSE_EMAIL_TEST_MODE', true);
 define('INTENSE_EMAIL_TEST_ADDRESS', 'kevin.gomez@nerd.pe');
 
 // Correos reales del equipo (se usan cuando TEST_MODE = false)
-define('INTENSE_TEAM_EMAILS', ['sales@intenseperu.com', 'karen@intenseperu.com', 'juanpablo@intenseperu.com', 'sofia@intenseperu.com']);
+define('INTENSE_TEAM_EMAILS', ['sales@intenseperu.com', 'karen@intenseperu.com', 'roberto@intenseperu.com', 'sofia@intenseperu.com']);
 
 // ── Soporte del Tema ───────────────────────────────────────────────────────────
 function intense_nerd_setup()
@@ -55,8 +55,14 @@ function intense_nerd_scripts()
   $is_dev = defined('VITE_DEV') && VITE_DEV;
 
   if ($is_dev) {
-    echo '<script type="module" src="http://localhost:5174/@vite/client"></script>' . "\n";
-    echo '<script type="module" src="http://localhost:5174/src/main.js"></script>' . "\n";
+    wp_enqueue_script('intense-nerd-js', 'http://localhost:5174/src/main.js', [], null, true);
+    add_filter('script_loader_tag', function ($tag, $handle) {
+      if ($handle === 'intense-nerd-js') {
+        $vite_client = '<script type="module" src="http://localhost:5174/@vite/client"></script>' . "\n";
+        return $vite_client . str_replace('<script ', '<script type="module" crossorigin ', $tag);
+      }
+      return $tag;
+    }, 10, 2);
     return;
   }
 
@@ -76,7 +82,7 @@ function intense_nerd_scripts()
 
   add_filter('script_loader_tag', function ($tag, $handle) {
     if ($handle === 'intense-nerd-js') {
-      return str_replace('<script ', '<script type="module" ', $tag);
+      return str_replace('<script ', '<script type="module" crossorigin ', $tag);
     }
     return $tag;
   }, 10, 2);
@@ -713,7 +719,15 @@ function intense_email_booking_internal($data)
   $adults = esc_html($data['adults'] ?: '0');
   $children = esc_html($data['children'] ?: '0');
   $enfants = esc_html($data['enfants'] ?: '0');
-  $hotel_cat = $data['hotel_cat'] ? esc_html($data['hotel_cat']) : '<em style="color:#776c60;">—</em>';
+  $hotel_cat_map = [
+    'boutique' => 'Boutique ★★★★★',
+    'luxury'   => 'Luxury ★★★★★',
+    'superior' => 'Superior ★★★★',
+    'value'    => 'Best Value ★★★',
+  ];
+  $hotel_cat = isset($hotel_cat_map[$data['hotel_cat']])
+    ? esc_html($hotel_cat_map[$data['hotel_cat']])
+    : ($data['hotel_cat'] ? esc_html($data['hotel_cat']) : '<em style="color:#776c60;">—</em>');
   $hear_about = $data['hear_about'] ? esc_html($data['hear_about']) : '<em style="color:#776c60;">—</em>';
   $mensaje = $data['mensaje'] ? nl2br(esc_html($data['mensaje'])) : '<em style="color:#776c60;">—</em>';
   $timestamp = current_time('d M Y · H:i');
@@ -769,7 +783,7 @@ function intense_email_booking_internal($data)
         <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
           <table width="100%" cellpadding="0" cellspacing="0"><tr>
             <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Source</td>
-            <td style="font-size:14px;color:#161616;">{$page_source}{$page_url}</td>
+            <td style="font-size:14px;color:#161616;">{$page_url}</td>
           </tr></table>
         </td></tr>
         <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
@@ -835,6 +849,15 @@ function intense_email_booking_autoreply($data)
   $adults = esc_html($data['adults'] ?: '0');
   $children = esc_html($data['children'] ?: '0');
   $enfants = esc_html($data['enfants'] ?: '0');
+  $hotel_cat_map = [
+    'boutique' => 'Boutique ★★★★★',
+    'luxury'   => 'Luxury ★★★★★',
+    'superior' => 'Superior ★★★★',
+    'value'    => 'Best Value ★★★',
+  ];
+  $hotel_cat = isset($hotel_cat_map[$data['hotel_cat']])
+    ? esc_html($hotel_cat_map[$data['hotel_cat']])
+    : ($data['hotel_cat'] ? esc_html($data['hotel_cat']) : '—');
 
   $rows = intense_email_header_html();
   $rows .= <<<HTML
@@ -871,6 +894,12 @@ function intense_email_booking_autoreply($data)
           <table width="100%" cellpadding="0" cellspacing="0"><tr>
             <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Travelers</td>
             <td style="font-size:14px;color:#161616;">{$adults} adults &nbsp;·&nbsp; {$children} children &nbsp;·&nbsp; {$enfants} infants</td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Hotel Category</td>
+            <td style="font-size:14px;color:#161616;">{$hotel_cat}</td>
           </tr></table>
         </td></tr>
       </table>
@@ -1387,7 +1416,7 @@ function intense_newsletter_subscribe()
   }
 
   // Email al equipo (solo juanpablo recibe notificaciones de newsletter)
-  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : 'juanpablo@intenseperu.com';
+  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : 'roberto@intenseperu.com';
   $subject = 'New Newsletter Subscriber – ' . ($name ?: $email);
   $body = '<div style="font-family:sans-serif;font-size:15px;color:#1a1a1a;max-width:560px;margin:0 auto">';
   $body .= '<h2 style="font-size:20px;margin-bottom:16px">New Newsletter Subscriber</h2>';

@@ -90,9 +90,7 @@ get_header();
 
                     <!-- Date & Trip Length Row -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                        <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }"
-                            x-data="{ dateFocused: false }"
-                            @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
+                        <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }">
                             <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Start Date</p> -->
                             <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
                                 x-show="!formData.startDate">
@@ -102,12 +100,18 @@ get_header();
                                     </path>
                                 </svg>
                             </div>
-                            <input type="text" x-ref="startDateInput"
-                                @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
-                                @blur="$el.type='text'; dateFocused = false"
-                                @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
-                                x-model="formData.startDate" @input="validateField('startDate')"
-                                class="input-field cursor-pointer" placeholder="Start date">
+                            <input type="text" readonly
+                                x-init="flatpickr($el, {
+                                    dateFormat: 'd/m/Y',
+                                    minDate: 'today',
+                                    disableMobile: true,
+                                    onChange(dates, dateStr) {
+                                        formData.startDate = dateStr;
+                                        validateField('startDate');
+                                    }
+                                })"
+                                :value="formData.startDate"
+                                class="input-field cursor-pointer" placeholder="Start Date">
                             <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
                         </div>
                         <div>
@@ -182,7 +186,7 @@ get_header();
                         </div>
                         <div>
                             <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Children &lt;12</p> -->
-                            <div class="input-wrapper">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.children }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -190,7 +194,7 @@ get_header();
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
-                                <select x-model="formData.children" class="input-field"
+                                <select x-model="formData.children" @change="validateField('children')" class="input-field"
                                     :class="formData.children ? 'text-dark' : 'text-dark/40'">
                                     <option value="" disabled selected>Children &lt;12</option>
                                     <option value="0">0</option>
@@ -205,11 +209,12 @@ get_header();
                                     <option value="9">9</option>
                                     <option value="10">10</option>
                                 </select>
+                                <span x-show="errors.children" x-text="errors.children" class="input-error-msg"></span>
                             </div>
                         </div>
                         <div>
                             <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Infants &lt;1</p> -->
-                            <div class="input-wrapper">
+                            <div class="input-wrapper" :class="{ 'has-error': errors.enfants }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -217,8 +222,8 @@ get_header();
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
-                                <select x-model="formData.enfants" class="input-field"
-                                    :class="formData.children ? 'text-dark' : 'text-dark/40'">
+                                <select x-model="formData.enfants" @change="validateField('enfants')" class="input-field"
+                                    :class="formData.enfants ? 'text-dark' : 'text-dark/40'">
                                     <option value="" disabled selected>Infants &lt;1</option>
                                     <option value="0">0</option>
                                     <option value="1">1</option>
@@ -232,6 +237,7 @@ get_header();
                                     <option value="9">9</option>
                                     <option value="10">10</option>
                                 </select>
+                                <span x-show="errors.enfants" x-text="errors.enfants" class="input-error-msg"></span>
                             </div>
                         </div>
                     </div>

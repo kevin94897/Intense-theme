@@ -2,6 +2,14 @@
 <html class="scroll-smooth" <?php language_attributes(); ?>>
 
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WRSXP2RH');</script>
+    <!-- End Google Tag Manager --> 
+
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="<?php bloginfo('description'); ?>">
@@ -11,9 +19,14 @@
 </head>
 
 <body <?php body_class('bg-cream'); ?>>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRSXP2RH"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <?php wp_body_open(); ?>
 
-    <?php $is_light_header = is_page_template('page-contact.php') || is_page_template('page-blog.php') || is_page_template('page-politics.php') || is_page_template('page-faqs.php') || is_404() || is_page_template('page-terms.php'); ?>
+    <?php $is_light_header = is_page_template('page-contact.php') || is_page_template('page-blog.php') || is_page_template('page-politics.php') || is_page_template('page-faqs.php') || is_404() || is_page_template('page-terms.php') || is_page_template('page-thankyou.php'); ?>
 
     <!-- Site Header -->
     <header
@@ -35,7 +48,7 @@
                                     fill="currentColor" />
                             </svg>
                             <span
-                                class="md:block hidden"><?php echo esc_html(get_theme_mod('contact_phone_text', '1 800 670 9510 Toll Free (US, CAN)')); ?></span>
+                                class="md:block hidden text-[0.9375rem] font-light"><?php echo esc_html(get_theme_mod('contact_phone_text', '1 800 670 9510 Toll Free (US, CAN)')); ?></span>
                         </a>
                         <?php
                         $raw_whatsapp = get_theme_mod('contact_whatsapp', '51 994 008 833');
@@ -58,7 +71,7 @@
                                 </g>
                             </svg>
 
-                            <span class="md:block hidden">+<?php echo esc_html($raw_whatsapp); ?></span>
+                            <span class="md:block hidden text-[0.9375rem] font-light">+<?php echo esc_html($raw_whatsapp); ?></span>
                         </a>
                         <a href="mailto:<?php echo esc_attr(get_theme_mod('contact_email', 'sales@intenseperu.com')); ?>"
                             class="hover:text-primary transition-colors flex items-center gap-2 pl-5">
@@ -69,7 +82,7 @@
                                     fill="currentColor" />
                             </svg>
                             <span
-                                class="md:block hidden"><?php echo esc_html(get_theme_mod('contact_email', 'sales@intenseperu.com')); ?></span>
+                                class="md:block hidden text-[0.9375rem] font-light"><?php echo esc_html(get_theme_mod('contact_email', 'sales@intenseperu.com')); ?></span>
                         </a>
                     </div>
                 </div>
@@ -126,7 +139,7 @@
                                     <div class="relative" x-data>
                                         <button type="button" @click="toggle('<?php echo $mega_key; ?>')"
                                             :aria-expanded="active === '<?php echo $mega_key; ?>'"
-                                            class="nav-link flex items-center gap-1 font-body text-sm tracking-wide transition-colors <?php echo $is_light_header ? 'text-dark hover:text-primary' : 'text-white hover:text-white/70'; ?>">
+                                            class="nav-link flex items-center gap-1 font-body text-[0.8125rem] tracking-wide transition-colors uppercase font-light cursor-pointer <?php echo $is_light_header ? 'text-dark hover:text-primary' : 'text-white hover:text-white/70'; ?>">
                                             <?php echo esc_html($item->title); ?>
                                             <svg class="w-3.5 h-3.5 transition-transform duration-200"
                                                 :class="active === '<?php echo $mega_key; ?>' ? 'rotate-180' : ''" fill="none"
@@ -137,7 +150,7 @@
                                     </div>
                                 <?php else: ?>
                                     <a href="<?php echo esc_url($item->url); ?>"
-                                        class="nav-link font-body text-sm tracking-wide transition-colors <?php echo $is_light_header ? 'text-dark hover:text-primary' : 'text-white hover:text-white/70'; ?>">
+                                        class="nav-link font-body text-[0.8125rem] tracking-wide transition-colors uppercase font-light <?php echo $is_light_header ? 'text-dark hover:text-primary' : 'text-white hover:text-white/70'; ?>">
                                         <?php echo esc_html($item->title); ?>
                                     </a>
                                 <?php endif; ?>
@@ -146,7 +159,7 @@
 
                         <!-- CTA -->
                         <a href="<?php echo esc_url(home_url('/design-your-trip/')); ?>"
-                            class="btn btn-primary text-sm">
+                            class="btn btn-primary text-[0.8125rem] font-light tracking-wide uppercase">
                             <?php esc_html_e('Design your trip', 'intense-nerd-theme'); ?>
                         </a>
                     </div>

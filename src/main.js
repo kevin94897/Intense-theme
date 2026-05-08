@@ -5,9 +5,12 @@ import Alpine from 'alpinejs'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import EmblaCarousel from 'embla-carousel'
+import flatpickr from 'flatpickr'
+import 'flatpickr/dist/flatpickr.min.css'
 
 window.AOS = AOS
 window.EmblaCarousel = EmblaCarousel
+window.flatpickr = flatpickr
 
 import { initFormularios } from './modules/formularios.js'
 import { initSliders } from './modules/slider.js'

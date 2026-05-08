@@ -117,7 +117,7 @@ export default function bookingForm() {
                 const json = await res.json();
                 if (!json.success) throw new Error(json.data?.message || 'Error');
 
-                window.location.href = 'http://intense.local/thank-you/';
+                window.location.href = 'https://intenseperu.com/thank-you/';
             } catch (err) {
                 console.error('Booking form error:', err);
             } finally {

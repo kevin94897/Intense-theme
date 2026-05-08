@@ -7,7 +7,7 @@ get_header();
 
 <main id="primary" class="site-main bg-cream">
 
-    <section class="pt-20 pb-14 md:pt-28 md:pb-16 bg-cream flex items-center justify-center min-h-[60vh]">
+    <section class="py-20 md:py-28 bg-cream flex items-center justify-center min-h-[60vh]">
         <div class="container-site max-w-lg mx-auto text-center" data-aos="fade-up">
 
             <!-- Luggage icon -->
