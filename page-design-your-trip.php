@@ -57,6 +57,7 @@ get_header();
             <!-- Form -->
             <div class="max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
                 <form x-data="bookingForm()" @submit.prevent="submitForm" class="space-y-8 md:space-y-10"
+                    autocomplete="off"
                     data-page-source="Design Your Trip" data-page-url="<?php echo esc_attr(get_permalink()); ?>">
 
                     <!-- Name Row -->
@@ -107,11 +108,14 @@ get_header();
                                     disableMobile: true,
                                     onChange(dates, dateStr) {
                                         formData.startDate = dateStr;
+                                        startDateLabel = dates[0] ? dates[0].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
                                         validateField('startDate');
                                     }
                                 })"
                                 :value="formData.startDate"
-                                class="input-field cursor-pointer" placeholder="Start Date">
+                                class="input-field cursor-pointer" placeholder="Start Date (dd-mm-yyyy)">
+                            <span x-show="startDateLabel" x-text="startDateLabel"
+                                class="block mt-1 text-xs text-dark/50 font-body"></span>
                             <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
                         </div>
                         <div>
@@ -126,7 +130,7 @@ get_header();
                                 </div>
                                 <select x-model="formData.tripLength" @change="validateField('tripLength')"
                                     class="input-field" :class="formData.tripLength ? 'text-dark' : 'text-dark/40'">
-                                    <option value="" disabled selected>Trip Length</option>
+                                    <option value="" disabled selected>Trip Length (# of days)</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>

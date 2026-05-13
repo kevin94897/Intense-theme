@@ -1116,7 +1116,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
     </section>
 
     <!-- 8. Booking Form Section -->
-    <section id="booking-form" class="py-24">
+    <section id="booking-form" class="py-12 md:py-24">
         <div class="container-site max-w-6xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
@@ -1132,6 +1132,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                 <!-- Right: Actually Form -->
                 <div class="lg:col-span-8" data-aos="fade-left">
                     <form x-data="bookingForm()" @submit="submitForm" class="space-y-8 md:space-y-10"
+                        autocomplete="off"
                         data-page-source="<?php echo esc_attr(get_the_title()); ?>"
                         data-page-url="<?php echo esc_attr(get_permalink()); ?>">
                         <!-- Name Row -->
@@ -1183,11 +1184,14 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         disableMobile: true,
                                         onChange(dates, dateStr) {
                                             formData.startDate = dateStr;
+                                            startDateLabel = dates[0] ? dates[0].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
                                             validateField('startDate');
                                         }
                                     })"
                                     :value="formData.startDate"
-                                    class="input-field cursor-pointer" placeholder="Start Date">
+                                    class="input-field cursor-pointer" placeholder="Start Date (dd-mm-yyyy)">
+                                <span x-show="startDateLabel" x-text="startDateLabel"
+                                    class="block mt-1 text-xs text-dark/50 font-body"></span>
                                 <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
                             </div>
                             <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
@@ -1198,9 +1202,8 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     </svg>
                                 </div>
                                 <select x-model="formData.tripLength" @change="validateField('tripLength')"
-                                    class="input-field" :class="formData.tripLength ? 'text-dark' : 'text-dark/40'"
-                                    x-init="formData.tripLength = '<?php echo esc_js($information['days'] ?? ''); ?>'">
-                                    <option value="" disabled>Trip Length (days)</option>
+                                    class="input-field" :class="formData.tripLength ? 'text-dark' : 'text-dark/40'">
+                                    <option value="" disabled>Trip Length (# of days)</option>
                                     <?php for ($d = 2; $d <= 20; $d++): ?>
                                     <option value="<?php echo $d; ?>"><?php echo $d; ?></option>
                                     <?php endfor; ?>

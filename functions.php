@@ -13,7 +13,7 @@ define('INTENSE_EMAIL_TEST_MODE', true);
 define('INTENSE_EMAIL_TEST_ADDRESS', 'kevin.gomez@nerd.pe');
 
 // Correos reales del equipo (se usan cuando TEST_MODE = false)
-define('INTENSE_TEAM_EMAILS', ['sales@intenseperu.com', 'karen@intenseperu.com', 'roberto@intenseperu.com', 'sofia@intenseperu.com']);
+define('INTENSE_TEAM_EMAILS', ['sales@intenseperu.com', 'roberto@intenseperu.com', 'sofia@intenseperu.com']);
 
 // ── Soporte del Tema ───────────────────────────────────────────────────────────
 function intense_nerd_setup()
@@ -581,7 +581,7 @@ function intense_email_contact_internal($data)
 
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#fcf1eb;border:1px solid #e0c9bd;margin-bottom:20px;">
         <tr><td style="padding:12px 16px;font-size:13px;color:#b76739;">
-          ★ &nbsp;Reply directly to this email — the <strong>Reply-To</strong> is already set to the client's address.
+          ★ &nbsp;Reply to this email is already set to the client's address.
         </td></tr>
       </table>
 
@@ -714,7 +714,13 @@ function intense_email_booking_internal($data)
   $name = esc_html($data['first_name'] . ' ' . $data['last_name']);
   $email = esc_html($data['email']);
   $whatsapp = $data['whatsapp'] ? esc_html($data['whatsapp']) : '<em style="color:#776c60;">—</em>';
-  $start_date = $data['start_date'] ? esc_html($data['start_date']) : '<em style="color:#776c60;">—</em>';
+  $start_date = '<em style="color:#776c60;">—</em>';
+  if (!empty($data['start_date'])) {
+    $date_parts = preg_split('/[-\/]/', trim($data['start_date']));
+    $start_date = count($date_parts) === 3
+      ? esc_html(sprintf('%02d-%02d-%04d', $date_parts[0], $date_parts[1], $date_parts[2]))
+      : esc_html($data['start_date']);
+  }
   $trip_length = $data['trip_length'] ? esc_html($data['trip_length']) . ' days' : '<em style="color:#776c60;">—</em>';
   $adults = esc_html($data['adults'] ?: '0');
   $children = esc_html($data['children'] ?: '0');
@@ -749,7 +755,7 @@ function intense_email_booking_internal($data)
 
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#fcf1eb;border:1px solid #e0c9bd;margin-bottom:20px;">
         <tr><td style="padding:12px 16px;font-size:13px;color:#b76739;">
-          ★ &nbsp;Reply directly to this email — the <strong>Reply-To</strong> is already set to the client's address.
+          ★ &nbsp;Reply to this email is already set to the client's address.
         </td></tr>
       </table>
 
@@ -844,7 +850,13 @@ HTML;
 function intense_email_booking_autoreply($data)
 {
   $first_name = esc_html($data['first_name']);
-  $start_date = $data['start_date'] ? esc_html($data['start_date']) : '—';
+  $start_date = '—';
+  if (!empty($data['start_date'])) {
+    $date_parts = preg_split('/[-\/]/', trim($data['start_date']));
+    $start_date = count($date_parts) === 3
+      ? esc_html(sprintf('%02d-%02d-%04d', $date_parts[0], $date_parts[1], $date_parts[2]))
+      : esc_html($data['start_date']);
+  }
   $trip_length = $data['trip_length'] ? esc_html($data['trip_length']) . ' days' : '—';
   $adults = esc_html($data['adults'] ?: '0');
   $children = esc_html($data['children'] ?: '0');

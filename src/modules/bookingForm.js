@@ -40,6 +40,7 @@ export default function bookingForm() {
             pageSource: '',
             pageUrl: '',
         },
+        startDateLabel: '',
         errors: {},
         isSubmitting: false,
         submitSuccess: false,
@@ -97,11 +98,23 @@ export default function bookingForm() {
             }
         },
 
+        scrollToFirstError() {
+            this.$nextTick(() => {
+                const firstError = this.$el.querySelector('.has-error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        },
+
         async submitForm(e) {
             e.preventDefault();
             this.submitSuccess = false;
 
-            if (!this.validate()) return;
+            if (!this.validate()) {
+                this.scrollToFirstError();
+                return;
+            }
 
             this.isSubmitting = true;
             try {
