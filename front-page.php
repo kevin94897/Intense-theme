@@ -82,7 +82,8 @@ $modal_title = $modal_data['title_modal'] ?? '';
         <!-- Background Image -->
         <div class="absolute inset-0 z-0">
             <video src="<?php echo esc_url($hero_video_url ?: $hero_video_fallback); ?>" autoplay muted loop playsinline
-                class="w-full h-full object-cover"></video>
+                poster="<?php echo esc_url(get_template_directory_uri() . '/assets/img/hero-poster.jpg'); ?>"
+                preload="none" class="w-full h-full object-cover"></video>
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 

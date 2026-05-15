@@ -3,12 +3,15 @@
 
 <head>
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WRSXP2RH');</script>
-    <!-- End Google Tag Manager --> 
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-WRSXP2RH');</script>
+    <!-- End Google Tag Manager -->
 
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,8 +23,8 @@
 
 <body <?php body_class('bg-cream'); ?>>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRSXP2RH"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRSXP2RH" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <?php wp_body_open(); ?>
@@ -53,10 +56,11 @@
                         <?php
                         $raw_whatsapp = get_theme_mod('contact_whatsapp', '51 994 008 833');
                         $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+                        $whatsapp_default_text = get_theme_mod('whatsapp_default_text', 'Hello! I would like to get more information.');
                         ?>
 
-                        <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>" target="_blank"
-                            rel="noopener noreferrer"
+                        <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>"
+                            target="_blank" rel="noopener noreferrer"
                             class="pr-5 pl-5 hover:text-primary transition-colors flex items-center gap-2">
 
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -71,7 +75,8 @@
                                 </g>
                             </svg>
 
-                            <span class="md:block hidden text-[0.9375rem] font-light">+<?php echo esc_html($raw_whatsapp); ?></span>
+                            <span
+                                class="md:block hidden text-[0.9375rem] font-light">+<?php echo esc_html($raw_whatsapp); ?></span>
                         </a>
                         <a href="mailto:<?php echo esc_attr(get_theme_mod('contact_email', 'sales@intenseperu.com')); ?>"
                             class="hover:text-primary transition-colors flex items-center gap-2 pl-5">
@@ -186,7 +191,7 @@
         <!-- ══════════════════════════════════════════════════════════
              MOBILE DRAWER
         ══════════════════════════════════════════════════════════ -->
-        <div x-show="mobileOpen" x-transition:enter="transition ease-out duration-300"
+        <div x-cloak x-show="mobileOpen" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
@@ -203,7 +208,12 @@
                     </svg>
                 </a>
                 <span class="h-4 w-px bg-dark/20"></span>
-                <a href="https://wa.me/<?php echo esc_attr(get_theme_mod('contact_whatsapp', '51 994 008 833')); ?>"
+                <?php
+                $raw_whatsapp_mob = get_theme_mod('contact_whatsapp', '51 994 008 833');
+                $clean_whatsapp_mob = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp_mob);
+                $whatsapp_default_text = get_theme_mod('whatsapp_default_text', 'Hello! I would like to get more information.');
+                ?>
+                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp_mob); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>"
                     target="_blank" rel="noopener" aria-label="WhatsApp" class="hover:text-primary transition-colors">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -452,7 +462,7 @@
         ══════════════════════════════════════════════════════════ -->
 
         <!-- JOURNEYS -->
-        <div x-show="active === 'journeys'" x-transition:enter="transition ease-out duration-200"
+        <div x-cloak x-show="active === 'journeys'" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 -translate-y-2"
@@ -513,7 +523,7 @@
         </div>
 
         <!-- DESTINATIONS -->
-        <div x-show="active === 'destinations'" x-transition:enter="transition ease-out duration-200"
+        <div x-cloak x-show="active === 'destinations'" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 -translate-y-2"
@@ -541,7 +551,7 @@
         </div>
 
         <!-- BLOG -->
-        <div x-show="active === 'blog'" x-transition:enter="transition ease-out duration-200"
+        <div x-cloak x-show="active === 'blog'" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
             x-transition:leave-end="opacity-0 -translate-y-2"

@@ -446,17 +446,18 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                         <?php
                         $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
                         $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+                        $whatsapp_default_text = get_theme_mod('whatsapp_default_text', 'Hello! I would like to get more information.');
                         ?>
 
                         <div class="text-center mt-6 text-[12px] font-body">
                             <p class="mb-1">Do you need help? Contact Us</p>
-                            <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>" target="_blank"
+                            <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>" target="_blank"
                                 rel="noopener noreferrer"
                                 class="pr-5 pl-5 hover:text-primary transition-colors justify-center flex items-center gap-2">
                                 <span class="md:block hidden">+<?php echo esc_html($raw_whatsapp); ?></span>
                             </a>
                             <div class="flex items-center justify-center gap-3">
-                                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>" target="_blank"
+                                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>" target="_blank"
                                     rel="noopener noreferrer" aria-label="WhatsApp"
                                     class="text-neutral-gray hover:text-green-500 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

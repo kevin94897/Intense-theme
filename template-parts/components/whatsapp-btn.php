@@ -9,8 +9,9 @@
  */
 $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
 $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+$whatsapp_default_text = get_theme_mod('whatsapp_default_text', 'Hello! I would like to get more information.');
 ?>
-<a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>"
+<a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="<?php esc_attr_e('Contactar por WhatsApp', 'intense-nerd-theme'); ?>"

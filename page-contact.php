@@ -8,6 +8,7 @@ get_header();
 $image_faq = get_field('image_faq');
 $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
 $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+$whatsapp_default_text = get_theme_mod('whatsapp_default_text', 'Hello! I would like to get more information.');
 ?>
 
 <main id="primary" class="site-main bg-cream">
@@ -32,7 +33,7 @@ $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp)
 
             <div class="flex flex-wrap justify-center items-center gap-2 md:gap-5 font-body body-small text-dark">
                 <p class="font-body body-small text-dark">Prefer to talk? You can call us at</p>
-                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>"
+                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>"
                     target="_blank" rel="noopener"
                     class="flex items-center gap-1.5 hover:text-primary transition-colors duration-200">
                     <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
