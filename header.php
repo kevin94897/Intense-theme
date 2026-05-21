@@ -18,6 +18,18 @@
     <meta name="description" content="<?php bloginfo('description'); ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/hv-simplicite-regular.woff2" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/hv-simplicite-bold.woff2" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" as="style">
+    <?php
+    $__lcp_logo_id = get_theme_mod('custom_logo');
+    if ($__lcp_logo_id) {
+        $__lcp_src = wp_get_attachment_image_src($__lcp_logo_id, 'full');
+        if ($__lcp_src) {
+            echo '<link rel="preload" as="image" href="' . esc_url($__lcp_src[0]) . '" fetchpriority="high">' . "\n    ";
+        }
+    }
+    ?>
     <?php wp_head(); ?>
 </head>
 
@@ -107,13 +119,28 @@
                             <a href="<?php echo esc_url(home_url('/')); ?>" rel="home"
                                 class="w-[140px] md:w-[120px] lg:w-[150px] block">
                                 <img src="<?php echo esc_url($logo_dark_url); ?>" alt="<?php bloginfo('name'); ?>"
-                                    class="w-full h-auto object-contain">
+                                    class="w-full h-auto object-contain" fetchpriority="high" loading="eager">
                             </a>
                         <?php elseif (has_custom_logo()): ?>
-                            <div
-                                class="w-[100px] md:w-[120px] lg:w-[150px] [&_img]:w-full [&_img]:h-auto [&_img]:object-contain">
+                            <?php
+                            $__logo_id  = get_theme_mod('custom_logo');
+                            $__logo_src = $__logo_id ? wp_get_attachment_image_src($__logo_id, 'full') : null;
+                            if ($__logo_src): ?>
+                            <div class="w-[100px] md:w-[120px] lg:w-[150px] [&_img]:w-full [&_img]:h-auto [&_img]:object-contain">
+                                <a href="<?php echo esc_url(home_url('/')); ?>" rel="home" class="custom-logo-link">
+                                    <img src="<?php echo esc_url($__logo_src[0]); ?>"
+                                        alt="<?php bloginfo('name'); ?>"
+                                        class="custom-logo w-full h-auto object-contain"
+                                        width="<?php echo (int) $__logo_src[1]; ?>"
+                                        height="<?php echo (int) $__logo_src[2]; ?>"
+                                        fetchpriority="high" loading="eager">
+                                </a>
+                            </div>
+                            <?php else: ?>
+                            <div class="w-[100px] md:w-[120px] lg:w-[150px] [&_img]:w-full [&_img]:h-auto [&_img]:object-contain">
                                 <?php the_custom_logo(); ?>
                             </div>
+                            <?php endif; ?>
                         <?php else: ?>
                             <a href="<?php echo esc_url(home_url('/')); ?>" rel="home" class="flex items-center shrink-0">
                                 <span class="font-heading text-2xl text-dark font-medium"><?php bloginfo('name'); ?></span>
