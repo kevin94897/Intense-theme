@@ -18,17 +18,17 @@
 get_header();
 
 // ── Leer campos ACF desde Options Page ──────────────────────────────────────
-$tyc_group   = get_field('tyc', 'option');
-$title       = $tyc_group['title_terms']  ?? get_the_title();
+$tyc_group = get_field('tyc', 'option');
+$title = $tyc_group['title_terms'] ?? get_the_title();
 $description = $tyc_group['description'] ?? '';
-$questions   = $tyc_group['list_of_terms'] ?? [];
+$questions = $tyc_group['list_of_terms'] ?? [];
 ?>
 
 <main class="min-h-screen bg-cream">
 
     <!-- ── Page Header ──────────────────────────────────────────────── -->
     <section class="pt-20 pb-10 text-center px-4" data-aos="fade-up">
-        <h1 class="heading-2 max-w-3xl mx-auto md:text-6xl text-4xl">
+        <h1 class="heading-2 text-dark max-w-3xl mx-auto md:text-6xl text-4xl">
             <?php echo esc_html($title ?: get_the_title()); ?>
         </h1>
         <div class="mt-8 text-dark max-w-2xl mx-auto font-light faq-wysiwyg">
@@ -43,22 +43,24 @@ $questions   = $tyc_group['list_of_terms'] ?? [];
             <!-- ══════════════════════════════════════════════════════
                  SIDEBAR NAV
             ══════════════════════════════════════════════════════ -->
-            <?php if (!empty($questions)) : ?>
+            <?php if (!empty($questions)): ?>
                 <aside class="legal-sidebar lg:w-72 xl:w-80 shrink-0">
                     <nav class="legal-nav lg:sticky lg:top-28" aria-label="Términos y condiciones">
                         <ul class="">
-                            <?php foreach ($questions as $i => $item) :
+                            <?php foreach ($questions as $i => $item):
                                 $q_text = $item['question'] ?? '';
-                                if (!$q_text) continue;
+                                if (!$q_text)
+                                    continue;
                                 $q_id = 'term-' . ($i + 1);
-                            ?>
+                                ?>
                                 <li class="border-b border-dark/8">
-                                    <a
-                                        href="#<?php echo esc_attr($q_id); ?>"
+                                    <a href="#<?php echo esc_attr($q_id); ?>"
                                         class="legal-nav__link group flex items-start gap-3 py-3.5 text-sm font-body text-dark/45 hover:text-dark transition-colors duration-200">
-                                        <span class="legal-nav__arrow mt-0.5 shrink-0 w-4 h-4 flex items-center justify-center text-dark/25 group-hover:text-dark group-hover:translate-x-1 transition-all duration-200">
+                                        <span
+                                            class="legal-nav__arrow mt-0.5 shrink-0 w-4 h-4 flex items-center justify-center text-dark/25 group-hover:text-dark group-hover:translate-x-1 transition-all duration-200">
                                             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                                                <path d="M1.5 6.5H11.5M11.5 6.5L7 2M11.5 6.5L7 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M1.5 6.5H11.5M11.5 6.5L7 2M11.5 6.5L7 11" stroke="currentColor"
+                                                    stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
                                         </span>
                                         <span class="leading-snug"><?php echo esc_html($q_text); ?></span>
@@ -75,44 +77,42 @@ $questions   = $tyc_group['list_of_terms'] ?? [];
             ══════════════════════════════════════════════════════ -->
             <div class="legal-content faq-content flex-1 min-w-0">
 
-                <?php if (empty($questions)) : ?>
+                <?php if (empty($questions)): ?>
                     <p class="text-sm text-dark/40 font-body">
                         <?php esc_html_e('No hay términos disponibles.', 'intense-nerd-theme'); ?>
                     </p>
 
-                <?php else : ?>
+                <?php else: ?>
                     <div class="faq-list">
-                        <?php foreach ($questions as $i => $item) :
+                        <?php foreach ($questions as $i => $item):
                             $q_text = $item['question'] ?? '';
                             $a_text = $item['response'] ?? '';
-                            $q_id   = 'term-' . ($i + 1);
-                            if (!$q_text) continue;
-                        ?>
-                            <div
-                                id="<?php echo esc_attr($q_id); ?>"
-                                class="faq-item scroll-mt-28 border-b border-dark/8"
+                            $q_id = 'term-' . ($i + 1);
+                            if (!$q_text)
+                                continue;
+                            ?>
+                            <div id="<?php echo esc_attr($q_id); ?>" class="faq-item scroll-mt-28 border-b border-dark/8"
                                 x-data="{ open: false }">
                                 <!-- Pregunta (trigger) -->
-                                <button
-                                    @click="open = !open"
-                                    :aria-expanded="open"
+                                <button @click="open = !open" :aria-expanded="open"
                                     class="faq-trigger w-full flex items-start justify-between gap-6 py-5 text-left group">
-                                    <span class="faq-question text-[15px] font-body font-medium text-dark leading-snug group-hover:text-dark/70 transition-colors">
+                                    <span
+                                        class="faq-question text-[15px] font-body font-medium text-dark leading-snug group-hover:text-dark/70 transition-colors">
                                         <?php echo esc_html($q_text); ?>
                                     </span>
                                     <!-- Icono +/- -->
-                                    <span class="faq-icon shrink-0 mt-0.5 w-5 h-5 flex items-center justify-center text-dark/30 transition-transform duration-300" :class="{ 'rotate-45': open }">
+                                    <span
+                                        class="faq-icon shrink-0 mt-0.5 w-5 h-5 flex items-center justify-center text-dark/30 transition-transform duration-300"
+                                        :class="{ 'rotate-45': open }">
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                            <path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                                            <path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.3"
+                                                stroke-linecap="round" />
                                         </svg>
                                     </span>
                                 </button>
 
                                 <!-- Respuesta (collapsible) -->
-                                <div
-                                    x-show="open"
-                                    x-collapse
-                                    class="faq-answer">
+                                <div x-show="open" x-collapse class="faq-answer">
                                     <div class="faq-wysiwyg pb-5 pr-10 text-sm font-body text-dark/55 leading-relaxed">
                                         <?php echo wp_kses_post($a_text); ?>
                                     </div>
@@ -206,7 +206,7 @@ $questions   = $tyc_group['list_of_terms'] ?? [];
 </style>
 
 <script>
-    (function() {
+    (function () {
         const navLinks = document.querySelectorAll('.legal-nav__link');
         const items = document.querySelectorAll('.faq-item[id]');
 

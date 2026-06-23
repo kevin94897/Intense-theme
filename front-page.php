@@ -37,37 +37,42 @@
 get_header();
 
 // ── ACF: Home fields ─────────────────────────────────────────────────────────
-$banner_hero             = get_field('banner_hero')             ?: [];
-$message_home            = get_field('message_home')            ?: '';
-$signature_destinations  = get_field('signature_destinations')  ?: [];
-$motivation              = get_field('motivation')              ?: [];
-$journey_spark           = get_field('journey_spark')           ?: [];
+$banner_hero = get_field('banner_hero') ?: [];
+$message_home = get_field('message_home') ?: '';
+$signature_destinations = get_field('signature_destinations') ?: [];
+$motivation = get_field('motivation') ?: [];
+$journey_spark = get_field('journey_spark') ?: [];
 
-$hero_btn1               = $banner_hero['button_1']    ?? [];
-$hero_btn2               = $banner_hero['button_2']    ?? [];
-$hero_video_field        = $banner_hero['video']       ?? null;
+$hero_btn1 = $banner_hero['button_1'] ?? [];
+$hero_btn2 = $banner_hero['button_2'] ?? [];
+$hero_video_field = $banner_hero['video'] ?? null;
 // Campo tipo file devuelve array; tipo url devuelve string
-$hero_video_url          = is_array($hero_video_field)
+$hero_video_url = is_array($hero_video_field)
     ? ($hero_video_field['url'] ?? '')
     : (string) $hero_video_field;
-$hero_video_fallback     = get_template_directory_uri() . '/assets/videos/intense_video_home_hero.mp4';
+$hero_video_fallback = get_template_directory_uri() . '/assets/videos/intense_video_home_hero.mp4';
 
-$dest_list               = $signature_destinations['destinations_list'] ?? [];
-$journey_posts           = $signature_destinations['journeys']     ?? [];
+$dest_list = $signature_destinations['destinations_list'] ?? [];
+$journey_posts = $signature_destinations['journeys'] ?? [];
 
-$motivation_title        = $motivation['title']            ?? '';
-$motivation_image        = $motivation['image']            ?? [];
-$list_of_purposes        = $motivation['list_of_purposes'] ?? [];
+$motivation_title = $motivation['title'] ?? '';
+$motivation_image = $motivation['image'] ?? [];
+$list_of_purposes = $motivation['list_of_purposes'] ?? [];
 
-$spark_title             = $journey_spark['title']  ?? '';
-$spark_journeys          = $journey_spark['journeys'] ?? [];
+$spark_title = $journey_spark['title'] ?? '';
+$spark_journeys = $journey_spark['journeys'] ?? [];
 
 // ── ACF: Download options page ───────────────────────────────────────────────
-$travel_guides           = get_field('travel_guides', 'option') ?: [];
-$guides_image            = $travel_guides['guides_image']    ?? [];
-$guides_title            = $travel_guides['title']           ?? '';
-$guides_description      = $travel_guides['description']     ?? '';
-$download_button         = $travel_guides['download_button'] ?? [];
+$travel_guides = get_field('travel_guides', 'option') ?: [];
+$guides_image = $travel_guides['guides_image'] ?? [];
+$guides_title = $travel_guides['title'] ?? '';
+$guides_description = $travel_guides['description'] ?? '';
+$download_button = $travel_guides['download_button'] ?? [];
+
+// ── ACF: New Modal Group (Try page first, then option) ──────────────────────
+$modal_data = get_field('modal') ?: get_field('modal', 'option') ?: [];
+$modal_image = $modal_data['modal_image'] ?? [];
+$modal_title = $modal_data['title_modal'] ?? '';
 ?>
 
 <main id="main" class="site-main" role="main">
@@ -76,8 +81,9 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20" data-aos="fade-in">
         <!-- Background Image -->
         <div class="absolute inset-0 z-0">
-            <video src="<?php echo esc_url($hero_video_url ?: $hero_video_fallback); ?>" autoplay
-                muted loop playsinline class="w-full h-full object-cover"></video>
+            <video src="<?php echo esc_url($hero_video_url ?: $hero_video_fallback); ?>" autoplay muted loop playsinline
+                poster="<?php echo esc_url(get_template_directory_uri() . '/assets/img/hero-poster.jpg'); ?>"
+                preload="none" class="w-full h-full object-cover"></video>
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 
@@ -86,7 +92,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
                 data-aos="fade-up" data-aos-delay="100">
                 <?php echo esc_html(get_the_title()); ?>
             </h1>
-            <?php if (get_the_content()) : ?>
+            <?php if (get_the_content()): ?>
                 <div class="font-body text-white/90 text-lg md:text-xl font-light max-w-xl mx-auto mb-10 entry-content-hero"
                     data-aos="fade-up" data-aos-delay="200">
                     <?php the_content(); ?>
@@ -94,17 +100,17 @@ $download_button         = $travel_guides['download_button'] ?? [];
             <?php endif; ?>
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up"
                 data-aos-delay="300">
-                <?php if (!empty($hero_btn1)) : ?>
+                <?php if (!empty($hero_btn1)): ?>
                     <?php get_template_part('template-parts/components/btn-primary', null, [
                         'text' => $hero_btn1['title'] ?? 'Explore itineraries',
-                        'href' => $hero_btn1['url']   ?? '#',
+                        'href' => $hero_btn1['url'] ?? '#',
                         'class_extra' => 'w-[180px] md:w-auto',
                     ]); ?>
                 <?php endif; ?>
-                <?php if (!empty($hero_btn2)) : ?>
+                <?php if (!empty($hero_btn2)): ?>
                     <?php get_template_part('template-parts/components/btn-outline', null, [
-                        'text'  => $hero_btn2['title'] ?? 'Design my trip',
-                        'href'  => $hero_btn2['url']   ?? '#',
+                        'text' => $hero_btn2['title'] ?? 'Design my trip',
+                        'href' => $hero_btn2['url'] ?? '#',
                         'color' => 'light',
                         'class_extra' => 'w-[180px] md:w-auto',
                     ]); ?>
@@ -114,11 +120,11 @@ $download_button         = $travel_guides['download_button'] ?? [];
     </section>
 
     <!-- Message -->
-    <?php if ($message_home) : ?>
+    <?php if ($message_home): ?>
         <section class="py-20">
             <div class="container-site">
-                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center leading-relaxed" data-aos="fade-up"
-                    data-aos-delay="200">
+                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center leading-relaxed"
+                    data-aos="fade-up" data-aos-delay="200">
                     <?php echo nl2br(esc_html($message_home)); ?>
                 </p>
             </div>
@@ -126,19 +132,25 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <?php endif; ?>
 
     <!-- B. Signature Destinations -->
-    <?php if (!empty($dest_list)) : ?>
+    <?php if (!empty($dest_list)): ?>
         <section class="py-10 bg-cream">
             <div class="container-site text-left">
                 <div class="flex flex-col items-center md:items-start gap-4">
-                    <svg class="block md:hidden" width="65" height="41" viewBox="0 0 65 41" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z" stroke="#7B4424" stroke-width="1.12281" />
-                        <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z" fill="#B76739" stroke="#B76739" stroke-width="1.12281" />
-                        <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="#7B4424" stroke-width="1.12281" />
+                    <svg class="block md:hidden" width="65" height="41" viewBox="0 0 65 41" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z"
+                            stroke="#7B4424" stroke-width="1.12281" />
+                        <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z"
+                            fill="#B76739" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="#7B4424"
+                            stroke-width="1.12281" />
                         <path d="M54.7339 40.3481L31.997 27.4359L9.26017 40.3481" stroke="#7B4424" stroke-width="1.12281" />
-                        <path d="M23.2954 3.29541L32.2779 8.90945L41.2603 3.29541" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M23.2954 3.29541L32.2779 8.90945L41.2603 3.29541" stroke="#B76739"
+                            stroke-width="1.12281" />
                         <path d="M41.2603 37.541L32.2778 31.927L23.2953 37.541" stroke="#B76739" stroke-width="1.12281" />
                         <path d="M64.2779 8.90942L44.0674 20.4182L64.2779 31.927" stroke="#B76739" stroke-width="1.12281" />
-                        <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="#B76739"
+                            stroke-width="1.12281" />
                     </svg>
                     <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12 text-center md:text-left"
                         data-aos="fade-up" data-aos-delay="100">Signature Destinations</h2>
@@ -157,32 +169,32 @@ $download_button         = $travel_guides['download_button'] ?? [];
 
                     $aos_delays = [200, 300, 400, 500, 600, 700];
 
-                    foreach ($dest_list as $idx => $dest_item) :
-                        if ($idx >= 6) break;
-                        $img_array  = $dest_item['destination_image'] ?? [];
-                        $thumb      = !empty($img_array['sizes']['large']) ? $img_array['sizes']['large'] : (!empty($img_array['url']) ? $img_array['url'] : get_template_directory_uri() . '/assets/images/intense_01.webp');
+                    foreach ($dest_list as $idx => $dest_item):
+                        if ($idx >= 6)
+                            break;
+                        $img_array = $dest_item['destination_image'] ?? [];
+                        $thumb = !empty($img_array['sizes']['large']) ? $img_array['sizes']['large'] : (!empty($img_array['url']) ? $img_array['url'] : get_template_directory_uri() . '/assets/images/intense_01.webp');
                         $dest_title = $dest_item['destination_title'] ?? '';
-                        $dest_btn   = $dest_item['destination_button'] ?? [];
-                        
-                        $dest_url   = $dest_btn['url'] ?? '#';
+                        $dest_btn = $dest_item['destination_button'] ?? [];
+
+                        $dest_url = $dest_btn['url'] ?? '#';
                         $dest_btn_text = $dest_btn['title'] ?? 'Explore destination';
-                    ?>
+                        ?>
                         <div class="<?php echo $bento_classes[$idx]; ?> relative group overflow-hidden rounded-sm cursor-pointer"
                             data-aos="fade-up" data-aos-delay="<?php echo $aos_delays[$idx]; ?>">
-                            <img src="<?php echo esc_url($thumb); ?>"
-                                alt="<?php echo esc_attr($dest_title); ?>"
+                            <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($dest_title); ?>"
                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             <!-- <div class="absolute inset-0 bg-black/20"></div> -->
                             <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-left">
                                 <h3 class="font-heading text-white text-2xl md:text-2xl font-medium mb-2">
                                     <?php echo esc_html($dest_title); ?>
                                 </h3>
-                                <?php if (!empty($dest_btn)) : ?>
+                                <?php if (!empty($dest_btn)): ?>
                                     <?php get_template_part('template-parts/components/btn-outline', null, [
-                                        'text'        => $dest_btn_text,
+                                        'text' => $dest_btn_text,
                                         'class_extra' => 'text-xs md:text-sm',
-                                        'href'        => $dest_url,
-                                        'color'       => 'light',
+                                        'href' => $dest_url,
+                                        'color' => 'light',
                                     ]); ?>
                                 <?php endif; ?>
                             </div>
@@ -194,45 +206,50 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <?php endif; ?>
 
     <!-- C. Authentic Itineraries -->
-    <?php if (!empty($journey_posts)) : ?>
+    <?php if (!empty($journey_posts)): ?>
         <section id="itineraries" class="py-20 bg-cream">
             <div class="container-site text-center">
                 <div class="flex flex-col items-center gap-4">
                     <svg width="65" height="41" viewBox="0 0 65 41" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z" stroke="#7B4424" stroke-width="1.12281" />
-                        <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z" fill="#B76739" stroke="#B76739" stroke-width="1.12281" />
-                        <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="#7B4424" stroke-width="1.12281" />
+                        <path d="M31.9972 27.997L18.8042 20.418L31.9972 12.8391L45.1902 20.418L31.9972 27.997Z"
+                            stroke="#7B4424" stroke-width="1.12281" />
+                        <path d="M31.9973 22.3832L28.3481 20.4183L31.9973 18.4534L35.6464 20.4183L31.9973 22.3832Z"
+                            fill="#B76739" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M9.26025 0.488281L31.9971 13.4006L54.734 0.488281" stroke="#7B4424"
+                            stroke-width="1.12281" />
                         <path d="M54.7339 40.3481L31.997 27.4359L9.26017 40.3481" stroke="#7B4424" stroke-width="1.12281" />
-                        <path d="M23.2954 3.29541L32.2779 8.90945L41.2603 3.29541" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M23.2954 3.29541L32.2779 8.90945L41.2603 3.29541" stroke="#B76739"
+                            stroke-width="1.12281" />
                         <path d="M41.2603 37.541L32.2778 31.927L23.2953 37.541" stroke="#B76739" stroke-width="1.12281" />
                         <path d="M64.2779 8.90942L44.0674 20.4182L64.2779 31.927" stroke="#B76739" stroke-width="1.12281" />
-                        <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="#B76739" stroke-width="1.12281" />
+                        <path d="M0.277743 8.90942L20.4883 20.4182L0.277743 31.927" stroke="#B76739"
+                            stroke-width="1.12281" />
                     </svg>
                     <h2 class="font-heading text-4xl md:text-5xl text-dark mb-12" data-aos="fade-up" data-aos-delay="100">
                         Authentic Itineraries</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 text-left">
-                        <?php foreach ($journey_posts as $jidx => $journey_post) :
-                            $j_id          = $journey_post->ID;
-                            $j_title       = get_the_title($j_id);
-                            $j_url         = get_permalink($j_id);
-                            $j_thumb       = get_the_post_thumbnail_url($j_id, 'large') ?: get_template_directory_uri() . '/assets/images/intense_02.webp';
-                            $j_features    = get_field('features', $j_id);
+                        <?php foreach ($journey_posts as $jidx => $journey_post):
+                            $j_id = $journey_post->ID;
+                            $j_title = get_the_title($j_id);
+                            $j_url = get_permalink($j_id);
+                            $j_thumb = get_the_post_thumbnail_url($j_id, 'large') ?: get_template_directory_uri() . '/assets/images/intense_02.webp';
+                            $j_features = get_field('features', $j_id);
                             $j_information = get_field('information', $j_id);
-                            $j_price_val   = $j_features['price'] ?? '';
-                            $j_days_val    = (int) ($j_information['days'] ?? 0);
-                            $j_badges      = get_field('badges', $j_id) ?: [];
-                        ?>
+                            $j_price_val = $j_features['price'] ?? '';
+                            $j_days_val = (int) ($j_information['days'] ?? 0);
+                            $j_badges = get_field('badges', $j_id) ?: [];
+                            ?>
                             <?php get_template_part('template-parts/components/card-itinerary', null, [
-                                'image'        => $j_thumb,
-                                'title'        => $j_title,
-                                'price'        => $j_price_val ? 'USD ' . number_format((int) $j_price_val) : '',
-                                'duration'     => $j_days_val ? $j_days_val . ' Days' : '',
-                                'post_id'      => $j_id,
-                                'link'         => $j_url,
-                                'link_text'    => 'Explore itineraries',
-                                'aos_delay'    => ($jidx * 100) + 200,
-                                'badges'       => $j_badges,
+                                'image' => $j_thumb,
+                                'title' => $j_title,
+                                'price' => $j_price_val ? 'USD ' . number_format((int) $j_price_val) : '',
+                                'duration' => $j_days_val ? $j_days_val . ' Days' : '',
+                                'post_id' => $j_id,
+                                'link' => $j_url,
+                                'link_text' => 'Explore itineraries',
+                                'aos_delay' => ($jidx * 100) + 200,
+                                'badges' => $j_badges,
                             ]); ?>
                         <?php endforeach; ?>
                     </div>
@@ -258,22 +275,22 @@ $download_button         = $travel_guides['download_button'] ?? [];
                         </h2>
                     </div>
 
-                    <?php if (!empty($motivation_image)) : ?>
+                    <?php if (!empty($motivation_image)): ?>
                         <img src="<?php echo esc_url($motivation_image['url']); ?>"
                             alt="<?php echo esc_attr($motivation_image['alt'] ?: 'Local Culture'); ?>"
                             class="w-full h-auto rounded-lg shadow-xl object-cover aspect-[4/3]">
                     <?php endif; ?>
                 </div>
                 <div data-aos="fade-left" class="space-y-12">
-                    <?php if (!empty($list_of_purposes)) : ?>
-                        <?php foreach ($list_of_purposes as $purpose) : ?>
+                    <?php if (!empty($list_of_purposes)): ?>
+                        <?php foreach ($list_of_purposes as $purpose): ?>
                             <div class="">
-                                <?php if (!empty($purpose['purpose_title'])) : ?>
+                                <?php if (!empty($purpose['purpose_title'])): ?>
                                     <h2 class="font-heading text-3xl md:text-4xl font-medium mb-6">
                                         <?php echo esc_html($purpose['purpose_title']); ?>
                                     </h2>
                                 <?php endif; ?>
-                                <?php if (!empty($purpose['purpose_description'])) : ?>
+                                <?php if (!empty($purpose['purpose_description'])): ?>
                                     <div class="space-y-6">
                                         <p class="font-body text-cream/80 font-light">
                                             <?php echo nl2br(esc_html($purpose['purpose_description'])); ?>
@@ -302,7 +319,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
         </div>
 
         <div class="container-site text-center">
-            <?php if (!empty($spark_journeys)) :
+            <?php if (!empty($spark_journeys)):
                 $journeys_items = array_slice($spark_journeys, 0, 8);
                 $col_heights = [
                     [['h' => '55%'], ['h' => '45%']],
@@ -310,44 +327,46 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     [['h' => '60%'], ['h' => '40%']],
                     [['h' => '45%'], ['h' => '55%']],
                 ];
-            ?>
+                ?>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-2 h-[1100px] md:h-[500px] lg:h-[600px] xl:h-[700px] w-full">
-                    <?php for ($col = 0; $col < 4; $col++) : ?>
+                    <?php for ($col = 0; $col < 4; $col++): ?>
                         <div class="flex flex-col gap-2 h-full w-full">
-                            <?php for ($row = 0; $row < 2; $row++) :
+                            <?php for ($row = 0; $row < 2; $row++):
                                 $j_idx = ($col * 2) + $row;
-                                if (!isset($journeys_items[$j_idx])) continue;
-                                $item      = $journeys_items[$j_idx];
-                                $img       = $item['journey_image'] ?? [];
-                                $img_url   = !empty($img['sizes']['large']) ? $img['sizes']['large'] : (!empty($img['url']) ? $img['url'] : '');
-                                $title     = $item['journey_title'] ?? '';
-                                $btn       = $item['journey__button'] ?? [];
-                                $btn_url   = $btn['url'] ?? '#';
+                                if (!isset($journeys_items[$j_idx]))
+                                    continue;
+                                $item = $journeys_items[$j_idx];
+                                $img = $item['journey_image'] ?? [];
+                                $img_url = !empty($img['sizes']['large']) ? $img['sizes']['large'] : (!empty($img['url']) ? $img['url'] : '');
+                                $title = $item['journey_title'] ?? '';
+                                $btn = $item['journey__button'] ?? [];
+                                $btn_url = $btn['url'] ?? '#';
                                 $btn_title = $btn['title'] ?? 'Explore';
-                                $h         = $col_heights[$col][$row]['h'];
-                            ?>
+                                $h = $col_heights[$col][$row]['h'];
+                                ?>
                                 <div class="gallery-item block w-full relative group overflow-hidden rounded-sm cursor-pointer"
-                                    style="height: calc(<?php echo $h; ?> - 0.5rem);"
-                                    data-aos="fade-up"
+                                    style="height: calc(<?php echo $h; ?> - 0.5rem);" data-aos="fade-up"
                                     data-aos-delay="<?php echo ($col * 150) + ($row * 100); ?>">
-                                    <img src="<?php echo esc_url($img_url); ?>"
-                                        alt="<?php echo esc_attr($title); ?>"
+                                    <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($title); ?>"
                                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                                    
+
                                     <!-- Hover Overlay -->
-                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                                    
+                                    <div
+                                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                                    </div>
+
                                     <!-- Hover Content -->
-                                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-left opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-10 w-[calc(100%-2rem)]">
+                                    <div
+                                        class="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-left opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-10 w-[calc(100%-2rem)]">
                                         <h3 class="font-heading text-white text-xl md:text-2xl font-medium mb-3">
                                             <?php echo esc_html($title); ?>
                                         </h3>
-                                        <?php if (!empty($btn_url)) : ?>
+                                        <?php if (!empty($btn_url)): ?>
                                             <?php get_template_part('template-parts/components/btn-outline', null, [
-                                                'text'        => $btn_title,
+                                                'text' => $btn_title,
                                                 'class_extra' => 'text-xs md:text-sm',
-                                                'href'        => $btn_url,
-                                                'color'       => 'light',
+                                                'href' => $btn_url,
+                                                'color' => 'light',
                                             ]); ?>
                                         <?php endif; ?>
                                     </div>
@@ -392,25 +411,26 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     <div class="embla__container flex -ml-6 md:-ml-10">
                         <?php
                         $recent_posts = get_posts([
-                            'post_type'      => 'post',
+                            'post_type' => 'post',
                             'posts_per_page' => 9,
-                            'post_status'    => 'publish',
-                            'orderby'        => 'date',
-                            'order'          => 'DESC',
+                            'post_status' => 'publish',
+                            'orderby' => 'date',
+                            'order' => 'DESC',
                         ]);
-                        foreach ($recent_posts as $pidx => $story_post) :
-                            $story_img  = get_the_post_thumbnail_url($story_post->ID, 'large') ?: get_template_directory_uri() . '/assets/images/intense_journal_01.webp';
-                            $read_time  = get_field('read_time', $story_post->ID) ?? '';
+                        foreach ($recent_posts as $pidx => $story_post):
+                            $story_img = get_the_post_thumbnail_url($story_post->ID, 'large') ?: get_template_directory_uri() . '/assets/images/intense_journal_01.webp';
+                            $read_time = get_field('read_time', $story_post->ID) ?? '';
                             $story_date = get_the_date('d M Y', $story_post->ID);
-                        ?>
-                            <div class="embla__slide flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-10">
+                            ?>
+                            <div
+                                class="embla__slide flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-10">
                                 <?php get_template_part('template-parts/components/card-story', null, [
-                                    'image'     => $story_img,
+                                    'image' => $story_img,
                                     'image_alt' => get_the_title($story_post->ID),
-                                    'title'     => get_the_title($story_post->ID),
+                                    'title' => get_the_title($story_post->ID),
                                     'read_time' => $read_time,
-                                    'date'      => $story_date,
-                                    'link'      => get_permalink($story_post->ID),
+                                    'date' => $story_date,
+                                    'link' => get_permalink($story_post->ID),
                                     'aos_delay' => 0, // Delay handled by wrapper
                                 ]); ?>
                             </div>
@@ -438,16 +458,15 @@ $download_button         = $travel_guides['download_button'] ?? [];
     </section>
 
     <!-- I. Travel Guides Download -->
-    <section class="md:py-20 py-12 mb-12">
+    <section class="md:py-20 py-12 mb-12" id="online-brochure">
         <div class="container-site">
             <div class="flex flex-col-reverse md:flex-row items-center gap-12">
                 <!-- Image -->
                 <div class="w-full md:w-1/2" data-aos="fade-right">
-                    <?php if (!empty($guides_image)) : ?>
+                    <?php if (!empty($guides_image)): ?>
                         <img src="<?php echo esc_url($guides_image['url']); ?>"
-                            alt="<?php echo esc_attr($guides_image['alt'] ?: 'Travel Guides'); ?>"
-                            class="w-full h-auto">
-                    <?php else : ?>
+                            alt="<?php echo esc_attr($guides_image['alt'] ?: 'Travel Guides'); ?>" class="w-full h-auto">
+                    <?php else: ?>
                         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_peru_travel.webp"
                             alt="Travel Booklet" class="w-full h-auto">
                     <?php endif; ?>
@@ -457,18 +476,18 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     <h3 class="font-heading text-3xl font-semibold text-dark mb-4">
                         <?php echo esc_html($guides_title ?: 'Intense Peru Travel Guides'); ?>
                     </h3>
-                    <?php if ($guides_description) : ?>
+                    <?php if ($guides_description): ?>
                         <p class="font-body text-dark text-base md:text-lg mb-8 font-light">
                             <?php echo esc_html($guides_description); ?>
                         </p>
                     <?php endif; ?>
 
-                    <?php if (!empty($download_button)) : ?>
+                    <?php if (!empty($download_button)): ?>
                         <div x-data @click.prevent="$dispatch('ccp:openbrochure')" class="inline-block cursor-pointer">
                             <?php get_template_part('template-parts/components/btn-outline', null, [
-                                'text'        => $download_button['title'] ?? 'Choose a Brochure',
-                                'href'        => '#',
-                                'color'       => 'dark',
+                                'text' => $download_button['title'] ?? 'Choose a Brochure',
+                                'href' => '#',
+                                'color' => 'dark',
                                 'class_extra' => 'px-5 py-2 text-base',
                             ]); ?>
                         </div>
@@ -481,28 +500,17 @@ $download_button         = $travel_guides['download_button'] ?? [];
     <!-- ══════════════════════════════════════════════
          BROCHURE MODAL
     ══════════════════════════════════════════════ -->
-    <div
-        x-data="brochureModal()"
-        @ccp:openbrochure.window="show = true"
-        x-show="show"
-        style="display:none;"
+    <div x-data="brochureModal()" @ccp:openbrochure.window="show = true" x-show="show" style="display:none;"
         class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-dark/50 backdrop-blur-sm"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0">
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
 
         <!-- Modal Container -->
-        <div
-            x-show="show"
-            @click.outside="show = false"
-            x-transition:enter="transition ease-out duration-300"
+        <div x-show="show" @click.outside="show = false" x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 scale-95 translate-y-3"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
             class="bg-white rounded-xl shadow-2xl w-full max-w-4xl mx-auto overflow-hidden relative flex flex-col md:flex-row">
 
@@ -516,41 +524,56 @@ $download_button         = $travel_guides['download_button'] ?? [];
 
             <!-- Left Image -->
             <div class="hidden md:block w-full md:w-5/12 h-64 md:h-auto relative p-5">
-                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_donwload_brochure_img.webp" alt="Peru Travel Guide" class="w-full h-full object-cover">
+                <?php
+                $modal_img_url = is_array($modal_image) ? ($modal_image['url'] ?? '') : $modal_image;
+                $fallback_img = get_template_directory_uri() . '/assets/images/intense_donwload_brochure_img.webp';
+                ?>
+                <img src="<?php echo esc_url($modal_img_url ?: $fallback_img); ?>" alt="Peru Travel Guide"
+                    class="w-full h-full object-cover">
             </div>
 
             <!-- Right Content (Form) -->
             <div class="w-full md:w-7/12 p-8 md:p-14 flex flex-col justify-center">
-                <h2 class="font-heading text-3xl md:text-4xl text-dark font-light mb-10 text-center leading-snug">
-                    Download our Peru Travel<br>Guide
-                </h2>
+                <?php if ($modal_title): ?>
+                    <h2 class="font-heading text-3xl md:text-4xl text-dark font-light mb-10 text-center leading-snug">
+                        <?php echo esc_html($modal_title); ?>
+                    </h2>
+                <?php endif; ?>
 
                 <form @submit.prevent="submitForm" class="space-y-8">
 
                     <!-- Brochure Dropdown -->
                     <div class="input-wrapper" :class="{ 'has-error': errors.brochure }">
-                        <select x-model="formData.brochure" @change="validateField('brochure')" class="input-field appearance-none cursor-pointer bg-transparent relative z-10 w-full text-dark" style="color: inherit;">
+                        <select x-model="formData.brochure" @change="validateField('brochure')"
+                            class="input-field appearance-none cursor-pointer bg-transparent relative z-10 w-full text-dark"
+                            style="color: inherit;">
                             <option value="" disabled hidden></option>
                             <?php
                             $first_file_url = '';
-                            if (!empty($travel_guides['files_to_download'])) :
-                                foreach ($travel_guides['files_to_download'] as $item) :
-                                    if (!empty($item['file_name']) && !empty($item['file_'])) :
+                            if (!empty($travel_guides['files_to_download'])):
+                                foreach ($travel_guides['files_to_download'] as $item):
+                                    if (!empty($item['file_name']) && !empty($item['file_'])):
                                         $file_url = is_array($item['file_']) ? ($item['file_']['url'] ?? '') : $item['file_'];
-                                        if (!$file_url) continue;
-                                        if (empty($first_file_url)) $first_file_url = $file_url;
-                            ?>
-                                        <option value="<?php echo esc_url($file_url); ?>"><?php echo esc_html($item['file_name']); ?></option>
-                            <?php
+                                        if (!$file_url)
+                                            continue;
+                                        if (empty($first_file_url))
+                                            $first_file_url = $file_url;
+                                        ?>
+                                        <option value="<?php echo esc_url($file_url); ?>">
+                                            <?php echo esc_html($item['file_name']); ?>
+                                        </option>
+                                        <?php
                                     endif;
                                 endforeach;
                             endif;
                             ?>
                         </select>
-                        <label class="input-label !opacity-100 transition-all duration-300" :class="formData.brochure ? '!-translate-y-5 !text-xs' : ''">Choose a brochure</label>
+                        <label class="input-label !opacity-100 transition-all duration-300"
+                            :class="formData.brochure ? '!-translate-y-5 !text-xs' : ''">Choose a brochure</label>
                         <div class="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-dark/70 pr-2">
                             <svg class="w-5 h-5 border-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </div>
                         <span x-show="errors.brochure" x-text="errors.brochure" class="input-error-msg"></span>
@@ -558,9 +581,7 @@ $download_button         = $travel_guides['download_button'] ?? [];
 
                     <!-- First Name -->
                     <div class="input-wrapper" :class="{ 'has-error': errors.firstName }">
-                        <input type="text"
-                            x-model="formData.firstName"
-                            @blur="validateField('firstName')"
+                        <input type="text" x-model="formData.firstName" @blur="validateField('firstName')"
                             class="input-field" placeholder="First Name">
                         <label class="input-label">First Name</label>
                         <span x-show="errors.firstName" x-text="errors.firstName" class="input-error-msg"></span>
@@ -568,18 +589,15 @@ $download_button         = $travel_guides['download_button'] ?? [];
 
                     <!-- Email -->
                     <div class="input-wrapper" :class="{ 'has-error': errors.email }">
-                        <input type="email"
-                            x-model="formData.email"
-                            @blur="validateField('email')"
-                            class="input-field" placeholder="Email">
+                        <input type="email" x-model="formData.email" @blur="validateField('email')" class="input-field"
+                            placeholder="Email">
                         <label class="input-label">Email</label>
                         <span x-show="errors.email" x-text="errors.email" class="input-error-msg"></span>
                     </div>
 
                     <!-- Submit -->
                     <div class="pt-6 flex justify-center w-full text-center">
-                        <a href="#"
-                            @click.prevent="submitForm()"
+                        <a href="#" @click.prevent="submitForm()"
                             :class="{ 'opacity-50 pointer-events-none': isSubmitting }"
                             class="btn btn-outline-dark px-10 py-3 text-sm font-medium hover:bg-dark hover:text-white">
                             <span x-text="isSubmitting ? 'Sending...' : 'Get the Guide'"></span>
@@ -623,12 +641,12 @@ $download_button         = $travel_guides['download_button'] ?? [];
                     try {
                         const fd = new FormData();
                         fd.append('action', 'intense_brochure');
-                        fd.append('nonce', '<?php echo wp_create_nonce('intense_forms_nonce'); ?>');
+                        fd.append('nonce', window.intenseAjax?.nonce || '');
                         fd.append('brochure', this.formData.brochure);
                         fd.append('firstName', this.formData.firstName);
                         fd.append('email', this.formData.email);
 
-                        const res = await fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                        const res = await fetch(window.intenseAjax?.ajaxUrl || '<?php echo admin_url('admin-ajax.php'); ?>', {
                             method: 'POST',
                             body: fd
                         });

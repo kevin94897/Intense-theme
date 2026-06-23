@@ -19,7 +19,7 @@ $aos_delay   = $args['aos_delay']   ?? 0;
     <!-- Image -->
     <?php if ($image) : ?>
         <div class="relative overflow-hidden aspect-[4/3] w-full mb-2">
-            <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($image_alt); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($image_alt); ?>" width="800" height="600" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
         </div>
     <?php endif; ?>
 

@@ -18,10 +18,11 @@ preg_match_all('/<h2[^>]*>(.*?)<\/h2>/is', $raw_content, $matches);
 foreach ($matches[1] as $heading_html) {
     $title = wp_strip_all_tags($heading_html);
     $title = trim($title);
-    if (!$title) continue;
+    if (!$title)
+        continue;
     $id = sanitize_title($title);
     $sections[] = [
-        'id'    => $id,
+        'id' => $id,
         'title' => $title,
     ];
 }
@@ -30,10 +31,10 @@ foreach ($matches[1] as $heading_html) {
 $processed_content = preg_replace_callback(
     '/<h2([^>]*)>(.*?)<\/h2>/is',
     function ($m) {
-        $attrs      = $m[1];
-        $inner      = $m[2];
-        $title      = wp_strip_all_tags($inner);
-        $id         = sanitize_title(trim($title));
+        $attrs = $m[1];
+        $inner = $m[2];
+        $title = wp_strip_all_tags($inner);
+        $id = sanitize_title(trim($title));
 
         // Evitar duplicar id si ya existe
         $attrs = preg_replace('/\s*id=["\'][^"\']*["\']/', '', $attrs);
@@ -48,12 +49,15 @@ $processed_content = preg_replace_callback(
 
     <!-- ── Page Header ──────────────────────────────────────────────── -->
     <section class="pt-20 pb-10 text-center px-4" data-aos="fade-up">
-        <h1 class="heading-2 max-w-3xl mx-auto md:text-6xl text-4xl">
+        <h1 class="heading-2 text-dark max-w-3xl mx-auto md:text-6xl text-4xl">
             <?php the_title(); ?>
         </h1>
-        <?php if (!is_page('sustainability')) : ?>
+        <?php if (!is_page('sustainability')): ?>
             <p class="mt-8 text-dark max-w-4xl mx-auto font-light">
-                The use of the website (the “Website”) is subject to the terms and conditions stated herein. Use of the Website constitutes an agreement by you (the “Client”) that your use is governed by these terms and conditions. In addition, when using particular Intense Peru S.A.C. (the “Company”) services, you will be subject to any guidelines or rules applicable to such services that may be posted from time to time.
+                The use of the website (the “Website”) is subject to the terms and conditions stated herein. Use of the
+                Website constitutes an agreement by you (the “Client”) that your use is governed by these terms and
+                conditions. In addition, when using particular Intense Peru S.A.C. (the “Company”) services, you will be
+                subject to any guidelines or rules applicable to such services that may be posted from time to time.
             </p>
         <?php endif; ?>
     </section>
@@ -65,18 +69,19 @@ $processed_content = preg_replace_callback(
             <!-- ══════════════════════════════════════════════════════
                  SIDEBAR NAV
             ══════════════════════════════════════════════════════ -->
-            <?php if (!empty($sections)) : ?>
+            <?php if (!empty($sections)): ?>
                 <aside class="legal-sidebar lg:w-72 xl:w-80 shrink-0">
                     <nav class="legal-nav lg:sticky lg:top-28" aria-label="Secciones">
                         <ul class="border-t border-dark/10">
-                            <?php foreach ($sections as $section) : ?>
+                            <?php foreach ($sections as $section): ?>
                                 <li class="border-b border-dark/8">
-                                    <a
-                                        href="#<?php echo esc_attr($section['id']); ?>"
+                                    <a href="#<?php echo esc_attr($section['id']); ?>"
                                         class="legal-nav__link group flex items-start gap-3 py-3.5 text-sm font-body text-dark/45 hover:text-dark transition-colors duration-200">
-                                        <span class="legal-nav__arrow mt-0.5 shrink-0 w-4 h-4 flex items-center justify-center text-dark/25 group-hover:text-dark group-hover:translate-x-1 transition-all duration-200">
+                                        <span
+                                            class="legal-nav__arrow mt-0.5 shrink-0 w-4 h-4 flex items-center justify-center text-dark/25 group-hover:text-dark group-hover:translate-x-1 transition-all duration-200">
                                             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                                                <path d="M1.5 6.5H11.5M11.5 6.5L7 2M11.5 6.5L7 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M1.5 6.5H11.5M11.5 6.5L7 2M11.5 6.5L7 11" stroke="currentColor"
+                                                    stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
                                         </span>
                                         <span class="leading-snug"><?php echo esc_html($section['title']); ?></span>
@@ -207,7 +212,7 @@ $processed_content = preg_replace_callback(
 </style>
 
 <script>
-    (function() {
+    (function () {
         const navLinks = document.querySelectorAll('.legal-nav__link');
         const headings = document.querySelectorAll('.legal-content h2.legal-heading[id]');
 

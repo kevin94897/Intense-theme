@@ -8,8 +8,8 @@ const formSchema = z.object({
     startDate: z.string().min(1, "Start Date is required"),
     tripLength: z.string().min(1, "Trip Length is required"),
     adults: z.string().min(1, "Adults is required"),
-    children: z.string().optional(),
-    enfants: z.string().optional(),
+    children: z.string().min(1, "Children is required"),
+    enfants: z.string().min(1, "Infants is required"),
     hotelCategory: z.enum(["boutique", "luxury", "superior", "value"], {
         errorMap: () => ({ message: "Please select a Hotel Category" })
     }),
@@ -30,9 +30,9 @@ export default function bookingForm() {
             confirmEmail: '',
             startDate: '',
             tripLength: '',
-            adults: '2',
-            children: '0',
-            enfants: '0',
+            adults: '',
+            children: '',
+            enfants: '',
             hotelCategory: '',
             whatsapp: '',
             hearAboutUs: '',
@@ -40,6 +40,7 @@ export default function bookingForm() {
             pageSource: '',
             pageUrl: '',
         },
+        startDateLabel: '',
         errors: {},
         isSubmitting: false,
         submitSuccess: false,
@@ -97,11 +98,23 @@ export default function bookingForm() {
             }
         },
 
+        scrollToFirstError() {
+            this.$nextTick(() => {
+                const firstError = this.$el.querySelector('.has-error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        },
+
         async submitForm(e) {
             e.preventDefault();
             this.submitSuccess = false;
 
-            if (!this.validate()) return;
+            if (!this.validate()) {
+                this.scrollToFirstError();
+                return;
+            }
 
             this.isSubmitting = true;
             try {
@@ -117,10 +130,7 @@ export default function bookingForm() {
                 const json = await res.json();
                 if (!json.success) throw new Error(json.data?.message || 'Error');
 
-                this.submitSuccess = true;
-                window.dispatchEvent(new CustomEvent('ccp:quoteSuccess'));
-
-                setTimeout(() => { this.submitSuccess = false; }, 5000);
+                window.location.href = 'https://intenseperu.com/thank-you/';
             } catch (err) {
                 console.error('Booking form error:', err);
             } finally {

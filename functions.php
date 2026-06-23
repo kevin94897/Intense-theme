@@ -13,7 +13,7 @@ define('INTENSE_EMAIL_TEST_MODE', false);
 define('INTENSE_EMAIL_TEST_ADDRESS', 'kevin.gomez@nerd.pe');
 
 // Correos reales del equipo (se usan cuando TEST_MODE = false)
-define('INTENSE_TEAM_EMAILS', ['sales@intenseperu.com', 'karen@intenseperu.com', 'juanpablo@intenseperu.com', 'sofia@intenseperu.com']);
+define('INTENSE_TEAM_EMAILS', ['sales@intenseperu.com', 'roberto@intenseperu.com', 'sofia@intenseperu.com']);
 
 // ── Soporte del Tema ───────────────────────────────────────────────────────────
 function intense_nerd_setup()
@@ -55,8 +55,14 @@ function intense_nerd_scripts()
   $is_dev = defined('VITE_DEV') && VITE_DEV;
 
   if ($is_dev) {
-    echo '<script type="module" src="http://localhost:5174/@vite/client"></script>' . "\n";
-    echo '<script type="module" src="http://localhost:5174/src/main.js"></script>' . "\n";
+    wp_enqueue_script('intense-nerd-js', 'http://localhost:5174/src/main.js', [], null, true);
+    add_filter('script_loader_tag', function ($tag, $handle) {
+      if ($handle === 'intense-nerd-js') {
+        $vite_client = '<script type="module" src="http://localhost:5174/@vite/client"></script>' . "\n";
+        return $vite_client . str_replace('<script ', '<script type="module" crossorigin ', $tag);
+      }
+      return $tag;
+    }, 10, 2);
     return;
   }
 
@@ -76,7 +82,7 @@ function intense_nerd_scripts()
 
   add_filter('script_loader_tag', function ($tag, $handle) {
     if ($handle === 'intense-nerd-js') {
-      return str_replace('<script ', '<script type="module" ', $tag);
+      return str_replace('<script ', '<script type="module" crossorigin ', $tag);
     }
     return $tag;
   }, 10, 2);
@@ -223,15 +229,15 @@ function load_more_journeys_handler()
       <div class="journey-card" data-days="<?php echo esc_attr($days_val); ?>">
         <?php
         get_template_part('template-parts/components/card-itinerary', null, [
-          'image'     => $image,
-          'title'     => $title,
-          'price'     => $price,
-          'duration'  => $duration,
-          'post_id'   => get_the_ID(),
-          'link'      => $link,
+          'image' => $image,
+          'title' => $title,
+          'price' => $price,
+          'duration' => $duration,
+          'post_id' => get_the_ID(),
+          'link' => $link,
           'link_text' => 'Explore itinerary',
           'aos_delay' => ($index % 3) * 100,
-          'badges'    => [],
+          'badges' => [],
         ]);
         ?>
       </div>
@@ -242,6 +248,23 @@ function load_more_journeys_handler()
   }
   wp_die();
 }
+
+// ── Customizer: Logo Dark ─────────────────────────────────────────────────────
+function theme_customize_logo_dark($wp_customize)
+{
+  $wp_customize->add_setting('logo_dark', [
+    'default' => '',
+    'sanitize_callback' => 'esc_url_raw',
+  ]);
+
+  $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'logo_dark', [
+    'label' => 'Logo Dark Version',
+    'description' => 'Dark version logo for light backgrounds (white header, mobile drawer, emails). Upload the dark version.',
+    'section' => 'title_tagline',
+    'priority' => 9,
+  ]));
+}
+add_action('customize_register', 'theme_customize_logo_dark');
 
 // ── Customizer: Información de Contacto ───────────────────────────────────────
 function theme_customize_contact_section($wp_customize)
@@ -254,7 +277,7 @@ function theme_customize_contact_section($wp_customize)
   $fields = [
     'contact_phone' => ['label' => 'Teléfono', 'default' => '18006709510', 'type' => 'text'],
     'contact_phone_text' => ['label' => 'Texto Teléfono', 'default' => '1 800 670 9510 Toll Free (US, CAN)', 'type' => 'text'],
-    'contact_whatsapp' => ['label' => 'WhatsApp (solo número con código país)', 'default' => '51994008833', 'type' => 'text'],
+    'contact_whatsapp' => ['label' => 'WhatsApp (solo número con código país)', 'default' => '51 994 008 833', 'type' => 'text'],
     'contact_email' => ['label' => 'Correo', 'default' => 'sales@intenseperu.com', 'type' => 'text'],
   ];
 
@@ -269,12 +292,12 @@ function theme_customize_contact_section($wp_customize)
 }
 add_action('customize_register', 'theme_customize_contact_section');
 
-add_filter('get_terms_args', function($args, $taxonomies) {
-    if (in_array('post_tag', $taxonomies)) {
-        $args['orderby'] = 'term_order';
-        $args['order'] = 'ASC';
-    }
-    return $args;
+add_filter('get_terms_args', function ($args, $taxonomies) {
+  if (in_array('post_tag', $taxonomies)) {
+    $args['orderby'] = 'term_order';
+    $args['order'] = 'ASC';
+  }
+  return $args;
 }, 10, 2);
 
 // ── Customizer: Redes Sociales ────────────────────────────────────────────────
@@ -330,9 +353,9 @@ function intense_mega_journeys()
   }
 
   $sort_by_days = fn($a, $b) => $b->_days - $a->_days;
-  usort($grand,   $sort_by_days);
+  usort($grand, $sort_by_days);
   usort($compact, $sort_by_days);
-  usort($short,   $sort_by_days);
+  usort($short, $sort_by_days);
 
   $recent = get_posts(['post_type' => 'journey', 'posts_per_page' => 3, 'orderby' => 'date', 'order' => 'DESC']);
 
@@ -341,7 +364,7 @@ function intense_mega_journeys()
       return '<li><span class="text-dark/30 text-sm italic">—</span></li>';
     $out = '';
     foreach ($items as $p) {
-      $out .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-xs lg:text-sm font-body text-dark/70 hover:text-primary leading-none transition-colors underline-offset-2 hover:underline">' . esc_html($p->post_title) . '</a></li>';
+      $out .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-xs lg:text-sm font-body font-light text-dark/70 hover:text-primary leading-none transition-colors underline-offset-2 hover:underline">' . esc_html($p->post_title) . '</a></li>';
     }
     return $out;
   };
@@ -415,7 +438,7 @@ function intense_mega_blog()
   $list_html = $cards_html = $mobile_list = '';
 
   foreach ($list_posts as $p) {
-    $list_html .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-sm font-body text-dark/70 hover:text-primary transition-colors underline-offset-2 hover:underline leading-snug">' . esc_html($p->post_title) . '</a></li>';
+    $list_html .= '<li><a href="' . esc_url(get_permalink($p)) . '" class="text-sm font-light font-body text-dark/70 hover:text-primary transition-colors underline-offset-2 hover:underline leading-snug">' . esc_html($p->post_title) . '</a></li>';
     $mobile_list .= '<li class="border-b border-dark/10"><a href="' . esc_url(get_permalink($p)) . '" class="flex py-4 font-body text-dark text-xs hover:text-primary transition-colors">' . esc_html($p->post_title) . '</a></li>';
   }
 
@@ -438,15 +461,45 @@ add_action('wp_enqueue_scripts', function () {
     'ajaxUrl' => admin_url('admin-ajax.php'),
     'nonce' => wp_create_nonce('intense_forms_nonce'),
   ]);
+
+  // El nonce embebido en el HTML caduca (~24h). Si un plugin de caché de página
+  // sirve HTML viejo, el nonce viene vencido y admin-ajax responde "-1".
+  // admin-ajax.php nunca se cachea, así que pedimos un nonce fresco en cada carga
+  // y sobrescribimos window.intenseAjax.nonce antes de que el usuario envíe.
+  wp_add_inline_script('intense-nerd-js', <<<'JS'
+(function () {
+  if (!window.intenseAjax || !window.intenseAjax.ajaxUrl) return;
+  var body = new FormData();
+  body.append('action', 'intense_refresh_nonce');
+  // POST a propósito: LiteSpeed (y cualquier caché de página) nunca cachea POST,
+  // así que el nonce siempre llega fresco aunque la página venga de caché.
+  fetch(window.intenseAjax.ajaxUrl, { method: 'POST', credentials: 'same-origin', cache: 'no-store', body: body })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d && d.success && d.data && d.data.nonce) {
+        window.intenseAjax.nonce = d.data.nonce;
+      }
+    })
+    .catch(function () {});
+})();
+JS, 'before');
 }, 20);
+
+// Endpoint que devuelve un nonce fresco (no requiere nonce para llamarse).
+add_action('wp_ajax_intense_refresh_nonce', 'intense_refresh_nonce_cb');
+add_action('wp_ajax_nopriv_intense_refresh_nonce', 'intense_refresh_nonce_cb');
+function intense_refresh_nonce_cb()
+{
+  wp_send_json_success(['nonce' => wp_create_nonce('intense_forms_nonce')]);
+}
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  EMAIL HELPERS
 // ══════════════════════════════════════════════════════════════════════════════
 
 /**
- * Logo adaptado al Design System para emails en base64.
- * Prioriza PNG para máxima compatibilidad con todos los clientes (Gmail, Outlook, etc).
+ * URL del logo para emails. Usa siempre URLs externas — los clientes de email
+ * (Gmail, Outlook) bloquean data: URIs y eliminan el atributo src.
  */
 function intense_email_logo_src()
 {
@@ -454,28 +507,8 @@ function intense_email_logo_src()
   if ($cache !== null)
     return $cache;
 
-  // 1. Intentamos usar el PNG del tema (máxima compatibilidad en correos)
-  $theme_logo = get_template_directory() . '/assets/images/intense_logo.png';
-  if (file_exists($theme_logo)) {
-    $cache = 'data:image/png;base64,' . base64_encode(file_get_contents($theme_logo));
-    return $cache;
-  }
-
-  // 2. Fallback: Usar el logo del Customizer si es imagen
-  $custom_logo_id = get_theme_mod('custom_logo');
-  if ($custom_logo_id) {
-    $logo_path = get_attached_file($custom_logo_id);
-    if ($logo_path && file_exists($logo_path)) {
-      $mime = mime_content_type($logo_path);
-      if (strpos($mime, 'image/') === 0) {
-        $cache = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($logo_path));
-        return $cache;
-      }
-    }
-  }
-
-  // URL fallback si nada funciona
-  return 'http://intense.nerd-agencia.com/wp-content/uploads/2026/04/intense_logo.png';
+  $cache = 'https://intenseperu.com/wp-content/uploads/2026/04/intense_logo_mails.png';
+  return $cache;
 }
 
 /**
@@ -578,7 +611,7 @@ function intense_email_contact_internal($data)
 
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#fcf1eb;border:1px solid #e0c9bd;margin-bottom:20px;">
         <tr><td style="padding:12px 16px;font-size:13px;color:#b76739;">
-          ★ &nbsp;Reply directly to this email — the <strong>Reply-To</strong> is already set to the client's address.
+          ★ &nbsp;Reply to this email is already set to the client's address.
         </td></tr>
       </table>
 
@@ -708,20 +741,34 @@ HTML;
  */
 function intense_email_booking_internal($data)
 {
-  $name        = esc_html($data['first_name'] . ' ' . $data['last_name']);
-  $email       = esc_html($data['email']);
-  $whatsapp    = $data['whatsapp'] ? esc_html($data['whatsapp']) : '<em style="color:#776c60;">—</em>';
-  $start_date  = $data['start_date'] ? esc_html($data['start_date']) : '<em style="color:#776c60;">—</em>';
+  $name = esc_html($data['first_name'] . ' ' . $data['last_name']);
+  $email = esc_html($data['email']);
+  $whatsapp = $data['whatsapp'] ? esc_html($data['whatsapp']) : '<em style="color:#776c60;">—</em>';
+  $start_date = '<em style="color:#776c60;">—</em>';
+  if (!empty($data['start_date'])) {
+    $date_parts = preg_split('/[-\/]/', trim($data['start_date']));
+    $start_date = count($date_parts) === 3
+      ? esc_html(sprintf('%02d-%02d-%04d', $date_parts[0], $date_parts[1], $date_parts[2]))
+      : esc_html($data['start_date']);
+  }
   $trip_length = $data['trip_length'] ? esc_html($data['trip_length']) . ' days' : '<em style="color:#776c60;">—</em>';
-  $adults      = esc_html($data['adults'] ?: '0');
-  $children    = esc_html($data['children'] ?: '0');
-  $enfants     = esc_html($data['enfants'] ?: '0');
-  $hotel_cat   = $data['hotel_cat'] ? esc_html($data['hotel_cat']) : '<em style="color:#776c60;">—</em>';
-  $hear_about  = $data['hear_about'] ? esc_html($data['hear_about']) : '<em style="color:#776c60;">—</em>';
-  $mensaje     = $data['mensaje'] ? nl2br(esc_html($data['mensaje'])) : '<em style="color:#776c60;">—</em>';
-  $timestamp   = current_time('d M Y · H:i');
+  $adults = esc_html($data['adults'] ?: '0');
+  $children = esc_html($data['children'] ?: '0');
+  $enfants = esc_html($data['enfants'] ?: '0');
+  $hotel_cat_map = [
+    'boutique' => 'Boutique ★★★★★',
+    'luxury' => 'Luxury ★★★★★',
+    'superior' => 'Superior ★★★★',
+    'value' => 'Best Value ★★★',
+  ];
+  $hotel_cat = isset($hotel_cat_map[$data['hotel_cat']])
+    ? esc_html($hotel_cat_map[$data['hotel_cat']])
+    : ($data['hotel_cat'] ? esc_html($data['hotel_cat']) : '<em style="color:#776c60;">—</em>');
+  $hear_about = $data['hear_about'] ? esc_html($data['hear_about']) : '<em style="color:#776c60;">—</em>';
+  $mensaje = $data['mensaje'] ? nl2br(esc_html($data['mensaje'])) : '<em style="color:#776c60;">—</em>';
+  $timestamp = current_time('d M Y · H:i');
   $page_source = !empty($data['page_source']) ? esc_html($data['page_source']) : '<em style="color:#776c60;">—</em>';
-  $page_url    = !empty($data['page_url']) ? '<a href="' . esc_url($data['page_url']) . '" style="color:#b76739;text-decoration:none;">' . esc_html($data['page_url']) . '</a>' : '';
+  $page_url = !empty($data['page_url']) ? '<a href="' . esc_url($data['page_url']) . '" style="color:#b76739;text-decoration:none;">' . esc_html($data['page_url']) . '</a>' : '';
 
   $rows = intense_email_header_html();
   $rows .= <<<HTML
@@ -738,7 +785,7 @@ function intense_email_booking_internal($data)
 
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#fcf1eb;border:1px solid #e0c9bd;margin-bottom:20px;">
         <tr><td style="padding:12px 16px;font-size:13px;color:#b76739;">
-          ★ &nbsp;Reply directly to this email — the <strong>Reply-To</strong> is already set to the client's address.
+          ★ &nbsp;Reply to this email is already set to the client's address.
         </td></tr>
       </table>
 
@@ -772,12 +819,12 @@ function intense_email_booking_internal($data)
         <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
           <table width="100%" cellpadding="0" cellspacing="0"><tr>
             <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Source</td>
-            <td style="font-size:14px;color:#161616;">{$page_source}{$page_url}</td>
+            <td style="font-size:14px;color:#161616;">{$page_url}</td>
           </tr></table>
         </td></tr>
         <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
           <table width="100%" cellpadding="0" cellspacing="0"><tr>
-            <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Start Date</td>
+            <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Start Date <br>(dd-mm-yyyy)</td>
             <td style="font-size:14px;color:#161616;">{$start_date}</td>
           </tr></table>
         </td></tr>
@@ -833,11 +880,26 @@ HTML;
 function intense_email_booking_autoreply($data)
 {
   $first_name = esc_html($data['first_name']);
-  $start_date = $data['start_date'] ? esc_html($data['start_date']) : '—';
+  $start_date = '—';
+  if (!empty($data['start_date'])) {
+    $date_parts = preg_split('/[-\/]/', trim($data['start_date']));
+    $start_date = count($date_parts) === 3
+      ? esc_html(sprintf('%02d-%02d-%04d', $date_parts[0], $date_parts[1], $date_parts[2]))
+      : esc_html($data['start_date']);
+  }
   $trip_length = $data['trip_length'] ? esc_html($data['trip_length']) . ' days' : '—';
   $adults = esc_html($data['adults'] ?: '0');
   $children = esc_html($data['children'] ?: '0');
   $enfants = esc_html($data['enfants'] ?: '0');
+  $hotel_cat_map = [
+    'boutique' => 'Boutique ★★★★★',
+    'luxury' => 'Luxury ★★★★★',
+    'superior' => 'Superior ★★★★',
+    'value' => 'Best Value ★★★',
+  ];
+  $hotel_cat = isset($hotel_cat_map[$data['hotel_cat']])
+    ? esc_html($hotel_cat_map[$data['hotel_cat']])
+    : ($data['hotel_cat'] ? esc_html($data['hotel_cat']) : '—');
 
   $rows = intense_email_header_html();
   $rows .= <<<HTML
@@ -860,7 +922,7 @@ function intense_email_booking_autoreply($data)
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
         <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
           <table width="100%" cellpadding="0" cellspacing="0"><tr>
-            <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Start Date</td>
+            <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Start Date <br>(dd-mm-yyyy)</td>
             <td style="font-size:14px;color:#161616;">{$start_date}</td>
           </tr></table>
         </td></tr>
@@ -874,6 +936,12 @@ function intense_email_booking_autoreply($data)
           <table width="100%" cellpadding="0" cellspacing="0"><tr>
             <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Travelers</td>
             <td style="font-size:14px;color:#161616;">{$adults} adults &nbsp;·&nbsp; {$children} children &nbsp;·&nbsp; {$enfants} infants</td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="150" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Hotel Category</td>
+            <td style="font-size:14px;color:#161616;">{$hotel_cat}</td>
           </tr></table>
         </td></tr>
       </table>
@@ -918,6 +986,189 @@ HTML;
 
   return intense_email_wrap('Your quote request is on its way — Intense Peru', $rows);
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  LEADS BACKUP — Respaldo de todos los leads (contact + booking)
+// ══════════════════════════════════════════════════════════════════════════════
+// Guarda cada envío en la base de datos para no perder ningún lead, aunque el
+// email falle. Cada registro lleva un estado: "sent" (email enviado) o
+// "failed" (no se pudo enviar). Visible en el dashboard bajo "DB Records".
+
+/**
+ * Guarda un lead en la base de datos como respaldo.
+ *
+ * @param string $type   Tipo de formulario: 'contact' | 'booking'.
+ * @param array  $data   Datos del formulario (payload completo).
+ * @param string $status 'sent' | 'failed'.
+ * @param string $error  Motivo del error si falló (opcional).
+ * @return int|WP_Error  ID del post creado.
+ */
+function intense_save_lead_backup($type, $data, $status, $error = '')
+{
+  $name = trim(($data['first_name'] ?? '') . ' ' . ($data['last_name'] ?? ''));
+  $email = $data['email'] ?? '';
+
+  $post_id = wp_insert_post([
+    'post_type' => 'lead_backup',
+    'post_title' => sprintf('%s — %s', $name ?: 'Unknown', $email ?: 'no-email'),
+    'post_status' => 'publish',
+  ]);
+
+  if ($post_id && !is_wp_error($post_id)) {
+    update_post_meta($post_id, 'lead_type', $type);
+    update_post_meta($post_id, 'lead_status', $status);
+    update_post_meta($post_id, 'lead_email', $email);
+    update_post_meta($post_id, 'lead_name', $name);
+    update_post_meta($post_id, 'lead_error', $error);
+    update_post_meta($post_id, 'lead_data', $data); // payload completo (serializado)
+  }
+
+  return $post_id;
+}
+
+// ── CPT: Leads Backup ─────────────────────────────────────────────────────────
+add_action('init', function () {
+  register_post_type('lead_backup', [
+    'labels' => [
+      'name' => 'Leads Backup',
+      'singular_name' => 'Lead',
+      'menu_name' => 'Leads Backup',
+    ],
+    'public' => false,
+    'show_ui' => true,
+    'show_in_menu' => 'edit.php?post_type=brochure_lead',
+    'supports' => ['title'],
+    'capability_type' => 'post',
+    'capabilities' => ['create_posts' => 'do_not_allow'],
+    'map_meta_cap' => true,
+  ]);
+});
+
+// Columnas del listado: Type · Status · Email · Date
+add_filter('manage_lead_backup_posts_columns', function ($columns) {
+  $new = [];
+  foreach ($columns as $key => $title) {
+    if ($key === 'title') {
+      $new[$key] = 'Name';
+      continue;
+    }
+    if ($key === 'date') {
+      $new['lead_type'] = 'Type';
+      $new['lead_status'] = 'Status';
+      $new['lead_email'] = 'Email';
+    }
+    $new[$key] = $title;
+  }
+  return $new;
+});
+
+add_action('manage_lead_backup_posts_custom_column', function ($column, $post_id) {
+  if ($column === 'lead_type') {
+    echo esc_html(ucfirst(get_post_meta($post_id, 'lead_type', true) ?: '—'));
+  }
+  if ($column === 'lead_status') {
+    $status = get_post_meta($post_id, 'lead_status', true);
+    $is_failed = $status === 'failed';
+    $bg = $is_failed ? '#d63638' : '#00a32a';
+    $label = $is_failed ? 'Failed' : 'Sent';
+    echo '<span style="display:inline-block;padding:2px 10px;border-radius:3px;color:#fff;font-size:11px;font-weight:600;background:' . $bg . ';">' . esc_html($label) . '</span>';
+  }
+  if ($column === 'lead_email') {
+    $email = get_post_meta($post_id, 'lead_email', true);
+    echo $email ? '<a href="mailto:' . esc_attr($email) . '">' . esc_html($email) . '</a>' : '—';
+  }
+}, 10, 2);
+
+// Meta box con todos los datos del lead (solo lectura)
+add_action('add_meta_boxes', function () {
+  add_meta_box('lead_backup_details', 'Lead Details', function ($post) {
+    $type = get_post_meta($post->ID, 'lead_type', true);
+    $status = get_post_meta($post->ID, 'lead_status', true);
+    $error = get_post_meta($post->ID, 'lead_error', true);
+    $data = get_post_meta($post->ID, 'lead_data', true);
+
+    echo '<table class="widefat striped" style="margin-bottom:12px;">';
+    echo '<tr><th style="width:180px;">Type</th><td>' . esc_html(ucfirst($type)) . '</td></tr>';
+    echo '<tr><th>Status</th><td>' . esc_html(ucfirst($status)) . '</td></tr>';
+    if ($error) {
+      echo '<tr><th>Error</th><td style="color:#d63638;">' . esc_html($error) . '</td></tr>';
+    }
+    if (is_array($data)) {
+      foreach ($data as $key => $value) {
+        $label = ucwords(str_replace('_', ' ', $key));
+        echo '<tr><th>' . esc_html($label) . '</th><td>' . nl2br(esc_html((string) $value)) . '</td></tr>';
+      }
+    }
+    echo '</table>';
+  }, 'lead_backup', 'normal', 'high');
+});
+
+// ── Export CSV: botón en la barra de filtros del listado ──────────────────────
+add_action('restrict_manage_posts', function ($post_type) {
+  if ($post_type !== 'lead_backup')
+    return;
+  $url = wp_nonce_url(admin_url('admin-post.php?action=intense_export_leads'), 'intense_export_leads');
+  echo '<a href="' . esc_url($url) . '" class="button button-primary" style="margin-left:8px;">Export CSV</a>';
+});
+
+// ── Export CSV: generación del archivo ────────────────────────────────────────
+add_action('admin_post_intense_export_leads', function () {
+  if (!current_user_can('edit_posts'))
+    wp_die('No autorizado.');
+  check_admin_referer('intense_export_leads');
+
+  $posts = get_posts([
+    'post_type' => 'lead_backup',
+    'post_status' => 'publish',
+    'numberposts' => -1,
+    'orderby' => 'date',
+    'order' => 'DESC',
+  ]);
+
+  // Recolectar dinámicamente todas las claves de datos presentes
+  $data_keys = [];
+  $rows = [];
+  foreach ($posts as $p) {
+    $data = get_post_meta($p->ID, 'lead_data', true);
+    $data = is_array($data) ? $data : [];
+    foreach (array_keys($data) as $k) {
+      $data_keys[$k] = true;
+    }
+    $rows[] = [
+      'date' => get_the_date('Y-m-d H:i', $p),
+      'type' => get_post_meta($p->ID, 'lead_type', true),
+      'status' => get_post_meta($p->ID, 'lead_status', true),
+      'error' => get_post_meta($p->ID, 'lead_error', true),
+      'data' => $data,
+    ];
+  }
+  $data_keys = array_keys($data_keys);
+
+  $filename = 'leads-backup-' . date('Y-m-d') . '.csv';
+  header('Content-Type: text/csv; charset=UTF-8');
+  header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+  $out = fopen('php://output', 'w');
+  // BOM para que Excel interprete UTF-8 (acentos, ñ)
+  fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+  // Encabezados
+  $header = array_merge(['Date', 'Type', 'Status', 'Error'], array_map(function ($k) {
+    return ucwords(str_replace('_', ' ', $k));
+  }, $data_keys));
+  fputcsv($out, $header);
+
+  // Filas
+  foreach ($rows as $r) {
+    $line = [$r['date'], $r['type'], $r['status'], $r['error']];
+    foreach ($data_keys as $k) {
+      $line[] = $r['data'][$k] ?? '';
+    }
+    fputcsv($out, $line);
+  }
+  fclose($out);
+  exit;
+});
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  AJAX HANDLERS
@@ -965,6 +1216,14 @@ function intense_handle_contact()
     ['Content-Type: text/html; charset=UTF-8']
   );
 
+  // 3. Respaldo en DB (no perder el lead aunque el email falle)
+  intense_save_lead_backup(
+    'contact',
+    $data,
+    $sent ? 'sent' : 'failed',
+    $sent ? '' : 'wp_mail devolvió false (email al equipo)'
+  );
+
   $sent
     ? wp_send_json_success(['message' => 'Email sent.'])
     : wp_send_json_error(['message' => 'Could not send email.'], 500);
@@ -987,11 +1246,11 @@ function intense_handle_booking()
   $adults = sanitize_text_field($_POST['adults'] ?? '');
   $children = sanitize_text_field($_POST['children'] ?? '');
   $enfants = sanitize_text_field($_POST['enfants'] ?? '');
-  $hotel_cat   = sanitize_text_field($_POST['hotelCategory'] ?? '');
-  $hear_about  = sanitize_text_field($_POST['hearAboutUs'] ?? '');
-  $mensaje     = sanitize_textarea_field($_POST['mensaje'] ?? '');
+  $hotel_cat = sanitize_text_field($_POST['hotelCategory'] ?? '');
+  $hear_about = sanitize_text_field($_POST['hearAboutUs'] ?? '');
+  $mensaje = sanitize_textarea_field($_POST['mensaje'] ?? '');
   $page_source = sanitize_text_field($_POST['pageSource'] ?? '');
-  $page_url    = esc_url_raw($_POST['pageUrl'] ?? '');
+  $page_url = esc_url_raw($_POST['pageUrl'] ?? '');
 
   if (!$first_name || !$email) {
     wp_send_json_error(['message' => 'Missing required fields.'], 400);
@@ -1020,8 +1279,8 @@ function intense_handle_booking()
   ];
 
   // 1. Email interno al equipo
-  $team_to      = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
-  $subject_src  = $page_source ? " [{$page_source}]" : '';
+  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
+  $subject_src = $page_source ? " [{$page_source}]" : '';
   $sent = wp_mail(
     $team_to,
     "New Quote Request — {$first_name} {$last_name}{$subject_src}",
@@ -1035,6 +1294,14 @@ function intense_handle_booking()
     'Your quote request is on its way — Intense Peru',
     intense_email_booking_autoreply($data),
     ['Content-Type: text/html; charset=UTF-8']
+  );
+
+  // 3. Respaldo en DB (no perder el lead aunque el email falle)
+  intense_save_lead_backup(
+    'booking',
+    $data,
+    $sent ? 'sent' : 'failed',
+    $sent ? '' : 'wp_mail devolvió false (email al equipo)'
   );
 
   $sent
@@ -1064,6 +1331,19 @@ function intense_handle_brochure()
     'Content-Type: text/html; charset=UTF-8',
     "Reply-To: {$first_name} <{$email}>",
   ];
+
+  // 0. Guardar en base de datos como CPT
+  $post_id = wp_insert_post([
+    'post_type' => 'brochure_lead',
+    'post_title' => sprintf('%s — %s', $first_name, $email),
+    'post_status' => 'publish',
+  ]);
+
+  if ($post_id && !is_wp_error($post_id)) {
+    update_post_meta($post_id, 'first_name', $first_name);
+    update_post_meta($post_id, 'email', $email);
+    update_post_meta($post_id, 'brochure_url', $brochure);
+  }
 
   // 1. Email interno al equipo
   $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : INTENSE_TEAM_EMAILS;
@@ -1186,7 +1466,304 @@ HTML;
   return intense_email_wrap('Your Peru Travel Guide — Intense Peru', $rows);
 }
 
+// ── CPT: Brochure Leads ───────────────────────────────────────────────────────
+add_action('init', function () {
+  register_post_type('brochure_lead', [
+    'labels' => [
+      'name' => 'DB Records',
+      'singular_name' => 'DB Record',
+      'menu_name' => 'DB Records',
+    ],
+    'public' => false,
+    'show_ui' => true,
+    'show_in_menu' => true,
+    'menu_icon' => 'dashicons-download',
+    'supports' => ['title'],
+    'capability_type' => 'post',
+    'capabilities' => [
+      'create_posts' => 'do_not_allow', // Evita crear posts manualmente
+    ],
+    'map_meta_cap' => true,
+  ]);
+});
+
+add_filter('manage_brochure_lead_posts_columns', function ($columns) {
+  $new_columns = [];
+  foreach ($columns as $key => $title) {
+    if ($key === 'date') {
+      $new_columns['email'] = 'Email';
+      $new_columns['brochure'] = 'Brochure';
+    }
+    $new_columns[$key] = $title;
+  }
+  return $new_columns;
+});
+
+add_action('manage_brochure_lead_posts_custom_column', function ($column, $post_id) {
+  if ($column === 'email') {
+    echo esc_html(get_post_meta($post_id, 'email', true));
+  }
+  if ($column === 'brochure') {
+    $url = get_post_meta($post_id, 'brochure_url', true);
+    if ($url) {
+      echo '<a href="' . esc_url($url) . '" target="_blank">Ver Link</a>';
+    } else {
+      echo '—';
+    }
+  }
+}, 10, 2);
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  NEWSLETTER — Template HTML
+// ══════════════════════════════════════════════════════════════════════════════
+
+function intense_email_newsletter_welcome($data)
+{
+  $first_name = esc_html($data['name'] ?: 'Traveler');
+
+  $rows = intense_email_header_html();
+  $rows .= <<<HTML
+
+  <tr>
+    <td style="background:#b76739;padding:32px 40px;text-align:center;">
+      <h1 style="color:#ffffff;font-size:24px;font-weight:normal;font-family:Georgia,serif;margin:0 0 6px;letter-spacing:0.04em;">Welcome to Intense Peru</h1>
+      <p style="color:rgba(255,255,255,0.85);font-size:13px;margin:0;line-height:1.5;">You're now part of our travel community</p>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:36px 40px;background:#ffffff;">
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 14px;">Dear <strong>{$first_name}</strong>,</p>
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 20px;">Thank you for subscribing to Intense Peru. You'll be among the first to receive <strong>curated travel inspiration</strong>, exclusive journey highlights, and insider stories from the heart of Peru.</p>
+
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+        <tr><td style="background:#fcf1eb;border-left:3px solid #b76739;padding:16px 20px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#b76739;margin-bottom:8px;">What to expect</div>
+          <div style="font-size:14px;color:#161616;line-height:1.8;">
+            · Signature journey features &amp; new itineraries<br>
+            · Destination spotlights — from Cusco to the Amazon<br>
+            · Travel tips crafted by our expert designers<br>
+            · Exclusive early access to special experiences
+          </div>
+        </td></tr>
+      </table>
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 24px;">In the meantime, explore our collection of private journeys — each one designed to reveal the real Peru at your own pace.</p>
+
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+        <tr><td align="center">
+          <a href="https://intenseperu.com/journeys" style="display:inline-block;background:#b76739;color:#ffffff;text-decoration:none;padding:13px 32px;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;">Explore Journeys</a>
+        </td></tr>
+      </table>
+
+      <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="height:1px;background:#c7c7c7;padding:0;font-size:0;">&nbsp;</td></tr></table>
+      <br>
+
+      <p style="font-size:15px;line-height:1.7;color:#161616;margin:0 0 14px;">Ready to start planning? Reach out anytime:</p>
+
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Toll Free</td>
+            <td style="font-size:14px;color:#b76739;font-weight:600;">1 800 670 9510 <span style="color:#776c60;font-weight:normal;font-size:12px;">(US, CAN)</span></td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">WhatsApp</td>
+            <td style="font-size:14px;color:#b76739;font-weight:600;">+51 994 008 833</td>
+          </tr></table>
+        </td></tr>
+        <tr><td style="border-top:1px solid #c7c7c7;padding:10px 0;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="130" style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#b76739;vertical-align:top;padding-top:2px;">Email</td>
+            <td style="font-size:14px;color:#161616;">sales@intenseperu.com</td>
+          </tr></table>
+        </td></tr>
+      </table>
+
+    </td>
+  </tr>
+
+HTML;
+  $rows .= intense_email_footer_html();
+
+  return intense_email_wrap('Welcome to Intense Peru', $rows);
+}
+
+// ── CPT: Newsletter Leads ─────────────────────────────────────────────────────
+add_action('init', function () {
+  register_post_type('newsletter_lead', [
+    'labels' => [
+      'name' => 'Newsletter Subscribers',
+      'singular_name' => 'Newsletter Subscriber',
+      'menu_name' => 'Newsletter',
+    ],
+    'public' => false,
+    'show_ui' => true,
+    'show_in_menu' => 'edit.php?post_type=brochure_lead',
+    'supports' => ['title'],
+    'capability_type' => 'post',
+    'capabilities' => ['create_posts' => 'do_not_allow'],
+    'map_meta_cap' => true,
+  ]);
+});
+
+add_filter('manage_newsletter_lead_posts_columns', function ($columns) {
+  $new = [];
+  foreach ($columns as $key => $title) {
+    if ($key === 'date') {
+      $new['subscriber_name'] = 'Name';
+      $new['subscriber_email'] = 'Email';
+    }
+    $new[$key] = $title;
+  }
+  return $new;
+});
+
+add_action('manage_newsletter_lead_posts_custom_column', function ($column, $post_id) {
+  if ($column === 'subscriber_name')
+    echo esc_html(get_post_meta($post_id, 'subscriber_name', true));
+  if ($column === 'subscriber_email')
+    echo esc_html(get_post_meta($post_id, 'subscriber_email', true));
+}, 10, 2);
+
+// ── AJAX: Newsletter subscribe ────────────────────────────────────────────────
+add_action('wp_ajax_nopriv_newsletter_subscribe', 'intense_newsletter_subscribe');
+add_action('wp_ajax_newsletter_subscribe', 'intense_newsletter_subscribe');
+
+function intense_newsletter_subscribe()
+{
+  check_ajax_referer('intense_forms_nonce', 'nonce');
+
+  $name = sanitize_text_field(wp_unslash($_POST['name'] ?? ''));
+  $email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+
+  if (!$email || !is_email($email)) {
+    wp_send_json_error(['message' => 'Please enter a valid email.']);
+  }
+
+  // Guardar en DB
+  $post_id = wp_insert_post([
+    'post_type' => 'newsletter_lead',
+    'post_title' => $name ?: $email,
+    'post_status' => 'publish',
+  ]);
+
+  if ($post_id && !is_wp_error($post_id)) {
+    update_post_meta($post_id, 'subscriber_name', $name);
+    update_post_meta($post_id, 'subscriber_email', $email);
+  }
+
+  // Email al equipo (solo juanpablo recibe notificaciones de newsletter)
+  $team_to = INTENSE_EMAIL_TEST_MODE ? INTENSE_EMAIL_TEST_ADDRESS : 'roberto@intenseperu.com';
+  $subject = 'New Newsletter Subscriber – ' . ($name ?: $email);
+  $body = '<div style="font-family:sans-serif;font-size:15px;color:#1a1a1a;max-width:560px;margin:0 auto">';
+  $body .= '<h2 style="font-size:20px;margin-bottom:16px">New Newsletter Subscriber</h2>';
+  $body .= '<table style="border-collapse:collapse;width:100%">';
+  $body .= '<tr><td style="padding:8px 0;border-bottom:1px solid #eee;width:120px;color:#666">Name</td><td style="padding:8px 0;border-bottom:1px solid #eee">' . esc_html($name) . '</td></tr>';
+  $body .= '<tr><td style="padding:8px 0;color:#666">Email</td><td style="padding:8px 0">' . esc_html($email) . '</td></tr>';
+  $body .= '</table></div>';
+
+  $sent = wp_mail($team_to, $subject, $body, ['Content-Type: text/html; charset=UTF-8']);
+
+  // Correo de bienvenida al suscriptor
+  wp_mail(
+    $email,
+    'Welcome to Intense Peru — You\'re in!',
+    intense_email_newsletter_welcome(['name' => $name, 'email' => $email]),
+    ['Content-Type: text/html; charset=UTF-8']
+  );
+
+  $sent
+    ? wp_send_json_success(['message' => 'Subscribed!'])
+    : wp_send_json_error(['message' => 'Saved, but email could not be sent.'], 500);
+}
+
 // ── Gutenberg: solo en posts, Classic en el resto ─────────────────────────────
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
   return $post_type === 'post';
 }, 10, 2);
+
+// ── Sitemap XML ───────────────────────────────────────────────────────────────
+add_action('init', function () {
+  add_rewrite_rule('^sitemap\.xml$', 'index.php?intense_sitemap=1', 'top');
+});
+
+add_filter('query_vars', function ($vars) {
+  $vars[] = 'intense_sitemap';
+  return $vars;
+});
+
+add_action('template_redirect', function () {
+  if (!get_query_var('intense_sitemap'))
+    return;
+
+  $urls = [];
+
+  $post_types = [
+    'page' => ['changefreq' => 'monthly', 'priority' => '0.8'],
+    'post' => ['changefreq' => 'weekly', 'priority' => '0.7'],
+    'journey' => ['changefreq' => 'monthly', 'priority' => '0.9'],
+    'destination' => ['changefreq' => 'monthly', 'priority' => '0.8'],
+  ];
+
+  foreach ($post_types as $type => $meta) {
+    $items = get_posts([
+      'post_type' => $type,
+      'post_status' => 'publish',
+      'numberposts' => -1,
+    ]);
+    foreach ($items as $item) {
+      $urls[] = [
+        'loc' => get_permalink($item),
+        'lastmod' => get_post_modified_time('c', false, $item),
+        'changefreq' => $meta['changefreq'],
+        'priority' => $meta['priority'],
+      ];
+    }
+  }
+
+  header('Content-Type: application/xml; charset=UTF-8');
+  echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+  echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+  foreach ($urls as $url) {
+    echo "  <url>\n";
+    echo '    <loc>' . esc_url($url['loc']) . "</loc>\n";
+    echo '    <lastmod>' . esc_html($url['lastmod']) . "</lastmod>\n";
+    echo '    <changefreq>' . esc_html($url['changefreq']) . "</changefreq>\n";
+    echo '    <priority>' . esc_html($url['priority']) . "</priority>\n";
+    echo "  </url>\n";
+  }
+  echo '</urlset>';
+  exit;
+});
+
+// ── Google Analytics ─────────────────────────────────────────────────────────
+if (!INTENSE_EMAIL_TEST_MODE) {
+  add_action('wp_head', function () {
+    ?>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVWKRSGT0J"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KVWKRSGT0J');
+    </script>
+    <?php
+  }, 1);
+}
+
+// ── Google Fonts ──────────────────────────────────────────────────────────────
+function intense_google_fonts()
+{
+  wp_enqueue_style(
+    'rubik-font',
+    'https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap',
+    array(),
+    null
+  );
+}
+add_action('wp_enqueue_scripts', 'intense_google_fonts');

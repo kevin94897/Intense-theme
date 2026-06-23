@@ -28,16 +28,22 @@ if (!is_array($selected_activities)) {
 $selected_activities = array_filter($selected_activities);
 
 // ---- PRE-FETCH HOTELS AND ACTIVITIES FOR DISPLAY AND NAVIGATION ----
-$journey_cats = wp_get_post_terms(get_the_ID(), 'category', [
-    'fields'  => 'all',
-    'orderby' => 'term_order',
-    'order'   => 'ASC',
-]);
-$hotel_tabs  = [];
+// Usa el orden personalizado de categorías definido en el meta box "Intense Tag Order".
+// Fallback: wp_get_post_terms si el plugin no está activo.
+if (function_exists('ito_get_ordered_categories')) {
+    $journey_cats = ito_get_ordered_categories(get_the_ID());
+} else {
+    $journey_cats = wp_get_post_terms(get_the_ID(), 'category', [
+        'fields' => 'all',
+        'orderby' => 'name',
+        'order' => 'ASC',
+    ]);
+}
+$hotel_tabs = [];
 $hotels_data = [];
 $hotel_cat_counts = [];
 
-$itinerary_tabs  = [];
+$itinerary_tabs = [];
 $activities_data = [];
 
 if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
@@ -49,29 +55,31 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
     // -- Fetch Hotels --
     $hotel_query = new WP_Query([
-        'post_type'      => 'hotel',
-        'post_status'    => 'publish',
+        'post_type' => 'hotel',
+        'post_status' => 'publish',
         'posts_per_page' => -1,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-        'tax_query'      => [[
-            'taxonomy' => 'category',
-            'field'    => 'slug',
-            'terms'    => array_keys($hotel_tabs),
-            'operator' => 'IN',
-        ]],
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'tax_query' => [
+            [
+                'taxonomy' => 'category',
+                'field' => 'slug',
+                'terms' => array_keys($hotel_tabs),
+                'operator' => 'IN',
+            ]
+        ],
     ]);
 
     $cat_counters_h = [];
     while ($hotel_query->have_posts()) {
         $hotel_query->the_post();
-        $h_id        = get_the_ID();
-        $h_terms     = wp_get_post_terms($h_id, 'category', ['fields' => 'slugs']);
-        $h_cats      = is_wp_error($h_terms) ? [] : array_values(array_intersect($h_terms, array_keys($hotel_tabs)));
-        $h_rating    = get_field('rating', $h_id);
-        $h_location  = get_field('location', $h_id);
-        $h_video     = get_field('video', $h_id);
-        $h_services  = get_field('list_of_services', $h_id);
+        $h_id = get_the_ID();
+        $h_terms = wp_get_post_terms($h_id, 'category', ['fields' => 'slugs']);
+        $h_cats = is_wp_error($h_terms) ? [] : array_values(array_intersect($h_terms, array_keys($hotel_tabs)));
+        $h_rating = get_field('rating', $h_id);
+        $h_location = get_field('location', $h_id);
+        $h_video = get_field('video', $h_id);
+        $h_services = get_field('list_of_services', $h_id);
         $h_amenities = [];
         if ($h_services) {
             foreach ($h_services as $svc) {
@@ -84,22 +92,23 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
         $h_cat_indices = [];
         foreach ($h_cats as $slug) {
-            if (!isset($cat_counters_h[$slug])) $cat_counters_h[$slug] = 0;
+            if (!isset($cat_counters_h[$slug]))
+                $cat_counters_h[$slug] = 0;
             $h_cat_indices[$slug] = $cat_counters_h[$slug]++;
             $hotel_cat_counts[$slug] = $cat_counters_h[$slug];
         }
 
         $hotels_data[] = [
-            'id'          => $h_id,
-            'image'       => get_the_post_thumbnail_url($h_id, 'large'),
-            'title'       => get_the_title(),
-            'stars'       => $h_rating['stars'] ?? 5,
+            'id' => $h_id,
+            'image' => get_the_post_thumbnail_url($h_id, 'large'),
+            'title' => get_the_title(),
+            'stars' => $h_rating['stars'] ?? 5,
             'web_ratings' => $h_rating['rating_web'] ?? [],
-            'location'    => $h_location,
-            'description' => get_the_excerpt(),
-            'video_link'  => $h_video ? $h_video['url'] : '#',
-            'amenities'   => $h_amenities,
-            'cats'        => $h_cats,
+            'location' => $h_location,
+            'description' => get_the_content(),
+            'video_link' => $h_video ? $h_video['url'] : '#',
+            'amenities' => $h_amenities,
+            'cats' => $h_cats,
             'cat_indices' => $h_cat_indices,
         ];
     }
@@ -108,34 +117,38 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
     // -- Fetch Activities --
     $act_query = new WP_Query([
-        'post_type'      => 'activity',
-        'post_status'    => 'publish',
+        'post_type' => 'activity',
+        'post_status' => 'publish',
         'posts_per_page' => -1,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-        'tax_query'      => [[
-            'taxonomy' => 'category',
-            'field'    => 'slug',
-            'terms'    => array_keys($itinerary_tabs),
-            'operator' => 'IN',
-        ]],
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'tax_query' => [
+            [
+                'taxonomy' => 'category',
+                'field' => 'slug',
+                'terms' => array_keys($itinerary_tabs),
+                'operator' => 'IN',
+            ]
+        ],
     ]);
 
     while ($act_query->have_posts()) {
         $act_query->the_post();
-        $act_id    = get_the_ID();
+        $act_id = get_the_ID();
         $act_terms = wp_get_post_terms($act_id, 'category', ['fields' => 'slugs']);
         $activities_data[] = [
-            'id'    => $act_id,
+            'id' => $act_id,
             'image' => get_the_post_thumbnail_url($act_id, 'large'),
             'title' => get_the_title(),
-            'cats'  => is_wp_error($act_terms) ? [] : $act_terms,
+            'cats' => is_wp_error($act_terms) ? [] : $act_terms,
         ];
     }
     wp_reset_postdata();
     $used_slugs_act = [];
     foreach ($activities_data as $act) {
-        foreach ($act['cats'] as $s) { $used_slugs_act[$s] = true; }
+        foreach ($act['cats'] as $s) {
+            $used_slugs_act[$s] = true;
+        }
     }
     $itinerary_tabs = array_filter($itinerary_tabs, fn($slug) => isset($used_slugs_act[$slug]), ARRAY_FILTER_USE_KEY);
 }
@@ -218,7 +231,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             <?php if (!empty($feature_group['price'])): ?>
                                 <div>
                                     <span class="block font-body text-3xl md:text-4xl text-dark font-light">USD
-                                        $<?php echo esc_html($feature_group['price']); ?></span>
+                                        <?php echo esc_html(number_format((float) $feature_group['price'], 0, '.', ',')); ?></span>
                                     <span
                                         class="block font-body text-[10px] text-neutral-gray uppercase tracking-widest mt-1">per
                                         person</span>
@@ -300,10 +313,10 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                 <div class="embla journey-gallery-embla overflow-hidden cursor-grab active:cursor-grabbing">
                     <div class="embla__container flex">
                         <?php foreach ($journey_gallery as $img): ?>
-                            <div class="embla__slide flex-[0_0_70%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] min-w-0">
+                            <div class="embla__slide min-w-0">
                                 <div class="relative">
                                     <img src="<?php echo esc_url($img['url']); ?>" alt="<?php echo esc_attr($img['alt']); ?>"
-                                        class="w-full h-[200px] object-cover">
+                                        class="w-full object-cover block">
                                     <!-- <div class="absolute inset-0 bg-primary/20"></div> -->
                                     <?php if (!empty($img['caption'])): ?>
                                         <p class="font-body text-sm font-light text-dark mt-3 px-2 text-left">
@@ -363,14 +376,14 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     <li class="border-b border-neutral-gray/30">
                                         <a href="#price"
                                             class="flex items-center gap-6 py-4 hover:text-[#bd7a4e] transition-colors">
-                                            <svg width="10" height="21" viewBox="0 0 10 21" fill="none"
+                                            <svg width="21" height="21" viewBox="0 0 10 21" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M4.37348 21V18.4868C3.32703 18.3505 2.42801 17.9838 1.67643 17.3868C0.924842 16.7897 0.366032 15.9638 0 14.9091L1.13073 14.4103C1.48274 15.3351 1.96651 16.047 2.58205 16.5458C3.1976 17.0447 4.03256 17.2941 5.08693 17.2941C6.01442 17.2941 6.86178 17.0601 7.62903 16.5922C8.39627 16.1242 8.77989 15.3699 8.77989 14.3294C8.77989 13.4505 8.49754 12.7445 7.93283 12.2115C7.36813 11.6787 6.31151 11.1605 4.76299 10.6569C3.18621 10.1484 2.07642 9.56746 1.43363 8.91419C0.79063 8.26093 0.469131 7.41012 0.469131 6.36176C0.469131 5.21356 0.903999 4.29656 1.77373 3.61076C2.64347 2.92518 3.51005 2.55459 4.37348 2.499V0H5.59358V2.499C6.4383 2.58465 7.16376 2.82182 7.76995 3.21053C8.37614 3.59944 8.87862 4.15254 9.27739 4.86984L8.19333 5.43066C7.90233 4.89846 7.50193 4.46765 6.99213 4.13824C6.48213 3.80882 5.83293 3.64412 5.04453 3.64412C4.10281 3.64412 3.30822 3.89632 2.66075 4.40074C2.01308 4.90515 1.68924 5.55882 1.68924 6.36176C1.68924 7.12044 1.95522 7.7349 2.48719 8.20513C3.01895 8.67557 4.08411 9.1665 5.68265 9.67791C7.16406 10.1531 8.25403 10.7632 8.95254 11.5083C9.65085 12.2536 10 13.1892 10 14.3152C10 15.5552 9.5691 16.5403 8.7073 17.2703C7.84529 18.0004 6.80739 18.4106 5.59358 18.501V21H4.37348Z"
                                                     fill="#161616" />
                                             </svg>
 
-                                            Price
+                                            Prices
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -379,12 +392,13 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     <li class="border-b border-neutral-gray/30">
                                         <a href="#hotels"
                                             class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                            <svg class="w-5 h-5 shrink-0 text-dark" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1">
-                                                </path>
+                                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5 24V9H6.1V19.3846H15.45V11.3077H27V24H25.9V20.5385H6.1V24H5ZM10.4975 17.2102C9.85054 17.2102 9.30137 16.9726 8.85 16.4974C8.39863 16.0222 8.17295 15.4453 8.17295 14.7666C8.17295 14.088 8.39946 13.5119 8.85247 13.0385C9.30549 12.565 9.85549 12.3283 10.5025 12.3283C11.1495 12.3283 11.6986 12.5659 12.15 13.0411C12.6014 13.5163 12.827 14.0932 12.827 14.7718C12.827 15.4505 12.6005 16.0265 12.1475 16.5C11.6945 16.9735 11.1445 17.2102 10.4975 17.2102ZM16.55 19.3846H25.9V12.4615H16.55V19.3846ZM10.5 16.0563C10.8399 16.0563 11.1294 15.931 11.3684 15.6802C11.6075 15.4294 11.727 15.1258 11.727 14.7692C11.727 14.4127 11.6075 14.109 11.3684 13.8583C11.1294 13.6075 10.8399 13.4821 10.5 13.4821C10.1601 13.4821 9.87062 13.6075 9.63155 13.8583C9.39248 14.109 9.27295 14.4127 9.27295 14.7692C9.27295 15.1258 9.39248 15.4294 9.63155 15.6802C9.87062 15.931 10.1601 16.0563 10.5 16.0563Z"
+                                                    fill="#161616" />
                                             </svg>
+
                                             Hotels
                                         </a>
                                     </li>
@@ -394,12 +408,13 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     <li class="border-b border-neutral-gray/30">
                                         <a href="#activities"
                                             class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                            <svg class="w-5 h-5 shrink-0 text-dark" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                    d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1">
-                                                </path>
+                                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M5 14.4868L10.0875 6L15.1751 14.4868H5ZM10.1105 26C8.93708 26 7.94471 25.6118 7.13339 24.8354C6.32226 24.0592 5.91669 23.1128 5.91669 21.9962C5.91669 20.8627 6.32226 19.9089 7.13339 19.1348C7.94471 18.3607 8.93708 17.9737 10.1105 17.9737C11.2837 17.9737 12.2759 18.3619 13.0873 19.1382C13.8986 19.9144 14.3043 20.864 14.3043 21.9868C14.3043 23.1097 13.8986 24.0592 13.0873 24.8354C12.2759 25.6118 11.2837 26 10.1105 26ZM10.1105 24.8597C10.9492 24.8597 11.6592 24.5815 12.2406 24.0252C12.8219 23.4689 13.1126 22.7894 13.1126 21.9868C13.1126 21.1842 12.8219 20.5048 12.2406 19.9485C11.6592 19.3922 10.9492 19.114 10.1105 19.114C9.27174 19.114 8.5617 19.3922 7.98036 19.9485C7.39903 20.5048 7.10836 21.1842 7.10836 21.9868C7.10836 22.7894 7.39903 23.4689 7.98036 24.0252C8.5617 24.5815 9.27174 24.8597 10.1105 24.8597ZM7.05801 13.3464H13.14L10.0875 8.31348L7.05801 13.3464ZM17.8104 26V17.9737H26.198V26H17.8104ZM19.0021 24.8597H25.0063V19.114H19.0021V24.8597ZM22.0042 14.4868C21.2694 13.9253 20.596 13.4042 19.984 12.9233C19.3721 12.4423 18.8454 11.9751 18.4039 11.5219C17.9624 11.0688 17.6194 10.6185 17.3749 10.1711C17.1306 9.72371 17.0084 9.25512 17.0084 8.76534C17.0084 8.08551 17.241 7.52408 17.7062 7.08105C18.1713 6.63822 18.7637 6.4168 19.4832 6.4168C19.9583 6.4168 20.4025 6.52827 20.8158 6.75121C21.2291 6.97414 21.6253 7.30931 22.0042 7.75671C22.3832 7.32394 22.7869 6.99239 23.2153 6.76204C23.6439 6.53188 24.0881 6.4168 24.5478 6.4168C25.2464 6.4168 25.8297 6.6499 26.2978 7.11612C26.7659 7.58252 27 8.15421 27 8.8312C27 9.30634 26.8778 9.76391 26.6333 10.2039C26.389 10.6441 26.046 11.0871 25.6043 11.533C25.1627 11.9788 24.6361 12.4423 24.0244 12.9233C23.4125 13.4042 22.7391 13.9253 22.0042 14.4868ZM22.0042 13.0066C23.3883 11.9831 24.3684 11.1534 24.9444 10.5175C25.5203 9.88156 25.8083 9.31651 25.8083 8.82236C25.8083 8.4584 25.6881 8.15649 25.4476 7.91664C25.2068 7.67698 24.904 7.55715 24.5389 7.55715C24.2823 7.55715 24.0321 7.63127 23.7885 7.77951C23.5446 7.92795 23.2072 8.20829 22.7764 8.62052L22.0042 9.34664L21.232 8.62052C20.7857 8.19365 20.4454 7.9097 20.2111 7.76868C19.9765 7.62766 19.7293 7.55715 19.4695 7.55715C19.0892 7.55715 18.7825 7.66605 18.5496 7.88386C18.3166 8.10166 18.2001 8.39986 18.2001 8.77846C18.2001 9.30188 18.4881 9.88156 19.0641 10.5175C19.6401 11.1534 20.6201 11.9831 22.0042 13.0066Z"
+                                                    fill="#161616" />
                                             </svg>
+
                                             Other Activities
                                         </a>
                                     </li>
@@ -428,24 +443,22 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                             'class_extra' => 'w-full',
                         ]); ?>
 
-                         <?php 
-                            $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
-                            $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+                        <?php
+                        $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+                        $clean_whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+                        $whatsapp_default_text = get_theme_mod('whatsapp_default_text', 'Hello! I would like to get more information.');
                         ?>
 
                         <div class="text-center mt-6 text-[12px] font-body">
                             <p class="mb-1">Do you need help? Contact Us</p>
-                            <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
+                            <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>" target="_blank"
+                                rel="noopener noreferrer"
                                 class="pr-5 pl-5 hover:text-primary transition-colors justify-center flex items-center gap-2">
                                 <span class="md:block hidden">+<?php echo esc_html($raw_whatsapp); ?></span>
                             </a>
                             <div class="flex items-center justify-center gap-3">
-                                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
-                                    aria-label="WhatsApp"
+                                <a href="https://wa.me/<?php echo esc_attr($clean_whatsapp); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>" target="_blank"
+                                    rel="noopener noreferrer" aria-label="WhatsApp"
                                     class="text-neutral-gray hover:text-green-500 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none">
@@ -464,7 +477,8 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         </defs>
                                     </svg>
                                 </a>
-                                <a href="mailto:<?php echo get_theme_mod('contact_email', 'sales@intenseperu.com'); ?>" aria-label="Email" class="hover:text-dark transition-colors">
+                                <a href="mailto:<?php echo get_theme_mod('contact_email', 'sales@intenseperu.com'); ?>"
+                                    aria-label="Email" class="hover:text-dark transition-colors">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -536,7 +550,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                             </button>
 
                                             <div x-show="expanded" x-collapse x-cloak>
-                                                <div class="pt-8 pr-4"> <!-- Indented content -->
+                                                <div class="pt-8 pr-4 contenido-journey"> <!-- Indented content -->
                                                     <?php if (!empty($tour['itinerary_image']) && is_array($tour['itinerary_image'])): ?>
                                                         <img src="<?php echo esc_url($tour['itinerary_image']['url']); ?>"
                                                             alt="<?php echo esc_attr($tour['itinerary_image']['alt']); ?>"
@@ -725,42 +739,40 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
                                 <!-- Category Tabs -->
                                 <?php if (!empty($hotel_tabs)): ?>
-                                <div class="flex items-center gap-5 overflow-x-auto no-scrollbar pb-1 mb-10">
-                                    <!-- <button
+                                    <div class="flex items-center gap-5 overflow-x-auto no-scrollbar pb-1 mb-10">
+                                        <!-- <button
                                         @click="activeTab = 'all'; visibleCount = 3"
                                         :class="activeTab === 'all' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
                                         class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
                                         All
                                     </button> -->
-                                    <?php foreach ($hotel_tabs as $slug => $name): ?>
-                                    <button
-                                        @click="activeTab = '<?php echo esc_js($slug); ?>'; visibleCount = 3"
-                                        :class="activeTab === '<?php echo esc_attr($slug); ?>' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
-                                        class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
-                                        <?php echo esc_html($name); ?>
-                                    </button>
-                                    <?php endforeach; ?>
-                                </div>
+                                        <?php foreach ($hotel_tabs as $slug => $name): ?>
+                                            <button @click="activeTab = '<?php echo esc_js($slug); ?>'; visibleCount = 3"
+                                                :class="activeTab === '<?php echo esc_attr($slug); ?>' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
+                                                class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
+                                                <?php echo esc_html($name); ?>
+                                            </button>
+                                        <?php endforeach; ?>
+                                    </div>
                                 <?php endif; ?>
 
                                 <div class="mb-10">
                                     <?php foreach ($hotels_data as $global_idx => $hotel): ?>
-                                        <div class="hotel-item"
-                                            data-cats="<?php echo esc_attr(implode(' ', $hotel['cats'])); ?>"
+                                        <div class="hotel-item" data-cats="<?php echo esc_attr(implode(' ', $hotel['cats'])); ?>"
                                             data-global-idx="<?php echo $global_idx; ?>"
                                             data-cat-indices='<?php echo wp_json_encode($hotel['cat_indices']); ?>'
                                             x-show="$el.dataset.cats.split(' ').includes(activeTab) && (JSON.parse($el.dataset.catIndices)[activeTab] ?? 999) < visibleCount"
                                             x-transition>
                                             <?php get_template_part('template-parts/components/card-hotel', null, [
-                                                'image'       => $hotel['image'],
-                                                'title'       => $hotel['title'],
-                                                'stars'       => $hotel['stars'],
-                                                'type'        => 'Hotel',
+                                                'image' => $hotel['image'],
+                                                'title' => $hotel['title'],
+                                                'stars' => $hotel['stars'],
+                                                'type' => 'Hotel',
                                                 'web_ratings' => $hotel['web_ratings'],
-                                                'location'    => $hotel['location'],
+                                                'location' => $hotel['location'],
                                                 'description' => $hotel['description'],
-                                                'video_link'  => $hotel['video_link'],
-                                                'amenities'   => $hotel['amenities'],
+                                                'video_link' => $hotel['video_link'],
+                                                'amenities' => $hotel['amenities'],
                                             ]); ?>
                                         </div>
                                     <?php endforeach; ?>
@@ -768,9 +780,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
                                 <!-- See More -->
                                 <div class="flex justify-center">
-                                    <button
-                                        @click="visibleCount += 3"
-                                        x-show="visibleCount < (catCounts[activeTab] ?? 0)"
+                                    <button @click="visibleCount += 3" x-show="visibleCount < (catCounts[activeTab] ?? 0)"
                                         class="btn btn-outline-dark text-md px-20">
                                         See more
                                     </button>
@@ -802,24 +812,24 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
                                         <!-- Tabs: always show when itinerary has tour days -->
                                         <?php if (!empty($itinerary_tabs)): ?>
-                                        <div class="flex items-center gap-5 overflow-x-auto no-scrollbar pb-1">
-                                            <!-- <button
+                                            <div class="flex items-center gap-5 overflow-x-auto no-scrollbar pb-1">
+                                                <!-- <button
                                                 @click="activeTab = 'all'; window.filterActivities($refs.activitiesSlider, 'all')"
                                                 :class="activeTab === 'all' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
                                                 class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
                                                 All
                                             </button> -->
-                                            <?php foreach ($itinerary_tabs as $slug => $label): ?>
-                                            <button
-                                                @click="activeTab = '<?php echo esc_js($slug); ?>'; window.filterActivities($refs.activitiesSlider, '<?php echo esc_js($slug); ?>')"
-                                                :class="activeTab === '<?php echo esc_attr($slug); ?>' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
-                                                class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
-                                                <?php echo esc_html($label); ?>
-                                            </button>
-                                            <?php endforeach; ?>
-                                        </div>
+                                                <?php foreach ($itinerary_tabs as $slug => $label): ?>
+                                                    <button
+                                                        @click="activeTab = '<?php echo esc_js($slug); ?>'; window.filterActivities($refs.activitiesSlider, '<?php echo esc_js($slug); ?>')"
+                                                        :class="activeTab === '<?php echo esc_attr($slug); ?>' ? 'text-dark border-b-2 border-[#bd7a4e] font-semibold' : 'text-neutral-gray hover:text-dark'"
+                                                        class="font-heading text-base pb-1 transition-colors whitespace-nowrap shrink-0 outline-none">
+                                                        <?php echo esc_html($label); ?>
+                                                    </button>
+                                                <?php endforeach; ?>
+                                            </div>
                                         <?php else: ?>
-                                        <div></div>
+                                            <div></div>
                                         <?php endif; ?>
 
                                         <!-- Prev / Next -->
@@ -844,8 +854,11 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     </div>
 
                                     <!-- Loader overlay (shown while filter transitions) -->
-                                    <div class="activities-loader absolute inset-x-0 top-0 bottom-8 z-10 flex items-center justify-center bg-cream/80 opacity-0 pointer-events-none transition-opacity duration-200 rounded-xl">
-                                        <div class="w-9 h-9 border-2 border-[#bd7a4e] border-t-transparent rounded-full animate-spin"></div>
+                                    <div
+                                        class="activities-loader absolute inset-x-0 top-0 bottom-8 z-10 flex items-center justify-center bg-cream/80 opacity-0 pointer-events-none transition-opacity duration-200 rounded-xl">
+                                        <div
+                                            class="w-9 h-9 border-2 border-[#bd7a4e] border-t-transparent rounded-full animate-spin">
+                                        </div>
                                     </div>
 
                                     <!-- Viewport Embla -->
@@ -853,8 +866,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         x-ref="activitiesSlider">
                                         <div class="embla__container flex flex-row -ml-6 md:-ml-8">
                                             <?php foreach ($activities_data as $act): ?>
-                                                <div
-                                                    class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8"
+                                                <div class="embla__slide flex-[0_0_85%] md:flex-[0_0_45%] lg:flex-[0_0_33.333%] min-w-0 pl-6 md:pl-8"
                                                     data-category="<?php echo esc_attr(implode(' ', $act['cats'])); ?>">
                                                     <?php get_template_part('template-parts/components/card-activity', null, [
                                                         'image' => $act['image'],
@@ -866,7 +878,8 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="font-body text-sm text-[#626262] leading-relaxed font-light italic">Ask your Travel Advisor to add this experience</p>
+                                    <p class="font-body text-sm text-[#626262] leading-relaxed font-light italic">Ask your
+                                        Travel Advisor to add this experience</p>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -962,13 +975,13 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 <li class="border-b border-neutral-gray/20">
                                     <a href="#price" @click="drawerOpen = false"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                        <svg width="10" height="21" viewBox="0 0 10 21" fill="none"
+                                        <svg width="21" height="21" viewBox="0 0 10 21" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 d="M4.37348 21V18.4868C3.32703 18.3505 2.42801 17.9838 1.67643 17.3868C0.924842 16.7897 0.366032 15.9638 0 14.9091L1.13073 14.4103C1.48274 15.3351 1.96651 16.047 2.58205 16.5458C3.1976 17.0447 4.03256 17.2941 5.08693 17.2941C6.01442 17.2941 6.86178 17.0601 7.62903 16.5922C8.39627 16.1242 8.77989 15.3699 8.77989 14.3294C8.77989 13.4505 8.49754 12.7445 7.93283 12.2115C7.36813 11.6787 6.31151 11.1605 4.76299 10.6569C3.18621 10.1484 2.07642 9.56746 1.43363 8.91419C0.79063 8.26093 0.469131 7.41012 0.469131 6.36176C0.469131 5.21356 0.903999 4.29656 1.77373 3.61076C2.64347 2.92518 3.51005 2.55459 4.37348 2.499V0H5.59358V2.499C6.4383 2.58465 7.16376 2.82182 7.76995 3.21053C8.37614 3.59944 8.87862 4.15254 9.27739 4.86984L8.19333 5.43066C7.90233 4.89846 7.50193 4.46765 6.99213 4.13824C6.48213 3.80882 5.83293 3.64412 5.04453 3.64412C4.10281 3.64412 3.30822 3.89632 2.66075 4.40074C2.01308 4.90515 1.68924 5.55882 1.68924 6.36176C1.68924 7.12044 1.95522 7.7349 2.48719 8.20513C3.01895 8.67557 4.08411 9.1665 5.68265 9.67791C7.16406 10.1531 8.25403 10.7632 8.95254 11.5083C9.65085 12.2536 10 13.1892 10 14.3152C10 15.5552 9.5691 16.5403 8.7073 17.2703C7.84529 18.0004 6.80739 18.4106 5.59358 18.501V21H4.37348Z"
                                                 fill="#161616" />
                                         </svg>
-                                        Price
+                                        Prices
                                     </a>
                                 </li>
                             <?php endif; ?>
@@ -991,10 +1004,11 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 <li class="border-b border-neutral-gray/20">
                                     <a href="#activities" @click="drawerOpen = false"
                                         class="flex items-center gap-4 py-4 hover:text-[#bd7a4e] transition-colors">
-                                        <svg class="w-5 h-5 shrink-0 text-dark" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1" />
+                                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M5 14.4868L10.0875 6L15.1751 14.4868H5ZM10.1105 26C8.93708 26 7.94471 25.6118 7.13339 24.8354C6.32226 24.0592 5.91669 23.1128 5.91669 21.9962C5.91669 20.8627 6.32226 19.9089 7.13339 19.1348C7.94471 18.3607 8.93708 17.9737 10.1105 17.9737C11.2837 17.9737 12.2759 18.3619 13.0873 19.1382C13.8986 19.9144 14.3043 20.864 14.3043 21.9868C14.3043 23.1097 13.8986 24.0592 13.0873 24.8354C12.2759 25.6118 11.2837 26 10.1105 26ZM10.1105 24.8597C10.9492 24.8597 11.6592 24.5815 12.2406 24.0252C12.8219 23.4689 13.1126 22.7894 13.1126 21.9868C13.1126 21.1842 12.8219 20.5048 12.2406 19.9485C11.6592 19.3922 10.9492 19.114 10.1105 19.114C9.27174 19.114 8.5617 19.3922 7.98036 19.9485C7.39903 20.5048 7.10836 21.1842 7.10836 21.9868C7.10836 22.7894 7.39903 23.4689 7.98036 24.0252C8.5617 24.5815 9.27174 24.8597 10.1105 24.8597ZM7.05801 13.3464H13.14L10.0875 8.31348L7.05801 13.3464ZM17.8104 26V17.9737H26.198V26H17.8104ZM19.0021 24.8597H25.0063V19.114H19.0021V24.8597ZM22.0042 14.4868C21.2694 13.9253 20.596 13.4042 19.984 12.9233C19.3721 12.4423 18.8454 11.9751 18.4039 11.5219C17.9624 11.0688 17.6194 10.6185 17.3749 10.1711C17.1306 9.72371 17.0084 9.25512 17.0084 8.76534C17.0084 8.08551 17.241 7.52408 17.7062 7.08105C18.1713 6.63822 18.7637 6.4168 19.4832 6.4168C19.9583 6.4168 20.4025 6.52827 20.8158 6.75121C21.2291 6.97414 21.6253 7.30931 22.0042 7.75671C22.3832 7.32394 22.7869 6.99239 23.2153 6.76204C23.6439 6.53188 24.0881 6.4168 24.5478 6.4168C25.2464 6.4168 25.8297 6.6499 26.2978 7.11612C26.7659 7.58252 27 8.15421 27 8.8312C27 9.30634 26.8778 9.76391 26.6333 10.2039C26.389 10.6441 26.046 11.0871 25.6043 11.533C25.1627 11.9788 24.6361 12.4423 24.0244 12.9233C23.4125 13.4042 22.7391 13.9253 22.0042 14.4868ZM22.0042 13.0066C23.3883 11.9831 24.3684 11.1534 24.9444 10.5175C25.5203 9.88156 25.8083 9.31651 25.8083 8.82236C25.8083 8.4584 25.6881 8.15649 25.4476 7.91664C25.2068 7.67698 24.904 7.55715 24.5389 7.55715C24.2823 7.55715 24.0321 7.63127 23.7885 7.77951C23.5446 7.92795 23.2072 8.20829 22.7764 8.62052L22.0042 9.34664L21.232 8.62052C20.7857 8.19365 20.4454 7.9097 20.2111 7.76868C19.9765 7.62766 19.7293 7.55715 19.4695 7.55715C19.0892 7.55715 18.7825 7.66605 18.5496 7.88386C18.3166 8.10166 18.2001 8.39986 18.2001 8.77846C18.2001 9.30188 18.4881 9.88156 19.0641 10.5175C19.6401 11.1534 20.6201 11.9831 22.0042 13.0066Z"
+                                                fill="#161616" />
                                         </svg>
                                         Other Activities
                                     </a>
@@ -1103,7 +1117,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
     </section>
 
     <!-- 8. Booking Form Section -->
-    <section id="booking-form" class="py-24">
+    <section id="booking-form" class="py-12 md:py-24">
         <div class="container-site max-w-6xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
@@ -1119,6 +1133,7 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                 <!-- Right: Actually Form -->
                 <div class="lg:col-span-8" data-aos="fade-left">
                     <form x-data="bookingForm()" @submit="submitForm" class="space-y-8 md:space-y-10"
+                        autocomplete="off"
                         data-page-source="<?php echo esc_attr(get_the_title()); ?>"
                         data-page-url="<?php echo esc_attr(get_permalink()); ?>">
                         <!-- Name Row -->
@@ -1154,97 +1169,138 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
 
                         <!-- Date & Trip Length Row -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                            <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }"
-                                x-data="{ dateFocused: false }"
-                                @click="$refs.startDateInput.focus(); if($refs.startDateInput.showPicker) $refs.startDateInput.showPicker();">
+                            <div class="input-wrapper cursor-pointer" :class="{ 'has-error': errors.startDate }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none"
                                     x-show="!formData.startDate">
-                                    <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"
                                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                         </path>
                                     </svg>
                                 </div>
-                                <input type="text" x-ref="startDateInput"
-                                    @focus="$el.type='date'; dateFocused = true; if($el.showPicker) $el.showPicker();"
-                                    @blur="if(!$el.value) $el.type='text'; dateFocused = false"
-                                    @click.stop="$el.focus(); if($el.type==='date' && $el.showPicker) $el.showPicker();"
-                                    x-model="formData.startDate" @input="validateField('startDate')"
-                                    class="input-field cursor-pointer" placeholder="Start Date">
-                                <span x-show="errors.startDate" x-text="errors.startDate"
-                                    class="input-error-msg"></span>
+                                <input type="text" readonly
+                                    x-init="flatpickr($el, {
+                                        dateFormat: 'd/m/Y',
+                                        minDate: 'today',
+                                        disableMobile: true,
+                                        onChange(dates, dateStr) {
+                                            formData.startDate = dateStr;
+                                            startDateLabel = dates[0] ? dates[0].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
+                                            validateField('startDate');
+                                        }
+                                    })"
+                                    :value="formData.startDate"
+                                    class="input-field cursor-pointer" placeholder="Start Date (dd-mm-yyyy)">
+                                <span x-show="startDateLabel" x-text="startDateLabel"
+                                    class="block mt-1 text-xs text-dark/50 font-body"></span>
+                                <span x-show="errors.startDate" x-text="errors.startDate" class="input-error-msg"></span>
                             </div>
                             <div class="input-wrapper" :class="{ 'has-error': errors.tripLength }">
                                 <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 9l-7 7-7-7"></path>
+                                            d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                                 <select x-model="formData.tripLength" @change="validateField('tripLength')"
-                                    class="input-field"
-                                    :class="{'text-dark/40': !formData.tripLength, 'text-dark': formData.tripLength}">
-                                    <option value="" disabled selected hidden>Trip Length</option>
-                                    <option value="1-4">1 to 4 days</option>
-                                    <option value="5-8">5 to 8 days</option>
-                                    <option value="9-14">9 to 14 days</option>
+                                    class="input-field" :class="formData.tripLength ? 'text-dark' : 'text-dark/40'">
+                                    <option value="" disabled>Trip Length (# of days)</option>
+                                    <?php for ($d = 2; $d <= 20; $d++): ?>
+                                    <option value="<?php echo $d; ?>"><?php echo $d; ?></option>
+                                    <?php endfor; ?>
+                                    <option value="20+">20+</option>
                                 </select>
-                                <span x-show="errors.tripLength" x-text="errors.tripLength"
-                                    class="input-error-msg"></span>
+                                <span x-show="errors.tripLength" x-text="errors.tripLength" class="input-error-msg"></span>
                             </div>
                         </div>
 
                         <!-- Passengers Row -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                            <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
+                            <div>
+                                <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Adults</p> -->
+                                <div class="input-wrapper" :class="{ 'has-error': errors.adults }">
+                                    <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <select x-model="formData.adults" @change="validateField('adults')"
+                                        class="input-field" :class="formData.adults ? 'text-dark' : 'text-dark/40'">
+                                        <option value="" disabled selected>Adults</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                    <span x-show="errors.adults" x-text="errors.adults" class="input-error-msg"></span>
                                 </div>
-                                <select x-model="formData.adults" @change="validateField('adults')" class="input-field">
-                                    <option value="0" disabled>Adults</option>
-                                    <option value="1">1 Adult</option>
-                                    <option value="2">2 Adults</option>
-                                    <option value="3">3 Adults</option>
-                                    <option value="4+">4+ Adults</option>
-                                </select>
-                                <span x-show="errors.adults" x-text="errors.adults" class="input-error-msg"></span>
                             </div>
-                            <div class="input-wrapper">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
+                            <div>
+                                <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Children &lt;12 -->
+                                </p>
+                                <div class="input-wrapper" :class="{ 'has-error': errors.children }">
+                                    <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <select x-model="formData.children" @change="validateField('children')" class="input-field"
+                                        :class="formData.children ? 'text-dark' : 'text-dark/40'">
+                                        <option value="" disabled selected>Children &lt;12</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                    <span x-show="errors.children" x-text="errors.children" class="input-error-msg"></span>
                                 </div>
-                                <select x-model="formData.children" class="input-field">
-                                    <option value="0" disabled>Children</option>
-                                    <option value="none">0 Children</option>
-                                    <option value="1">1 Child</option>
-                                    <option value="2">2 Children</option>
-                                    <option value="3+">3+ Children</option>
-                                </select>
                             </div>
-                            <div class="input-wrapper">
-                                <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M19 9l-7 7-7-7"></path>
-                                    </svg>
+                            <div>
+                                <!-- <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Infants &lt;1 -->
+                                </p>
+                                <div class="input-wrapper" :class="{ 'has-error': errors.enfants }">
+                                    <div class="absolute right-0 top-0 bottom-2 flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 text-dark" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <select x-model="formData.enfants" @change="validateField('enfants')" class="input-field"
+                                        :class="formData.enfants ? 'text-dark' : 'text-dark/40'">
+                                        <option value="" disabled selected>Infants &lt;1</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                    <span x-show="errors.enfants" x-text="errors.enfants" class="input-error-msg"></span>
                                 </div>
-                                <select x-model="formData.enfants" class="input-field">
-                                    <option value="0" disabled>Enfants ( &lt; 1 )</option>
-                                    <option value="none">0 Enfants</option>
-                                    <option value="1">1 Enfant</option>
-                                    <option value="2">2 Enfants</option>
-                                </select>
                             </div>
                         </div>
 
@@ -1262,8 +1318,10 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         :class="formData.hotelCategory === 'boutique' ? 'text-primary font-medium' : 'text-dark'">Boutique</span>
                                     <div class="flex gap-0.5"
                                         :class="formData.hotelCategory === 'boutique' ? 'text-primary' : 'text-neutral-gray'">
-                                        <template x-for="i in 5"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        <template x-for="i in 5"><svg class="w-3.5 h-3.5 fill-current"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg></template>
                                     </div>
                                 </button>
@@ -1277,8 +1335,10 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         :class="formData.hotelCategory === 'luxury' ? 'text-primary font-medium' : 'text-dark'">Luxury</span>
                                     <div class="flex gap-0.5"
                                         :class="formData.hotelCategory === 'luxury' ? 'text-primary' : 'text-neutral-gray'">
-                                        <template x-for="i in 5"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        <template x-for="i in 5"><svg class="w-3.5 h-3.5 fill-current"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg></template>
                                     </div>
                                 </button>
@@ -1292,8 +1352,10 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         :class="formData.hotelCategory === 'superior' ? 'text-primary font-medium' : 'text-dark'">Superior</span>
                                     <div class="flex gap-0.5"
                                         :class="formData.hotelCategory === 'superior' ? 'text-primary' : 'text-neutral-gray'">
-                                        <template x-for="i in 4"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        <template x-for="i in 4"><svg class="w-3.5 h-3.5 fill-current"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg></template>
                                     </div>
                                 </button>
@@ -1304,11 +1366,14 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                         ? 'border-primary bg-primary/10'
                                         : 'border-dark hover:border-dark/40'">
                                     <span class="font-body text-sm transition-colors"
-                                        :class="formData.hotelCategory === 'value' ? 'text-primary font-medium' : 'text-dark'">Best Value</span>
+                                        :class="formData.hotelCategory === 'value' ? 'text-primary font-medium' : 'text-dark'">Best
+                                        Value</span>
                                     <div class="flex gap-0.5"
                                         :class="formData.hotelCategory === 'value' ? 'text-primary' : 'text-neutral-gray'">
-                                        <template x-for="i in 3"><svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        <template x-for="i in 3"><svg class="w-3.5 h-3.5 fill-current"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                             </svg></template>
                                     </div>
                                 </button>
@@ -1334,19 +1399,23 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
                                 <select x-model="formData.hearAboutUs" class="input-field"
                                     :class="{'text-dark/40': !formData.hearAboutUs, 'text-dark': formData.hearAboutUs}">
                                     <option value="" disabled selected hidden>How do you hear about us</option>
-                                    <option value="google">Google Search</option>
-                                    <option value="friend">Friend/Family</option>
-                                    <option value="social">Social Media</option>
-                                    <option value="travel-agent">Travel Agent</option>
-                                    <option value="ai">Artificial Intelligence</option>
+                                    <option value="Google Search">Google Search</option>
+                                    <option value="Friend/Family">Friend/Family</option>
+                                    <option value="Social Media">Social Media</option>
+                                    <option value="Travel Agent">Travel Agent</option>
+                                    <option value="Artificial Intelligence">Artificial Intelligence</option>
                                 </select>
                             </div>
                         </div>
 
                         <!-- Mensaje Row -->
-                        <div class="pt-4 input-wrapper">
-                            <textarea rows="2" x-model="formData.mensaje" class="input-field"
-                                placeholder="Mensaje"></textarea>
+                        <div class="pt-4">
+                            <p class="font-body text-xs text-dark/40 uppercase tracking-widest mb-3">Additional comments
+                                (optional)</p>
+                            <div class="input-wrapper">
+                                <textarea rows="4" x-model="formData.mensaje" class="input-field"
+                                    placeholder="Let us know if you have any special requests or would like to personalize your experience.&#10;If you are traveling with children, kindly indicate their exact ages at the time of travel."></textarea>
+                            </div>
                         </div>
 
                         <!-- Submit Button -->
@@ -1454,69 +1523,6 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
         </div>
     </section>
 
-    <!-- ── SUCCESS MODAL ───────────────────────────────────────── -->
-    <div
-        x-data="{ open: false }"
-        x-init="window.addEventListener('ccp:quoteSuccess', () => open = true)"
-        x-show="open"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
-        style="display: none;">
-
-        <div
-            x-show="open"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
-            @click.outside="open = false"
-            class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto p-10 text-center relative">
-
-            <!-- Close -->
-            <button @click="open = false"
-                class="absolute top-4 right-5 text-dark/30 hover:text-dark/60 transition-colors text-xl leading-none font-light">
-                ×
-            </button>
-
-            <!-- Luggage Icon -->
-            <div class="flex justify-center mb-6">
-                <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="8" y="20" width="40" height="30" rx="3" stroke="#1a1a1a" stroke-width="1.8" fill="none" />
-                    <path d="M20 20V15a8 8 0 0116 0v5" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" fill="none" />
-                    <line x1="28" y1="20" x2="28" y2="50" stroke="#1a1a1a" stroke-width="1.4" />
-                    <line x1="8" y1="33" x2="48" y2="33" stroke="#1a1a1a" stroke-width="1.4" />
-                    <circle cx="16" cy="51" r="2" fill="#1a1a1a" />
-                    <circle cx="40" cy="51" r="2" fill="#1a1a1a" />
-                </svg>
-            </div>
-
-            <h3 class="font-heading text-2xl md:text-3xl text-dark font-light mb-3 leading-snug">
-                Quote request<br>received!
-            </h3>
-            <p class="font-body text-sm text-dark/60 leading-relaxed mb-8 max-w-[220px] mx-auto">
-                One of our travel designers will reach out within 24 hours to tailor this itinerary for you.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="<?php echo esc_url(home_url('/')); ?>"
-                    class="px-6 py-2.5 rounded-full border border-dark/40 text-dark font-body text-sm hover:bg-dark hover:text-white transition-all duration-300">
-                    Back to Home
-                </a>
-                <a href="<?php echo esc_url(home_url('/destinations')); ?>"
-                    class="px-6 py-2.5 rounded-full bg-primary text-white font-body text-sm hover:bg-hover transition-all duration-300">
-                    Explore other journeys
-                </a>
-            </div>
-
-        </div>
-    </div>
 
 </main>
 
@@ -1544,34 +1550,19 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
         /* Sin gap — pegados */
     }
 
-    /* ── Slides ── */
+    /* ── Slides: ancho reducido ~60% de 574px (aspect 574×283) ── */
     .journey-gallery-embla .embla__slide {
-        flex: 0 0 100%;
-        /* Mobile: 1 slide visible */
+        flex: 0 0 auto;
+        width: min(450px, 76vw);
         min-width: 0;
-        /* Padding interno para separación visual entre cards */
-        /* padding: 0 8px; */
         box-sizing: border-box;
     }
 
-    @media (min-width: 768px) {
-        .journey-gallery-embla .embla__slide {
-            flex: 0 0 50%;
-            /* Tablet: 2 slides visibles */
-        }
-    }
-
-    @media (min-width: 1024px) {
-        .journey-gallery-embla .embla__slide {
-            flex: 0 0 25%;
-            /* Desktop: 4 slides visibles */
-        }
-    }
-
-    /* ── Card interna (ajusta a tu estructura HTML) ── */
-    .journey-gallery-embla .embla__slide>* {
-        height: 100%;
-        /* Card ocupa todo el alto del slide */
+    .journey-gallery-embla .embla__slide img {
+        aspect-ratio: 574 / 283;
+        object-fit: cover;
+        width: 100%;
+        display: block;
     }
 
     input[type="date"]::-webkit-calendar-picker-indicator {
@@ -1581,6 +1572,10 @@ if (!is_wp_error($journey_cats) && !empty($journey_cats)) {
         width: 2rem;
         height: 100%;
         cursor: pointer;
+    }
+
+    .contenido-journey p {
+        margin-bottom: 20px;
     }
 </style>
 

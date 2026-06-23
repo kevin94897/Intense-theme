@@ -3,14 +3,15 @@
     <div class="container-site">
 
         <!-- Footer Top: 4 Columns -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-12 mb-0 md:mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-12 mb-0 md:mb-10">
 
             <!-- Column 1: Get in Touch with Us -->
             <?php
             $phone = get_theme_mod('contact_phone', '18006709510');
             $phone_text = get_theme_mod('contact_phone_text', '1 800 670 9510 Toll Free (US, CAN)');
-            $raw_whatsapp = get_theme_mod('contact_whatsapp', '51994008833');
+            $raw_whatsapp = get_theme_mod('contact_whatsapp', '51 994 008 833');
             $whatsapp = str_replace(array(' ', '-', '(', ')', '+'), '', $raw_whatsapp);
+            $whatsapp_default_text = get_theme_mod('whatsapp_default_text', 'Hello! I would like to get more information.');
             $email = get_theme_mod('contact_email', 'sales@intenseperu.com');
             ?>
 
@@ -33,12 +34,15 @@
                             <a href="tel:<?php echo esc_attr($phone); ?>"
                                 class="flex items-center gap-3 text-cream/80 hover:text-primary transition-colors duration-200">
 
-                                <svg class="w-5 h-5 fill-none stroke-current" stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.54-4.24-7.136-7.136l1.292-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M14.9307 16C15.2362 16 15.4908 15.9 15.6945 15.7C15.8982 15.5 16 15.25 16 14.95V12.5155C16 12.2475 15.9154 12.01 15.7463 11.803C15.5769 11.5958 15.3563 11.4589 15.0845 11.3923L12.9808 10.9615C12.7346 10.9282 12.5099 10.9394 12.3067 10.9952C12.1036 11.0509 11.9206 11.1666 11.7578 11.3422L9.61925 13.5193C8.81925 13.0756 8.08467 12.6041 7.4155 12.1048C6.74617 11.6054 6.12117 11.0653 5.5405 10.4845C4.97767 9.91283 4.44783 9.30742 3.951 8.66825C3.45417 8.02908 3.00067 7.33708 2.5905 6.59225L4.7845 4.54625C4.9435 4.41292 5.05442 4.24175 5.11725 4.03275C5.18008 3.82375 5.18842 3.5795 5.14225 3.3L4.64625 0.9155C4.57442 0.6475 4.43717 0.427917 4.2345 0.25675C4.032 0.0855838 3.79483 0 3.523 0H1.05C0.75 0 0.5 0.101833 0.3 0.305499C0.0999994 0.509166 0 0.76375 0 1.06925C0 2.75508 0.422084 4.48008 1.26625 6.24425C2.11058 8.00842 3.29233 9.65325 4.8115 11.1788C6.33083 12.7044 7.97575 13.8894 9.74625 14.7337C11.5167 15.5779 13.2449 16 14.9307 16ZM2.127 5.65375C1.79233 4.90125 1.52758 4.15317 1.33275 3.4095C1.13792 2.666 1.03083 1.95258 1.0115 1.26925C1.0115 1.19225 1.03717 1.12817 1.0885 1.077C1.13983 1.02567 1.20392 1 1.28075 1H3.327C3.4295 1 3.51283 1.02567 3.577 1.077C3.641 1.12817 3.68583 1.20508 3.7115 1.30775L4.1615 3.427C4.18717 3.50383 4.19042 3.58717 4.17125 3.677C4.15192 3.76667 4.11025 3.83717 4.04625 3.8885L2.127 5.65375ZM10.577 13.977L12.4577 12.0577C12.5217 11.9936 12.5827 11.9519 12.6405 11.9327C12.6982 11.9134 12.7654 11.9166 12.8423 11.9423L14.6923 12.327C14.7949 12.3527 14.8718 12.3975 14.923 12.4615C14.9743 12.5257 15 12.609 15 12.7115V14.7193C15 14.7961 14.9743 14.8602 14.923 14.9115C14.8718 14.9628 14.8077 14.9885 14.7307 14.9885C14.1627 14.977 13.4973 14.8892 12.7345 14.725C11.9718 14.5608 11.2527 14.3115 10.577 13.977Z"
+                                        fill="white" />
                                 </svg>
 
-                                <span class="text-sm text-cream/80 hover:text-primary transition-colors duration-200">
+
+                                <span class="text-sm text-cream/80 hover:text-primary transition-colors duration-200 whitespace-nowrap">
                                     <?php echo esc_html($phone_text); ?>
                                 </span>
                             </a>
@@ -46,16 +50,28 @@
 
                         <!-- WhatsApp -->
                         <li>
-                            <a href="https://wa.me/<?php echo esc_attr($whatsapp); ?>" target="_blank" rel="noopener"
+                            <a href="https://wa.me/<?php echo esc_attr($whatsapp); ?>?text=<?php echo rawurlencode($whatsapp_default_text); ?>" target="_blank" rel="noopener"
                                 class="flex items-center gap-3 text-cream/80 hover:text-primary transition-colors duration-200">
 
-                                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                                    <path
-                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <g clip-path="url(#clip0_240_2559)">
+                                        <path
+                                            d="M3 21.0007L4.65 17.2007C3.38766 15.4088 2.82267 13.2177 3.06104 11.0388C3.29942 8.85988 4.32479 6.84284 5.94471 5.36622C7.56463 3.8896 9.66775 3.05492 11.8594 3.0188C14.051 2.98269 16.1805 3.74763 17.8482 5.17007C19.5159 6.59252 20.6071 8.57468 20.9172 10.7446C21.2272 12.9145 20.7347 15.1229 19.5321 16.9555C18.3295 18.788 16.4994 20.1187 14.3854 20.6978C12.2713 21.2769 10.0186 21.0646 8.05 20.1007L3 21.0007Z"
+                                            stroke="white" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path
+                                            d="M9 10C9 10.1326 9.05268 10.2598 9.14645 10.3536C9.24021 10.4473 9.36739 10.5 9.5 10.5C9.63261 10.5 9.75979 10.4473 9.85355 10.3536C9.94732 10.2598 10 10.1326 10 10V9C10 8.86739 9.94732 8.74021 9.85355 8.64645C9.75979 8.55268 9.63261 8.5 9.5 8.5C9.36739 8.5 9.24021 8.55268 9.14645 8.64645C9.05268 8.74021 9 8.86739 9 9V10ZM9 10C9 11.3261 9.52678 12.5979 10.4645 13.5355C11.4021 14.4732 12.6739 15 14 15M14 15H15C15.1326 15 15.2598 14.9473 15.3536 14.8536C15.4473 14.7598 15.5 14.6326 15.5 14.5C15.5 14.3674 15.4473 14.2402 15.3536 14.1464C15.2598 14.0527 15.1326 14 15 14H14C13.8674 14 13.7402 14.0527 13.6464 14.1464C13.5527 14.2402 13.5 14.3674 13.5 14.5C13.5 14.6326 13.5527 14.7598 13.6464 14.8536C13.7402 14.9473 13.8674 15 14 15Z"
+                                            stroke="white" stroke-linecap="round" stroke-linejoin="round" />
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_240_2559">
+                                            <rect width="24" height="24" fill="white" />
+                                        </clipPath>
+                                    </defs>
                                 </svg>
 
-                                <span class="text-sm text-cream/80 hover:text-primary transition-colors duration-200">
-                                    +<?php echo esc_html($whatsapp); ?>
+                                <span class="text-sm text-cream/80 hover:text-primary transition-colors duration-200 whitespace-nowrap">
+                                    +<?php echo esc_html($raw_whatsapp); ?>
                                 </span>
                             </a>
                         </li>
@@ -173,28 +189,54 @@
                         Subscribe to receive curated travel inspiration from Peru.
                     </p>
 
-                    <form class="flex flex-col gap-6 mb-8 w-full max-w-sm" action="#" method="POST">
-                        <div class="input-wrapper">
-                            <!-- Custom inline styles to enforce white border logic for the dark footer -->
-                            <input type="text" placeholder="Nombre" required
-                                class="w-full bg-transparent pb-2 text-sm outline-none transition-colors"
-                                style="border: none; border-bottom: 1px solid rgba(255,252,247,0.5); color: #fffcf7;"
-                                onfocus="this.style.borderBottom='1px solid #fffcf7'"
-                                onblur="this.style.borderBottom='1px solid rgba(255,252,247,0.5)'" />
-                        </div>
-                        <div class="input-wrapper">
-                            <input type="email" placeholder="Email" required
-                                class="w-full bg-transparent pb-2 text-sm outline-none transition-colors"
-                                style="border: none; border-bottom: 1px solid rgba(255,252,247,0.5); color: #fffcf7;"
-                                onfocus="this.style.borderBottom='1px solid #fffcf7'"
-                                onblur="this.style.borderBottom='1px solid rgba(255,252,247,0.5)'" />
-                        </div>
-                        <div>
-                            <button type="submit"
-                                class="w-full cursor-pointer btn-outline-light py-3 rounded-full text-sm font-medium transition-colors hover:bg-cream hover:text-dark">
-                                Subscribe
-                            </button>
-                        </div>
+                    <form class="flex flex-col gap-6 mb-8 w-full max-w-sm"
+                        x-data="{
+                            name: '', email: '', loading: false, done: false, error: '',
+                            submit() {
+                                if (!this.email) return;
+                                this.loading = true; this.error = '';
+                                const fd = new FormData();
+                                fd.append('action', 'newsletter_subscribe');
+                                fd.append('nonce', window.intenseAjax?.nonce || '');
+                                fd.append('name', this.name);
+                                fd.append('email', this.email);
+                                fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>', { method: 'POST', body: fd })
+                                    .then(r => r.json())
+                                    .then(d => { this.loading = false; d.success ? this.done = true : this.error = d.data?.message || 'Error, try again.'; })
+                                    .catch(() => { this.loading = false; this.error = 'Error, try again.'; });
+                            }
+                        }"
+                        @submit.prevent="submit">
+
+                        <template x-if="!done">
+                            <div class="flex flex-col gap-6">
+                                <div class="input-wrapper">
+                                    <input type="text" x-model="name" placeholder="Name"
+                                        class="w-full bg-transparent pb-2 text-sm outline-none transition-colors"
+                                        style="border:none;border-bottom:1px solid rgba(255,252,247,0.5);color:#fffcf7;"
+                                        onfocus="this.style.borderBottom='1px solid #fffcf7'"
+                                        onblur="this.style.borderBottom='1px solid rgba(255,252,247,0.5)'" />
+                                </div>
+                                <div class="input-wrapper">
+                                    <input type="email" x-model="email" placeholder="Email" required
+                                        class="w-full bg-transparent pb-2 text-sm outline-none transition-colors"
+                                        style="border:none;border-bottom:1px solid rgba(255,252,247,0.5);color:#fffcf7;"
+                                        onfocus="this.style.borderBottom='1px solid #fffcf7'"
+                                        onblur="this.style.borderBottom='1px solid rgba(255,252,247,0.5)'" />
+                                </div>
+                                <p x-show="error" x-text="error" class="text-xs text-red-300 -mt-2"></p>
+                                <button type="submit" :disabled="loading"
+                                    class="w-full cursor-pointer btn-outline-light py-3 rounded-full text-sm font-medium transition-colors hover:bg-cream hover:text-dark disabled:opacity-50">
+                                    <span x-show="!loading">Subscribe</span>
+                                    <span x-show="loading">Sending…</span>
+                                </button>
+                            </div>
+                        </template>
+
+                        <template x-if="done">
+                            <p class="text-sm text-cream/90">Thanks for subscribing! We'll be in touch.</p>
+                        </template>
+
                     </form>
 
                     <div class="flex items-center gap-4">
@@ -216,7 +258,7 @@
 
                                     <a href="<?php echo esc_url($url); ?>" target="_blank" rel="noopener"
                                         aria-label="<?php echo esc_attr(ucfirst($key)); ?>"
-                                        class="w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-200">
+                                        class="w-8 h-8 rounded-full flex items-center justify-center text-[#fffcf7] hover:text-primary transition-all duration-300 hover:-translate-y-1 hover:scale-110">
 
                                         <?php if ($key === 'instagram'): ?>
                                             <!-- Instagram -->
@@ -224,7 +266,7 @@
                                                 viewBox="0 0 24 24">
                                                 <path
                                                     d="M 8 3 C 5.239 3 3 5.239 3 8 L 3 16 C 3 18.761 5.239 21 8 21 L 16 21 C 18.761 21 21 18.761 21 16 L 21 8 C 21 5.239 18.761 3 16 3 L 8 3 z M 18 5 C 18.552 5 19 5.448 19 6 C 19 6.552 18.552 7 18 7 C 17.448 7 17 6.552 17 6 C 17 5.448 17.448 5 18 5 z M 12 7 C 14.761 7 17 9.239 17 12 C 17 14.761 14.761 17 12 17 C 9.239 17 7 14.761 7 12 C 7 9.239 9.239 7 12 7 z M 12 9 A 3 3 0 0 0 9 12 A 3 3 0 0 0 12 15 A 3 3 0 0 0 15 12 A 3 3 0 0 0 12 9 z"
-                                                    fill="#fffcf7"></path>
+                                                    fill="currentColor"></path>
                                             </svg>
 
                                         <?php elseif ($key === 'facebook'): ?>
@@ -233,7 +275,7 @@
                                                 viewBox="0 0 24 24">
                                                 <path
                                                     d="M12,2C6.477,2,2,6.477,2,12c0,5.013,3.693,9.153,8.505,9.876V14.65H8.031v-2.629h2.474v-1.749 c0-2.896,1.411-4.167,3.818-4.167c1.153,0,1.762,0.085,2.051,0.124v2.294h-1.642c-1.022,0-1.379,0.969-1.379,2.061v1.437h2.995 l-0.406,2.629h-2.588v7.247C18.235,21.236,22,17.062,22,12C22,6.477,17.523,2,12,2z"
-                                                    fill="#fffcf7"></path>
+                                                    fill="currentColor"></path>
                                             </svg>
 
                                         <?php elseif ($key === 'twitter'): ?>
@@ -242,7 +284,7 @@
                                                 viewBox="0 0 24 24">
                                                 <path
                                                     d="M22,3.999c-0.78,0.463-2.345,1.094-3.265,1.276c-0.027,0.007-0.049,0.016-0.075,0.023c-0.813-0.802-1.927-1.299-3.16-1.299 c-2.485,0-4.5,2.015-4.5,4.5c0,0.131-0.011,0.372,0,0.5c-3.353,0-5.905-1.756-7.735-4c-0.199,0.5-0.286,1.29-0.286,2.032 c0,1.401,1.095,2.777,2.8,3.63c-0.314,0.081-0.66,0.139-1.02,0.139c-0.581,0-1.196-0.153-1.759-0.617c0,0.017,0,0.033,0,0.051 c0,1.958,2.078,3.291,3.926,3.662c-0.375,0.221-1.131,0.243-1.5,0.243c-0.26,0-1.18-0.119-1.426-0.165 c0.514,1.605,2.368,2.507,4.135,2.539c-1.382,1.084-2.341,1.486-5.171,1.486H2C3.788,19.145,6.065,20,8.347,20 C15.777,20,20,14.337,20,8.999c0-0.086-0.002-0.266-0.005-0.447C19.995,8.534,20,8.517,20,8.499c0-0.027-0.008-0.053-0.008-0.08 c-0.003-0.136-0.006-0.263-0.009-0.329c0.79-0.57,1.475-1.281,2.017-2.091c-0.725,0.322-1.503,0.538-2.32,0.636 C20.514,6.135,21.699,4.943,22,3.999z"
-                                                    fill="#fffcf7"></path>
+                                                    fill="currentColor"></path>
                                             </svg>
 
                                         <?php elseif ($key === 'linkedin'): ?>
@@ -251,7 +293,7 @@
                                                 viewBox="0 0 24 24">
                                                 <path
                                                     d="M19,3H5C3.895,3,3,3.895,3,5v14c0,1.105,0.895,2,2,2h14c1.105,0,2-0.895,2-2V5C21,3.895,20.105,3,19,3z M9,17H6.477v-7H9 V17z M7.694,8.717c-0.771,0-1.286-0.514-1.286-1.2s0.514-1.2,1.371-1.2c0.771,0,1.286,0.514,1.286,1.2S8.551,8.717,7.694,8.717z M18,17h-2.442v-3.826c0-1.058-0.651-1.302-0.895-1.302s-1.058,0.163-1.058,1.302c0,0.163,0,3.826,0,3.826h-2.523v-7h2.523v0.977 C13.93,10.407,14.581,10,15.802,10C17.023,10,18,10.977,18,13.174V17z"
-                                                    fill="#fffcf7"></path>
+                                                    fill="currentColor"></path>
                                             </svg>
 
                                         <?php endif; ?>
@@ -281,6 +323,7 @@
                             ?>
                             <img src="<?php echo esc_url($client_logo['url']); ?>"
                                 alt="<?php echo esc_attr(isset($client_logo['alt']) ? $client_logo['alt'] : ''); ?>"
+                                width="200" height="80"
                                 class="h-8 md:h-12 w-auto object-contain" />
                         <?php endif; ?>
                     <?php endwhile; ?>
