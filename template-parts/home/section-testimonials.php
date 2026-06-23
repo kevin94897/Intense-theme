@@ -31,7 +31,7 @@ $testimonials_list = get_field('list_of_testimonials', 'option');
                     <div class="embla__container flex">
                         <?php foreach ($testimonials_list as $index => $testimonial):
                             $image_url = isset($testimonial['testimony_image']['url']) && $testimonial['testimony_image']['url'] ? $testimonial['testimony_image']['url'] : get_template_directory_uri() . '/assets/images/intense_05.webp';
-                        ?>
+                            ?>
                             <?php get_template_part('template-parts/components/card-testimonial', null, [
                                 'image' => $image_url,
                                 'quote' => $testimonial['testimony'],
