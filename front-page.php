@@ -46,11 +46,15 @@ $journey_spark = get_field('journey_spark') ?: [];
 $hero_btn1 = $banner_hero['button_1'] ?? [];
 $hero_btn2 = $banner_hero['button_2'] ?? [];
 $hero_video_field = $banner_hero['video'] ?? null;
-// Campo tipo file devuelve array; tipo url devuelve string
+// Campo tipo file devuelve array; tipo url devuelve string.
+// Solo se usa el video si se subió uno por ACF — sin fallback hardcodeado.
 $hero_video_url = is_array($hero_video_field)
     ? ($hero_video_field['url'] ?? '')
     : (string) $hero_video_field;
-$hero_video_fallback = get_template_directory_uri() . '/assets/videos/intense_video_home_hero.mp4';
+
+// Si no hay video subido, se muestra la imagen destacada de la página
+$hero_featured_img = get_the_post_thumbnail_url(get_the_ID(), 'full');
+$hero_poster = get_template_directory_uri() . '/assets/img/hero-poster.jpg';
 
 $dest_list = $signature_destinations['destinations_list'] ?? [];
 $journey_posts = $signature_destinations['journeys'] ?? [];
@@ -79,11 +83,17 @@ $modal_title = $modal_data['title_modal'] ?? '';
 
     <!-- A. Hero Section -->
     <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20" data-aos="fade-in">
-        <!-- Background Image -->
+        <!-- Background: video si existe, si no la imagen destacada -->
         <div class="absolute inset-0 z-0">
-            <video src="<?php echo esc_url($hero_video_url ?: $hero_video_fallback); ?>" autoplay muted loop playsinline
-                poster="<?php echo esc_url(get_template_directory_uri() . '/assets/img/hero-poster.jpg'); ?>"
-                preload="none" class="w-full h-full object-cover"></video>
+            <?php if ($hero_video_url): ?>
+                <video src="<?php echo esc_url($hero_video_url); ?>" autoplay muted loop playsinline
+                    poster="<?php echo esc_url($hero_poster); ?>"
+                    preload="none" class="w-full h-full object-cover"></video>
+            <?php else: ?>
+                <img src="<?php echo esc_url($hero_featured_img ?: $hero_poster); ?>"
+                    alt="<?php echo esc_attr(get_the_title()); ?>"
+                    class="w-full h-full object-cover">
+            <?php endif; ?>
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 
@@ -158,6 +168,7 @@ $modal_title = $modal_data['title_modal'] ?? '';
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-2 auto-rows-[300px]">
                     <?php
+                    // Bento de 4 columnas · 9 destinos en 3 filas (1-2-1 / 2-1-1 / 1-1-2)
                     $bento_classes = [
                         'md:col-span-1 md:row-span-1',
                         'md:col-span-2 md:row-span-1',
@@ -165,12 +176,15 @@ $modal_title = $modal_data['title_modal'] ?? '';
                         'md:col-span-2 md:row-span-1',
                         'md:col-span-1 md:row-span-1',
                         'md:col-span-1 md:row-span-1',
+                        'md:col-span-1 md:row-span-1',
+                        'md:col-span-1 md:row-span-1',
+                        'md:col-span-2 md:row-span-1',
                     ];
 
-                    $aos_delays = [200, 300, 400, 500, 600, 700];
+                    $aos_delays = [200, 300, 400, 500, 600, 700, 800, 900, 1000];
 
                     foreach ($dest_list as $idx => $dest_item):
-                        if ($idx >= 6)
+                        if ($idx >= 9)
                             break;
                         $img_array = $dest_item['destination_image'] ?? [];
                         $thumb = !empty($img_array['sizes']['large']) ? $img_array['sizes']['large'] : (!empty($img_array['url']) ? $img_array['url'] : get_template_directory_uri() . '/assets/images/intense_01.webp');
@@ -180,8 +194,8 @@ $modal_title = $modal_data['title_modal'] ?? '';
                         $dest_url = $dest_btn['url'] ?? '#';
                         $dest_btn_text = $dest_btn['title'] ?? 'Explore destination';
                         ?>
-                        <div class="<?php echo $bento_classes[$idx]; ?> relative group overflow-hidden rounded-sm cursor-pointer"
-                            data-aos="fade-up" data-aos-delay="<?php echo $aos_delays[$idx]; ?>">
+                        <div class="<?php echo $bento_classes[$idx] ?? 'md:col-span-1 md:row-span-1'; ?> relative group overflow-hidden rounded-sm cursor-pointer"
+                            data-aos="fade-up" data-aos-delay="<?php echo $aos_delays[$idx] ?? 0; ?>">
                             <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($dest_title); ?>"
                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             <!-- <div class="absolute inset-0 bg-black/20"></div> -->

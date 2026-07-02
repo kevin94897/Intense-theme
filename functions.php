@@ -326,6 +326,116 @@ function theme_customize_social_links($wp_customize)
 }
 add_action('customize_register', 'theme_customize_social_links');
 
+// ── Selector de Regiones: librería de banderas SVG (hardcode) ──────────────────
+/**
+ * Banderas disponibles como SVG inline (viewBox 0 0 900 600).
+ * Para agregar una bandera nueva, añade su clave con label + rects.
+ */
+function intense_region_flags()
+{
+  return [
+    'peru' => [
+      'label' => 'Perú',
+      'rects' => '<rect width="900" height="600" fill="#D91023"/><rect width="300" height="600" x="300" fill="#fff"/>',
+    ],
+    'bolivia' => [
+      'label' => 'Bolivia',
+      'rects' => '<rect width="900" height="200" fill="#DA291C"/><rect width="900" height="200" y="200" fill="#F4E400"/><rect width="900" height="200" y="400" fill="#007A33"/>',
+    ],
+    'colombia' => [
+      'label' => 'Colombia',
+      'rects' => '<rect width="900" height="300" y="0" fill="#FCD116"/><rect width="900" height="150" y="300" fill="#003893"/><rect width="900" height="150" y="450" fill="#CE1126"/>',
+    ],
+  ];
+}
+
+/**
+ * Devuelve el <svg> de una bandera por su clave. $extra = clases extra para el <svg>.
+ */
+function intense_flag_svg($key, $extra_classes = '', $preserve_slice = false)
+{
+  $flags = intense_region_flags();
+  if (empty($flags[$key]))
+    return '';
+  $pa = $preserve_slice ? ' preserveAspectRatio="xMidYMid slice"' : '';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" class="' . esc_attr($extra_classes) . '"' . $pa . '>' . $flags[$key]['rects'] . '</svg>';
+}
+
+/**
+ * Sanitiza la clave de bandera contra las disponibles.
+ */
+function intense_sanitize_flag_key($value)
+{
+  return array_key_exists($value, intense_region_flags()) ? $value : '';
+}
+
+// ── Customizer: Selector de Regiones (redirección a otros dominios) ────────────
+function theme_customize_region_selector($wp_customize)
+{
+  $wp_customize->add_section('region_selector_section', [
+    'title' => 'Selector de Regiones',
+    'description' => 'Redirección a otros dominios/regiones. Deja vacía la URL de una región para ocultarla.',
+    'priority' => 36,
+  ]);
+
+  // Opciones de bandera (clave => label) para los <select>
+  $flag_choices = ['' => '— Sin bandera —'];
+  foreach (intense_region_flags() as $fk => $fv) {
+    $flag_choices[$fk] = $fv['label'];
+  }
+
+  // Tooltip del selector
+  $wp_customize->add_setting('region_tooltip', ['default' => 'Explore our Regions', 'sanitize_callback' => 'sanitize_text_field']);
+  $wp_customize->add_control('region_tooltip', [
+    'label' => 'Texto del tooltip',
+    'description' => 'Ej. Explore our Regions',
+    'section' => 'region_selector_section',
+    'type' => 'text',
+  ]);
+
+  // Región actual = la de ESTE dominio (se muestra en el botón y en gris en la lista)
+  $wp_customize->add_setting('region_current_label', ['default' => '', 'sanitize_callback' => 'sanitize_text_field']);
+  $wp_customize->add_control('region_current_label', [
+    'label' => 'Región actual — nombre',
+    'description' => 'Ej. Intense Perú — es la región de este sitio.',
+    'section' => 'region_selector_section',
+    'type' => 'text',
+  ]);
+  $wp_customize->add_setting('region_current_flag', ['default' => '', 'sanitize_callback' => 'intense_sanitize_flag_key']);
+  $wp_customize->add_control('region_current_flag', [
+    'label' => 'Región actual — bandera',
+    'section' => 'region_selector_section',
+    'type' => 'select',
+    'choices' => $flag_choices,
+  ]);
+
+  // Hasta 3 regiones adicionales con su dominio
+  for ($i = 1; $i <= 3; $i++) {
+    $wp_customize->add_setting("region_{$i}_label", ['default' => '', 'sanitize_callback' => 'sanitize_text_field']);
+    $wp_customize->add_control("region_{$i}_label", [
+      'label' => "Región {$i} — nombre",
+      'description' => 'Ej. Intense Bolivia',
+      'section' => 'region_selector_section',
+      'type' => 'text',
+    ]);
+    $wp_customize->add_setting("region_{$i}_url", ['default' => '', 'sanitize_callback' => 'esc_url_raw']);
+    $wp_customize->add_control("region_{$i}_url", [
+      'label' => "Región {$i} — URL del dominio",
+      'description' => 'Ej. https://intensebolivia.com',
+      'section' => 'region_selector_section',
+      'type' => 'url',
+    ]);
+    $wp_customize->add_setting("region_{$i}_flag", ['default' => '', 'sanitize_callback' => 'intense_sanitize_flag_key']);
+    $wp_customize->add_control("region_{$i}_flag", [
+      'label' => "Región {$i} — bandera",
+      'section' => 'region_selector_section',
+      'type' => 'select',
+      'choices' => $flag_choices,
+    ]);
+  }
+}
+add_action('customize_register', 'theme_customize_region_selector');
+
 // ── Megamenu JS + AJAX URL ────────────────────────────────────────────────────
 add_action('wp_enqueue_scripts', function () {
   wp_enqueue_script('megamenu-js', get_template_directory_uri() . '/src/modules/megamenu.js', [], '1.0.0', true);

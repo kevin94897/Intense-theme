@@ -194,6 +194,81 @@
                             class="btn btn-primary text-[0.8125rem] font-light tracking-wide uppercase">
                             <?php esc_html_e('Design your trip', 'intense-nerd-theme'); ?>
                         </a>
+
+                        <!-- Region Selector (redirección por dominio · Customizer) -->
+                        <?php
+                        $region_tooltip = get_theme_mod('region_tooltip', 'Explore our Regions');
+                        $region_current_label = get_theme_mod('region_current_label', 'Intense Perú');
+                        $region_current_flag = get_theme_mod('region_current_flag', '');
+                        $regions = [];
+                        for ($ri = 1; $ri <= 3; $ri++) {
+                            $r_url = get_theme_mod("region_{$ri}_url", '');
+                            $r_label = get_theme_mod("region_{$ri}_label", '');
+                            if ($r_url && $r_label) {
+                                $regions[] = ['label' => $r_label, 'url' => $r_url, 'flag' => get_theme_mod("region_{$ri}_flag", '')];
+                            }
+                        }
+                        if (!empty($regions)): ?>
+                            <div x-data="{ regionOpen: false, regionTip: false }" @click.outside="regionOpen = false"
+                                class="relative">
+                                <button type="button" @click="regionOpen = !regionOpen"
+                                    @mouseenter="regionTip = true" @mouseleave="regionTip = false"
+                                    :aria-expanded="regionOpen"
+                                    aria-label="<?php echo esc_attr($region_tooltip); ?>"
+                                    class="flex items-center gap-2 transition-colors <?php echo $is_light_header ? 'text-dark hover:text-primary' : 'text-white hover:text-white/70'; ?>">
+                                    <?php if ($region_current_flag): ?>
+                                        <span class="w-7 h-7 rounded-full overflow-hidden block shadow-sm shrink-0">
+                                            <?php echo intense_flag_svg($region_current_flag, 'w-full h-full object-cover', true); ?>
+                                        </span>
+                                    <?php endif; ?>
+                                    <svg class="w-4 h-4 transition-transform duration-300" :class="{ 'rotate-180': regionOpen }"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <!-- Tooltip -->
+                                <div x-cloak x-show="regionTip && !regionOpen" x-transition.opacity
+                                    class="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50 pointer-events-none whitespace-nowrap">
+                                    <div class="relative bg-dark text-white text-xs font-body font-light px-3 py-2 rounded-md shadow-lg">
+                                        <?php echo esc_html($region_tooltip); ?>
+                                        <span class="absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-dark"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Dropdown -->
+                                <div x-cloak x-show="regionOpen" x-transition.opacity
+                                    class="absolute right-0 mt-4 w-48 bg-white shadow-2xl rounded-md overflow-hidden z-50 border border-gray-100 py-2">
+                                    <!-- Región actual (no enlaza) -->
+                                    <?php if ($region_current_flag || $region_current_label): ?>
+                                        <div class="flex items-center gap-3 px-4 py-3 opacity-40 cursor-default">
+                                            <?php if ($region_current_flag): ?>
+                                                <span class="w-6 h-6 rounded-full overflow-hidden block shadow-sm shrink-0">
+                                                    <?php echo intense_flag_svg($region_current_flag, 'w-full h-full object-cover scale-150'); ?>
+                                                </span>
+                                            <?php endif; ?>
+                                            <?php if ($region_current_label): ?>
+                                                <span class="font-body text-sm font-medium text-black"><?php echo esc_html($region_current_label); ?></span>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php foreach ($regions as $region_o): ?>
+                                        <a href="<?php echo esc_url($region_o['url']); ?>"
+                                            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors group/region">
+                                            <?php if ($region_o['flag']): ?>
+                                                <span class="w-6 h-6 rounded-full overflow-hidden block shadow-sm shrink-0 grayscale group-hover/region:grayscale-0 transition-all">
+                                                    <?php echo intense_flag_svg($region_o['flag'], 'w-full h-full object-cover scale-150'); ?>
+                                                </span>
+                                            <?php endif; ?>
+                                            <span class="font-body text-sm font-medium text-black group-hover/region:text-primary transition-colors">
+                                                <?php echo esc_html($region_o['label']); ?>
+                                            </span>
+                                        </a>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Tablet CTA -->
