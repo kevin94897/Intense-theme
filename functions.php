@@ -336,9 +336,20 @@ add_action('wp_enqueue_scripts', function () {
 add_action('wp_ajax_mega_journeys', 'intense_mega_journeys');
 add_action('wp_ajax_nopriv_mega_journeys', 'intense_mega_journeys');
 
+// Habilita el campo "Orden" (menu_order) en el editor de Journeys, para reordenar
+// manualmente los que tienen la misma duración dentro de las listas del megamenú.
+add_action('init', function () {
+  add_post_type_support('journey', 'page-attributes');
+}, 20);
+
 function intense_mega_journeys()
 {
-  $all = get_posts(['post_type' => 'journey', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'ASC']);
+  // Orden manual (campo "Orden") primero; a igualdad, más recientes primero.
+  $all = get_posts([
+    'post_type' => 'journey',
+    'posts_per_page' => -1,
+    'orderby' => ['menu_order' => 'ASC', 'date' => 'DESC'],
+  ]);
 
   $grand = $compact = $short = [];
   foreach ($all as $post) {
@@ -352,7 +363,13 @@ function intense_mega_journeys()
       $short[] = $post;
   }
 
-  $sort_by_days = fn($a, $b) => $b->_days - $a->_days;
+  // Ordena por días (desc); a igual duración, respeta el campo "Orden" (menu_order asc).
+  $sort_by_days = function ($a, $b) {
+    if ($b->_days !== $a->_days) {
+      return $b->_days - $a->_days;
+    }
+    return $a->menu_order - $b->menu_order;
+  };
   usort($grand, $sort_by_days);
   usort($compact, $sort_by_days);
   usort($short, $sort_by_days);

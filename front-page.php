@@ -180,12 +180,21 @@ $modal_title = $modal_data['title_modal'] ?? '';
                         $dest_url = $dest_btn['url'] ?? '#';
                         $dest_btn_text = $dest_btn['title'] ?? 'Explore destination';
                         ?>
+                        <?php $dest_has_link = $dest_url && $dest_url !== '#'; ?>
                         <div class="<?php echo $bento_classes[$idx]; ?> relative group overflow-hidden rounded-sm cursor-pointer"
                             data-aos="fade-up" data-aos-delay="<?php echo $aos_delays[$idx]; ?>">
-                            <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($dest_title); ?>"
-                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <?php if ($dest_has_link): ?>
+                                <a href="<?php echo esc_url($dest_url); ?>" class="absolute inset-0 z-0"
+                                    aria-label="<?php echo esc_attr($dest_title); ?>">
+                                    <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($dest_title); ?>"
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                </a>
+                            <?php else: ?>
+                                <img src="<?php echo esc_url($thumb); ?>" alt="<?php echo esc_attr($dest_title); ?>"
+                                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <?php endif; ?>
                             <!-- <div class="absolute inset-0 bg-black/20"></div> -->
-                            <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-left">
+                            <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 text-left z-10">
                                 <h3 class="font-heading text-white text-2xl md:text-2xl font-medium mb-2">
                                     <?php echo esc_html($dest_title); ?>
                                 </h3>

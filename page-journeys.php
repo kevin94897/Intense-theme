@@ -74,31 +74,34 @@ get_header();
                 <div id="journey-grid"
                     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-left min-h-[300px] transition-opacity duration-300">
                     <?php
-                    $args = [
+                    // Todos los journeys (sin paginación) ordenados por número de días desc.
+                    $journeys = get_posts([
                         'post_type' => 'journey',
-                        'posts_per_page' => 9, // Adjust as needed
+                        'posts_per_page' => -1,
                         'post_status' => 'publish',
-                        'orderby' => 'date',
-                        'order' => 'DESC',
-                    ];
+                    ]);
 
-                    $query = new WP_Query($args);
+                    // Precalcular días una sola vez y ordenar (mayor a menor duración)
+                    foreach ($journeys as $jp) {
+                        $info = get_field('information', $jp->ID);
+                        $jp->_days = (int) ($info['days'] ?? 0) ?: (int) get_post_meta($jp->ID, 'days', true);
+                    }
+                    usort($journeys, fn($a, $b) => $b->_days - $a->_days);
 
-                    if ($query->have_posts()):
+                    if ($journeys):
                         $index = 0;
-                        while ($query->have_posts()):
-                            $query->the_post();
-                            $information = get_field('information');
-                            $features = get_field('features');
+                        foreach ($journeys as $journey_post):
+                            $j_id = $journey_post->ID;
+                            $features = get_field('features', $j_id);
 
                             // Data mapping
-                            $image = get_the_post_thumbnail_url(get_the_ID(), 'large');
-                            $title = get_the_title();
-                            $days_val = (int) ($information['days'] ?? 0);
+                            $image = get_the_post_thumbnail_url($j_id, 'large');
+                            $title = get_the_title($j_id);
+                            $days_val = $journey_post->_days;
                             $duration = $days_val ? $days_val . ' Days' : '';
                             $price_val = $features['price'] ?? '';
                             $price = $price_val ? 'USD ' . number_format($price_val) : '';
-                            $link = get_permalink();
+                            $link = get_permalink($j_id);
                             ?>
 
                             <div class="journey-card" data-days="<?php echo $days_val; ?>">
@@ -108,7 +111,7 @@ get_header();
                                     'title' => $title,
                                     'price' => $price,
                                     'duration' => $duration,
-                                    'post_id' => get_the_ID(),
+                                    'post_id' => $j_id,
                                     'link' => $link,
                                     'link_text' => 'Explore itinerary',
                                     'aos_delay' => ($index % 3) * 100,
@@ -119,24 +122,13 @@ get_header();
 
                             <?php
                             $index++;
-                        endwhile;
-                        wp_reset_postdata();
+                        endforeach;
                     else:
                         echo '<p class="col-span-full text-center py-10">No journeys found.</p>';
                     endif;
                     ?>
                 </div>
             </div><!-- /.relative wrapper -->
-
-            <!-- Load More Journeys -->
-            <?php if ($query->max_num_pages > 1): ?>
-                <div id="load-more-container" class="mt-16 text-center lg:mb-20" data-aos="fade-up">
-                    <button id="load-more-journeys" data-page="1" data-max="<?php echo esc_attr($query->max_num_pages); ?>"
-                        class="btn btn-secondary px-12 text-base cursor-pointer">
-                        Load More Journeys
-                    </button>
-                </div>
-            <?php endif; ?>
 
         </div>
     </section>
@@ -211,61 +203,6 @@ get_header();
                 });
             });
         });
-
-        // Load More feature
-        const loadMoreBtn = document.getElementById('load-more-journeys');
-        if (loadMoreBtn) {
-            loadMoreBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                const btn = this;
-                let page = parseInt(btn.dataset.page);
-                const maxPage = parseInt(btn.dataset.max);
-
-                if (page >= maxPage) return;
-
-                const originalText = btn.innerText;
-                btn.innerText = 'Loading...';
-                btn.classList.add('opacity-75', 'pointer-events-none');
-
-                const formData = new FormData();
-                formData.append('action', 'load_more_journeys');
-                formData.append('page', page + 1);
-
-                fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(res => res.text())
-                    .then(html => {
-                        if (html.trim() !== '') {
-                            document.getElementById('journey-grid').insertAdjacentHTML('beforeend', html);
-                            btn.dataset.page = page + 1;
-
-                            // Re-apply filter
-                            const updatedCards = document.querySelectorAll('#journey-grid .journey-card');
-                            const activeFilterBtn = document.querySelector('#journey-filters .filter-btn.active');
-                            if (activeFilterBtn) {
-                                const filter = activeFilterBtn.dataset.filter;
-                                const [min, max] = filterRanges[filter] ?? [0, Infinity];
-                                updatedCards.forEach(card => {
-                                    const days = parseInt(card.dataset.days, 10) || 0;
-                                    const show = days >= min && days <= max;
-                                    card.style.display = show ? '' : 'none';
-                                });
-                            }
-
-                            if (page + 1 >= maxPage) {
-                                document.getElementById('load-more-container').style.display = 'none';
-                            }
-                        }
-                    })
-                    .catch(err => console.error(err))
-                    .finally(() => {
-                        btn.innerText = originalText;
-                        btn.classList.remove('opacity-75', 'pointer-events-none');
-                    });
-            });
-        }
     });
 </script>
 
