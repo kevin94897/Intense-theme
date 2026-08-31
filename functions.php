@@ -481,23 +481,62 @@ add_action('wp_enqueue_scripts', function () {
 
   // El nonce embebido en el HTML caduca (~24h). Si un plugin de caché de página
   // sirve HTML viejo, el nonce viene vencido y admin-ajax responde "-1".
-  // admin-ajax.php nunca se cachea, así que pedimos un nonce fresco en cada carga
-  // y sobrescribimos window.intenseAjax.nonce antes de que el usuario envíe.
+  // admin-ajax.php nunca se cachea, así que pedimos uno fresco y sobrescribimos
+  // window.intenseAjax.nonce antes de que el usuario envíe.
+  //
+  // No se pide en la carga: admin-ajax.php arranca WordPress entero y sin caché
+  // de página, así que cuesta ~1s de PHP en la ruta crítica de TODAS las visitas,
+  // incluidas las que nunca tocan un formulario. Se pide en la primera
+  // interacción del usuario, que siempre ocurre antes de poder enviar nada.
   wp_add_inline_script('intense-nerd-js', <<<'JS'
 (function () {
   if (!window.intenseAjax || !window.intenseAjax.ajaxUrl) return;
-  var body = new FormData();
-  body.append('action', 'intense_refresh_nonce');
-  // POST a propósito: LiteSpeed (y cualquier caché de página) nunca cachea POST,
-  // así que el nonce siempre llega fresco aunque la página venga de caché.
-  fetch(window.intenseAjax.ajaxUrl, { method: 'POST', credentials: 'same-origin', cache: 'no-store', body: body })
-    .then(function (r) { return r.json(); })
-    .then(function (d) {
-      if (d && d.success && d.data && d.data.nonce) {
-        window.intenseAjax.nonce = d.data.nonce;
-      }
+
+  var pending = null;
+
+  // Memoizado: por mucho que se llame, la peticion sale una sola vez.
+  window.intenseAjax.ensureNonce = function () {
+    if (pending) return pending;
+
+    var body = new FormData();
+    body.append('action', 'intense_refresh_nonce');
+
+    // POST a proposito: LiteSpeed (y cualquier cache de pagina) nunca cachea POST,
+    // asi que el nonce siempre llega fresco aunque la pagina venga de cache.
+    pending = fetch(window.intenseAjax.ajaxUrl, {
+      method: 'POST',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      body: body
     })
-    .catch(function () {});
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.success && d.data && d.data.nonce) {
+          window.intenseAjax.nonce = d.data.nonce;
+        }
+        return window.intenseAjax.nonce;
+      })
+      .catch(function () {
+        // Si falla, se reintenta en la proxima interaccion.
+        pending = null;
+        return window.intenseAjax.nonce;
+      });
+
+    return pending;
+  };
+
+  var events = ['pointerdown', 'keydown', 'touchstart', 'focusin'];
+
+  function prime() {
+    events.forEach(function (e) {
+      document.removeEventListener(e, prime, true);
+    });
+    window.intenseAjax.ensureNonce();
+  }
+
+  events.forEach(function (e) {
+    document.addEventListener(e, prime, { capture: true, passive: true });
+  });
 })();
 JS, 'before');
 }, 20);

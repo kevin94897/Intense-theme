@@ -8,7 +8,11 @@
  *     ├── banner_hero (group)
  *     │     ├── description   (text)
  *     │     ├── button_1      (link)
- *     │     └── button_2      (link)
+ *     │     ├── button_2      (link)
+ *     │     ├── video         (file) — version desktop
+ *     │     └── video_mobile  (file) — version ligera para celular
+ *     │
+ *     │   La imagen de portada del hero es la imagen destacada de la pagina.
  *     ├── signature_destinations (group)
  *     │     ├── destinations_list (repeater)
  *     │     │     ├── destination_image (image)
@@ -45,12 +49,23 @@ $journey_spark = get_field('journey_spark') ?: [];
 
 $hero_btn1 = $banner_hero['button_1'] ?? [];
 $hero_btn2 = $banner_hero['button_2'] ?? [];
-$hero_video_field = $banner_hero['video'] ?? null;
-// Campo tipo file devuelve array; tipo url devuelve string
-$hero_video_url = is_array($hero_video_field)
-    ? ($hero_video_field['url'] ?? '')
-    : (string) $hero_video_field;
-$hero_video_fallback = get_template_directory_uri() . '/assets/videos/intense_video_home_hero.mp4';
+
+// ── Hero media ───────────────────────────────────────────────────────────────
+// Los campos tipo file devuelven array; los tipo url, string.
+$acf_url = static function ($field): string {
+    if (is_array($field)) {
+        return (string) ($field['url'] ?? '');
+    }
+    return is_string($field) ? $field : '';
+};
+
+$hero_video_url = $acf_url($banner_hero['video'] ?? null);
+$hero_video_mobile_url = $acf_url($banner_hero['video_mobile'] ?? null);
+
+// Imagen de portada del hero: la imagen destacada de la pagina.
+// Es lo primero que se pinta y lo que Google mide como LCP; el video se
+// carga despues, solo si la conexion lo permite.
+$hero_poster_id = (int) get_post_thumbnail_id();
 
 $dest_list = $signature_destinations['destinations_list'] ?? [];
 $journey_posts = $signature_destinations['journeys'] ?? [];
@@ -77,29 +92,63 @@ $modal_title = $modal_data['title_modal'] ?? '';
 
 <main id="main" class="site-main" role="main">
 
+    <style>
+        /* El video arranca oculto y aparece recien cuando puede reproducirse,
+           para que el LCP lo marque la imagen de portada y no el video. */
+        .hero-video {
+            opacity: 0;
+            transition: opacity .6s ease;
+        }
+
+        .hero-video.is-ready {
+            opacity: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-video {
+                display: none;
+            }
+        }
+    </style>
+
     <!-- A. Hero Section -->
-    <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20" data-aos="fade-in">
-        <!-- Background Image -->
-        <div class="absolute inset-0 z-0">
-            <video src="<?php echo esc_url($hero_video_url ?: $hero_video_fallback); ?>" autoplay muted loop playsinline
-                poster="<?php echo esc_url(get_template_directory_uri() . '/assets/img/hero-poster.jpg'); ?>"
-                preload="none" class="w-full h-full object-cover"></video>
+    <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20">
+        <!-- Fondo: imagen primero, video encima cuando termina de cargar -->
+        <div class="absolute inset-0 z-0 bg-dark">
+            <?php if ($hero_poster_id): ?>
+                <?php // data-no-lazy: LiteSpeed no debe diferir esta imagen, es el LCP.
+                echo wp_get_attachment_image($hero_poster_id, 'full', false, [
+                    'class' => 'hero-poster w-full h-full object-cover',
+                    'fetchpriority' => 'high',
+                    'decoding' => 'async',
+                    'loading' => 'eager',
+                    'sizes' => '100vw',
+                    'alt' => '',
+                    'data-no-lazy' => '1',
+                    'data-skip-lazy' => '1',
+                ]); ?>
+            <?php endif; ?>
+
+            <?php if ($hero_video_url || $hero_video_mobile_url): ?>
+                <video data-hero-video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"
+                    data-src-desktop="<?php echo esc_url($hero_video_url ?: $hero_video_mobile_url); ?>"
+                    data-src-mobile="<?php echo esc_url($hero_video_mobile_url ?: $hero_video_url); ?>"
+                    class="hero-video absolute inset-0 w-full h-full object-cover"></video>
+            <?php endif; ?>
+
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 
         <div class="container-site relative z-10 text-center px-4">
-            <h1 class="font-heading text-white text-4xl md:text-[64px] leading-tight md:leading-[72px] mb-6"
-                data-aos="fade-up" data-aos-delay="100">
+            <h1 class="font-heading text-white text-4xl md:text-[64px] leading-tight md:leading-[72px] mb-6">
                 <?php echo esc_html(get_the_title()); ?>
             </h1>
             <?php if (get_the_content()): ?>
-                <div class="font-body text-white/90 text-lg md:text-xl font-light max-w-xl mx-auto mb-10 entry-content-hero"
-                    data-aos="fade-up" data-aos-delay="200">
+                <div class="font-body text-white/90 text-lg md:text-xl font-light max-w-xl mx-auto mb-10 entry-content-hero">
                     <?php the_content(); ?>
                 </div>
             <?php endif; ?>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up"
-                data-aos-delay="300">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <?php if (!empty($hero_btn1)): ?>
                     <?php get_template_part('template-parts/components/btn-primary', null, [
                         'text' => $hero_btn1['title'] ?? 'Explore itineraries',
@@ -118,6 +167,48 @@ $modal_title = $modal_data['title_modal'] ?? '';
             </div>
         </div>
     </section>
+
+    <?php if ($hero_video_url || $hero_video_mobile_url): ?>
+        <script data-cfasync="false">
+            // Carga el video del hero recien despues del load, con la variante que
+            // corresponda al ancho de pantalla. data-cfasync evita que Rocket Loader
+            // lo difiera todavia mas.
+            (function () {
+                function initHeroVideo() {
+                    var video = document.querySelector('[data-hero-video]');
+                    if (!video) return;
+
+                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+                    // No gastar datos del usuario si pidio ahorro o esta en 2G/3G.
+                    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                    if (conn && (conn.saveData || /^(slow-)?2g$/.test(conn.effectiveType || ''))) return;
+
+                    var isMobile = window.matchMedia('(max-width: 767px)').matches;
+                    var src = isMobile ? video.dataset.srcMobile : video.dataset.srcDesktop;
+                    if (!src) return;
+
+                    video.addEventListener('canplay', function () {
+                        video.classList.add('is-ready');
+                    }, { once: true });
+
+                    video.src = src;
+                    video.load();
+
+                    var playing = video.play();
+                    if (playing && typeof playing.catch === 'function') {
+                        playing.catch(function () { /* autoplay bloqueado: queda la imagen */ });
+                    }
+                }
+
+                if (document.readyState === 'complete') {
+                    initHeroVideo();
+                } else {
+                    window.addEventListener('load', initHeroVideo);
+                }
+            })();
+        </script>
+    <?php endif; ?>
 
     <!-- Message -->
     <?php if ($message_home): ?>
@@ -648,6 +739,8 @@ $modal_title = $modal_data['title_modal'] ?? '';
                     if (!this.validateAll()) return;
                     this.isSubmitting = true;
                     try {
+                        // Garantiza un nonce fresco aunque el HTML venga de cache.
+                        await window.intenseAjax?.ensureNonce?.();
                         const fd = new FormData();
                         fd.append('action', 'intense_brochure');
                         fd.append('nonce', window.intenseAjax?.nonce || '');

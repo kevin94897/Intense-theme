@@ -284,6 +284,8 @@ $whatsapp_default_text = get_theme_mod('whatsapp_default_text', 'Hello! I would 
                     if (!this.validateAll()) return;
                     this.isSubmitting = true;
                     try {
+                        // Garantiza un nonce fresco aunque el HTML venga de cache.
+                        await window.intenseAjax?.ensureNonce?.();
                         const body = new URLSearchParams({
                             action: 'intense_contact',
                             nonce:  intenseAjax.nonce,

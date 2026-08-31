@@ -25,7 +25,9 @@
     if ($__lcp_logo_id) {
         $__lcp_src = wp_get_attachment_image_src($__lcp_logo_id, 'full');
         if ($__lcp_src) {
-            echo '<link rel="preload" as="image" href="' . esc_url($__lcp_src[0]) . '" fetchpriority="high">' . "\n    ";
+            // Sin fetchpriority: la prioridad alta se reserva para la imagen del hero,
+            // que es la que el navegador mide como LCP.
+            echo '<link rel="preload" as="image" href="' . esc_url($__lcp_src[0]) . '">' . "\n    ";
         }
     }
     ?>

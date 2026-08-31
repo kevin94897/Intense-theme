@@ -192,9 +192,10 @@
                     <form class="flex flex-col gap-6 mb-8 w-full max-w-sm"
                         x-data="{
                             name: '', email: '', loading: false, done: false, error: '',
-                            submit() {
+                            async submit() {
                                 if (!this.email) return;
                                 this.loading = true; this.error = '';
+                                await window.intenseAjax?.ensureNonce?.();
                                 const fd = new FormData();
                                 fd.append('action', 'newsletter_subscribe');
                                 fd.append('nonce', window.intenseAjax?.nonce || '');
@@ -324,7 +325,7 @@
                             <img src="<?php echo esc_url($client_logo['url']); ?>"
                                 alt="<?php echo esc_attr(isset($client_logo['alt']) ? $client_logo['alt'] : ''); ?>"
                                 width="200" height="80"
-                                class="h-8 md:h-12 w-auto object-contain" />
+                                class="h-8 md:h-20 w-auto object-contain" />
                         <?php endif; ?>
                     <?php endwhile; ?>
                 <?php else: ?>
