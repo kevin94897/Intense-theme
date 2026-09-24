@@ -11,7 +11,7 @@
  *   - team_members (array)  — gallery of image objects
  */
 
-$title       = $args['title']       ?? 'Meet the Team Behind Intense Peru';
+$title       = $args['title']       ?? 'Meet the Team Behind Intense Bolivia';
 $description = $args['description'] ?? 'A proudly women-led workforce — over 50% local women — each bringing strong expertise and a firm commitment to supporting local communities and caring for the planet.';
 $group_img   = $args['image']       ?? [];
 $gallery     = $args['team_members'] ?? [];

@@ -34,32 +34,32 @@
  */
 get_header();
 
-$story           = get_field('story')            ?: [];
-$counter         = get_field('counter')          ?: [];
-$meet_the_team   = get_field('meet_the_team')    ?: [];
-$motivation      = get_field('motivation')       ?: [];
+$story = get_field('story') ?: [];
+$counter = get_field('counter') ?: [];
+$meet_the_team = get_field('meet_the_team') ?: [];
+$motivation = get_field('motivation') ?: [];
 $alternative_txt = get_field('alternative_text') ?: [];
 
-$story_msg    = $story['message']     ?? '';
-$story_img    = $story['image']       ?? [];
-$story_title  = $story['title']       ?? '';
-$story_desc   = $story['description'] ?? '';
+$story_msg = $story['message'] ?? '';
+$story_img = $story['image'] ?? [];
+$story_title = $story['title'] ?? '';
+$story_desc = $story['description'] ?? '';
 
 $counter_list = $counter['list_of_values'] ?? [];
 
-$team_img     = $meet_the_team['image']        ?? [];
-$team_title   = $meet_the_team['title']        ?? '';
-$team_desc    = $meet_the_team['description']  ?? '';
+$team_img = $meet_the_team['image'] ?? [];
+$team_title = $meet_the_team['title'] ?? '';
+$team_desc = $meet_the_team['description'] ?? '';
 $team_gallery = $meet_the_team['team_members'] ?? [];
 
-$motiv_title  = $motivation['title']            ?? '';
-$motiv_img    = $motivation['image']            ?? [];
-$motiv_list   = $motivation['list_of_purposes'] ?? [];
+$motiv_title = $motivation['title'] ?? '';
+$motiv_img = $motivation['image'] ?? [];
+$motiv_list = $motivation['list_of_purposes'] ?? [];
 
-$alt_img      = $alternative_txt['image']   ?? [];
-$alt_title    = $alternative_txt['title']   ?? '';
-$alt_text     = $alternative_txt['text']    ?? '';
-$alt_msg      = $alternative_txt['message'] ?? '';
+$alt_img = $alternative_txt['image'] ?? [];
+$alt_title = $alternative_txt['title'] ?? '';
+$alt_text = $alternative_txt['text'] ?? '';
+$alt_msg = $alternative_txt['message'] ?? '';
 ?>
 
 <main id="main" class="site-main" role="main">
@@ -68,10 +68,10 @@ $alt_msg      = $alternative_txt['message'] ?? '';
     <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20" data-aos="fade-in">
         <!-- Background Image -->
         <div class="absolute inset-0 z-0">
-            <?php if (has_post_thumbnail()) : ?>
+            <?php if (has_post_thumbnail()): ?>
                 <img src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>"
                     alt="<?php echo esc_attr(get_the_title()); ?>" class="w-full h-full object-cover">
-            <?php else : ?>
+            <?php else: ?>
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_banner_nosotros.webp"
                     alt="Machu Picchu" class="w-full h-full object-cover">
             <?php endif; ?>
@@ -85,7 +85,7 @@ $alt_msg      = $alternative_txt['message'] ?? '';
             </h1>
             <?php
             $content = get_the_content();
-            if ($content) : ?>
+            if ($content): ?>
                 <p class="font-body text-white/90 text-lg md:text-xl font-light max-w-2xl mx-auto mb-10" data-aos="fade-up"
                     data-aos-delay="200">
                     <?php echo wp_strip_all_tags($content); ?>
@@ -94,11 +94,11 @@ $alt_msg      = $alternative_txt['message'] ?? '';
         </div>
     </section>
 
-    <?php if ($story_msg) : ?>
+    <?php if ($story_msg): ?>
         <section class="py-20">
             <div class="container-site">
-                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center leading-relaxed" data-aos="fade-up"
-                    data-aos-delay="200">
+                <p class="font-body text-lg md:text-xl text-dark mb-0 max-w-4xl mx-auto text-center leading-relaxed"
+                    data-aos="fade-up" data-aos-delay="200">
                     <?php echo esc_html($story_msg); ?>
                 </p>
             </div>
@@ -107,14 +107,14 @@ $alt_msg      = $alternative_txt['message'] ?? '';
 
 
     <!-- Our Story -->
-    <?php if ($story_title || $story_desc || !empty($story_img)) : ?>
+    <?php if ($story_title || $story_desc || !empty($story_img)): ?>
         <section class="pb-12 md:pb-20 bg-cream">
             <div class="container-site">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
                     <!-- Left: Photo -->
                     <div class="relative" data-aos="fade-right">
-                        <?php if (!empty($story_img)) : ?>
+                        <?php if (!empty($story_img)): ?>
                             <div class="rounded-lg overflow-hidden shadow-xl">
                                 <img src="<?php echo esc_url($story_img['url']); ?>"
                                     alt="<?php echo esc_attr($story_img['alt'] ?: $story_title); ?>"
@@ -125,11 +125,12 @@ $alt_msg      = $alternative_txt['message'] ?? '';
 
                     <!-- Right: Content -->
                     <div data-aos="fade-left">
-                        <?php if ($story_title) : ?>
-                            <h2 class="font-heading text-4xl md:text-5xl font-medium mb-6"><?php echo esc_html($story_title); ?></h2>
+                        <?php if ($story_title): ?>
+                            <h2 class="font-heading text-4xl md:text-5xl font-medium mb-6"><?php echo esc_html($story_title); ?>
+                            </h2>
                         <?php endif; ?>
 
-                        <?php if ($story_desc) : ?>
+                        <?php if ($story_desc): ?>
                             <div class="font-body text-dark font-light prose prose-neutral max-w-none">
                                 <?php echo apply_filters('the_content', $story_desc); ?>
                             </div>
@@ -141,20 +142,20 @@ $alt_msg      = $alternative_txt['message'] ?? '';
     <?php endif; ?>
 
     <!-- STATS COUNTER BAR -->
-    <?php if (!empty($counter_list)) : ?>
+    <?php if (!empty($counter_list)): ?>
         <?php get_template_part('template-parts/components/section-counter', null, ['list_of_values' => $counter_list]); ?>
     <?php endif; ?>
 
     <!-- MEET THE TEAM -->
     <?php get_template_part('template-parts/components/section-meetus', null, [
-        'title'        => $team_title,
-        'description'  => $team_desc,
-        'image'        => $team_img,
+        'title' => $team_title,
+        'description' => $team_desc,
+        'image' => $team_img,
         'team_members' => $team_gallery
     ]); ?>
 
     <!-- D. Motivation (What Moves Us) -->
-    <?php if ($motiv_title || !empty($motiv_list)) : ?>
+    <?php if ($motiv_title || !empty($motiv_list)): ?>
         <section class="py-20 bg-sage text-white">
             <div class="container-site">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -172,22 +173,22 @@ $alt_msg      = $alternative_txt['message'] ?? '';
                             </h2>
                         </div>
 
-                        <?php if (!empty($motiv_img)) : ?>
+                        <?php if (!empty($motiv_img)): ?>
                             <img src="<?php echo esc_url($motiv_img['url']); ?>"
                                 alt="<?php echo esc_attr($motiv_img['alt'] ?: $motiv_title); ?>"
                                 class="w-full h-auto rounded-lg shadow-xl object-cover aspect-[4/3]">
                         <?php endif; ?>
                     </div>
                     <div data-aos="fade-left" class="space-y-12">
-                        <?php if (!empty($motiv_list)) : ?>
-                            <?php foreach ($motiv_list as $purpose) : ?>
+                        <?php if (!empty($motiv_list)): ?>
+                            <?php foreach ($motiv_list as $purpose): ?>
                                 <div class="mb-12">
-                                    <?php if (!empty($purpose['purpose_title'])) : ?>
+                                    <?php if (!empty($purpose['purpose_title'])): ?>
                                         <h2 class="font-heading text-3xl md:text-4xl font-medium mb-6">
                                             <?php echo esc_html($purpose['purpose_title']); ?>
                                         </h2>
                                     <?php endif; ?>
-                                    <?php if (!empty($purpose['purpose_description'])) : ?>
+                                    <?php if (!empty($purpose['purpose_description'])): ?>
                                         <div class="space-y-6 font-body text-cream/80 font-light">
                                             <?php echo apply_filters('the_content', $purpose['purpose_description']); ?>
                                         </div>
@@ -202,14 +203,14 @@ $alt_msg      = $alternative_txt['message'] ?? '';
     <?php endif; ?>
 
     <!-- Alternative Text / Sofia -->
-    <?php if ($alt_title || $alt_text || !empty($alt_img)) : ?>
+    <?php if ($alt_title || $alt_text || !empty($alt_img)): ?>
         <section class="py-12 md:py-20 bg-cream">
             <div class="container-site">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
                     <!-- Left: Photo -->
                     <div class="relative" data-aos="fade-right">
-                        <?php if (!empty($alt_img)) : ?>
+                        <?php if (!empty($alt_img)): ?>
                             <div class="rounded-lg overflow-hidden shadow-xl">
                                 <img src="<?php echo esc_url($alt_img['url']); ?>"
                                     alt="<?php echo esc_attr($alt_img['alt'] ?: $alt_title); ?>"
@@ -220,11 +221,12 @@ $alt_msg      = $alternative_txt['message'] ?? '';
 
                     <!-- Right: Content -->
                     <div data-aos="fade-left">
-                        <?php if ($alt_title) : ?>
-                            <h2 class="font-heading text-4xl md:text-6xl font-medium mb-12"><?php echo esc_html($alt_title); ?></h2>
+                        <?php if ($alt_title): ?>
+                            <h2 class="font-heading text-4xl md:text-6xl font-medium mb-12"><?php echo esc_html($alt_title); ?>
+                            </h2>
                         <?php endif; ?>
 
-                        <?php if ($alt_text) : ?>
+                        <?php if ($alt_text): ?>
                             <div class="font-body text-dark font-light prose prose-neutral max-w-none">
                                 <?php echo apply_filters('the_content', $alt_text); ?>
                             </div>
@@ -232,7 +234,7 @@ $alt_msg      = $alternative_txt['message'] ?? '';
                     </div>
                 </div>
 
-                <?php if ($alt_msg) : ?>
+                <?php if ($alt_msg): ?>
                     <div class="mt-12" data-aos="fade-up">
                         <div class="font-body text-dark font-light">
                             <?php echo $alt_msg; ?>
@@ -245,6 +247,8 @@ $alt_msg      = $alternative_txt['message'] ?? '';
 
     <!-- G. Banner CTA -->
     <?php get_template_part('template-parts/components/banner-cta'); ?>
+
+    <div class="h-8"></div>
 
 </main>
 

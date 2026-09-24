@@ -7,7 +7,7 @@
  * ══════════════════════════════════════════════════════════
  */
 
-document.addEventListener("alpine:init", () => {
+export function registerMegaMenu() {
   // ── Store compartido (header ↔ portal) ────────────────────────
   Alpine.store("mega", {
     active: null,
@@ -157,7 +157,7 @@ document.addEventListener("alpine:init", () => {
       Alpine.store("mega").scheduleClose();
     },
   }));
-});
+}
 
 // ── Posicionar panels debajo del <header> dinámicamente ──────────
 function positionMegaPanels() {

@@ -14,7 +14,7 @@ get_header();
         data-aos="fade-in">
         <div class="absolute inset-0 z-0">
             <img src="<?php echo get_the_post_thumbnail_url(get_the_ID()); ?>"
-                alt="Discover Peru" class="w-full h-full object-cover">
+                alt="Discover Bolivia" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-neutral-black/40"></div>
         </div>
 
@@ -68,128 +68,101 @@ get_header();
                 </h2>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2"
-                 style="--dest-col-h: clamp(600px, 80vw, 920px);">
-                <?php
-                $args = [
-                    'post_type'      => 'destination',
-                    'posts_per_page' => -1,
-                    'post_status'    => 'publish',
-                    'orderby'        => 'menu_order',
-                    'order'          => 'ASC',
-                ];
-                $destinations_query = new WP_Query($args);
+            <?php
+            $destinations_query = new WP_Query([
+                'post_type'      => 'destination',
+                'posts_per_page' => -1,
+                'post_status'    => 'publish',
+                'orderby'        => 'menu_order',
+                'order'          => 'ASC',
+            ]);
+            $fallback_img = get_template_directory_uri() . '/assets/images/intense_banner_destinations.webp';
 
-                if ($destinations_query->have_posts()) :
-                    $all_destinations = $destinations_query->posts;
-                    $left_col  = [];
-                    $right_col = [];
-
-                    foreach ($all_destinations as $i => $post) {
-                        if ($i % 2 === 0) {
-                            $left_col[]  = $post;
-                        } else {
-                            $right_col[] = $post;
-                        }
-                    }
-
-                    // Intercambiar card 2 y card 3 de la columna derecha
-                    if (isset($right_col[1]) && isset($right_col[2])) {
-                        [$right_col[1], $right_col[2]] = [$right_col[2], $right_col[1]];
-                    }
+            // Card del bento. $grow = proporción de alto dentro de la columna; $big = tipografía de columna izquierda.
+            $render_card = function ($post, $grow, $delay, $big) use ($fallback_img) {
+                $img = get_the_post_thumbnail_url($post, 'large') ?: $fallback_img;
                 ?>
+                <div class="dest-card group relative overflow-hidden block w-full cursor-pointer"
+                    style="flex: <?php echo $grow; ?> 1 0%; min-height: 0;"
+                    data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>"
+                    onclick="window.location.href='<?php echo esc_url(get_permalink($post)); ?>'">
 
-                    <!-- ── LEFT COLUMN ── -->
-                    <div class="flex flex-col gap-2 h-auto sm:h-[var(--dest-col-h)]">
-                        <?php
-                        $left_heights = ['45%', '30%', '25%'];
+                    <img src="<?php echo esc_url($img); ?>"
+                        alt="<?php echo esc_attr(get_the_title($post)); ?>"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
 
-                        foreach ($left_col as $index => $post) :
-                            setup_postdata($post);
-                            $height = $left_heights[$index] ?? '33%';
-                            $delay  = 200 + ($index * 150);
-                        ?>
-                            <div class="dest-card group relative overflow-hidden block w-full cursor-pointer flex-shrink-0"
-                                style="height: <?php echo $height; ?>;"
-                                data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>"
-                                onclick="window.location.href='<?php the_permalink(); ?>'">
+                    <div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500"></div>
 
-                                <?php if (has_post_thumbnail()) : ?>
-                                    <img src="<?php the_post_thumbnail_url('large'); ?>"
-                                        alt="<?php the_title_attribute(); ?>"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                                <?php endif; ?>
-
-                                <div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500"></div>
-
-                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6 z-10 w-full h-full">
-                                    <h3 class="font-heading text-white text-xl md:text-3xl font-medium mb-3 md:mb-4 drop-shadow">
-                                        <?php the_title(); ?>
-                                    </h3>
-                                    <div>
-                                        <?php get_template_part('template-parts/components/btn-outline', null, [
-                                            'text'        => 'Explore Destination',
-                                            'href'        => get_permalink(),
-                                            'color'       => 'light',
-                                            'class_extra' => 'text-xs md:text-sm px-3 py-1.5 md:px-5 md:py-2 z-20 relative',
-                                        ]); ?>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; wp_reset_postdata(); ?>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6 z-10 w-full h-full">
+                        <h3 class="font-heading text-white font-medium drop-shadow <?php echo $big ? 'text-xl md:text-3xl mb-3 md:mb-4' : 'text-base md:text-2xl mb-2 md:mb-3'; ?>">
+                            <?php echo esc_html(get_the_title($post)); ?>
+                        </h3>
+                        <div>
+                            <?php get_template_part('template-parts/components/btn-outline', null, [
+                                'text'        => 'Explore Destination',
+                                'href'        => get_permalink($post),
+                                'color'       => 'light',
+                                'class_extra' => ($big ? 'text-xs md:text-sm' : 'text-[10px] md:text-xs') . ' px-3 py-1.5 md:px-5 md:py-2 z-20 relative',
+                            ]); ?>
+                        </div>
                     </div>
+                </div>
+                <?php
+            };
+            ?>
 
-                    <!-- ── RIGHT COLUMN ── -->
-                    <div class="flex flex-col gap-2 h-auto sm:h-[var(--dest-col-h)]">
-                        <?php
-                        $right_heights = ['30%', '25%', '45%'];
-
-                        foreach ($right_col as $index => $post) :
-                            setup_postdata($post);
-                            $height = $right_heights[$index] ?? '33%';
-                            $delay  = 275 + ($index * 150);
+            <?php if ($destinations_query->have_posts()) : ?>
+                <div class="flex flex-col gap-2" style="--dest-col-h: clamp(600px, 80vw, 920px);">
+                    <?php
+                    // El bento se diseñó para 6 cards (3 por columna); con más destinos se repite en bloques de 6.
+                    foreach (array_chunk($destinations_query->posts, 6) as $chunk) :
+                        $left_col = $right_col = [];
+                        foreach ($chunk as $i => $post) {
+                            if ($i % 2 === 0) $left_col[] = $post; else $right_col[] = $post;
+                        }
+                        // Intercambiar card 2 y card 3 de la columna derecha
+                        if (isset($right_col[1], $right_col[2])) {
+                            [$right_col[1], $right_col[2]] = [$right_col[2], $right_col[1]];
+                        }
+                        // Bloque incompleto: el alto se reduce en proporción a las cards de la columna más larga.
+                        $rows = max(count($left_col), count($right_col));
+                        $col_h = $rows >= 3 ? 'var(--dest-col-h)' : 'calc(var(--dest-col-h) * ' . $rows . ' / 3)';
+                        $columns = [
+                            [$left_col, [45, 30, 25], 200, true],
+                            [$right_col, [30, 25, 45], 275, false],
+                        ];
                         ?>
-                            <div class="dest-card group relative overflow-hidden block w-full cursor-pointer flex-shrink-0"
-                                style="height: <?php echo $height; ?>;"
-                                data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>"
-                                onclick="window.location.href='<?php the_permalink(); ?>'">
-
-                                <?php if (has_post_thumbnail()) : ?>
-                                    <img src="<?php the_post_thumbnail_url('large'); ?>"
-                                        alt="<?php the_title_attribute(); ?>"
-                                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                                <?php endif; ?>
-
-                                <div class="absolute inset-0 bg-black/10 group-hover:bg-black/30 transition-colors duration-500"></div>
-
-                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6 z-10 w-full h-full">
-                                    <h3 class="font-heading text-white text-base md:text-2xl font-medium mb-2 md:mb-3 drop-shadow">
-                                        <?php the_title(); ?>
-                                    </h3>
-                                    <div>
-                                        <?php get_template_part('template-parts/components/btn-outline', null, [
-                                            'text'        => 'Explore Destination',
-                                            'href'        => get_permalink(),
-                                            'color'       => 'light',
-                                            'class_extra' => 'text-[10px] md:text-xs px-3 py-1.5 md:px-5 md:py-2 z-20 relative',
-                                        ]); ?>
-                                    </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <?php foreach ($columns as [$col, $pattern, $base_delay, $big]) :
+                                if (!$col) continue;
+                                $full = count($col) === 3; ?>
+                                <div class="dest-col flex flex-col gap-2" style="--col-h: <?php echo $col_h; ?>;">
+                                    <?php foreach ($col as $index => $post) {
+                                        $render_card($post, $full ? $pattern[$index] : 1, $base_delay + ($index * 150), $big);
+                                    } ?>
                                 </div>
-                            </div>
-                        <?php endforeach; wp_reset_postdata(); ?>
-                    </div>
-
-                <?php else : ?>
-                    <p class="col-span-2 text-center py-10">No destinations found.</p>
-                <?php endif; ?>
-            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else : ?>
+                <p class="text-center py-10">No destinations found.</p>
+            <?php endif; ?>
+            <?php wp_reset_postdata(); ?>
 
         </div>
     </section>
     <style>
+        @media (min-width: 640px) {
+            .dest-col {
+                height: var(--col-h);
+            }
+        }
+
         @media (max-width: 639px) {
             .dest-card {
-                height: clamp(220px, 50vw, 320px) !important;
+                flex: none !important;
+                height: clamp(220px, 50vw, 320px);
             }
         }
     </style>

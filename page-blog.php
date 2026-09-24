@@ -12,9 +12,9 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 // 2. Main Query
 $args = [
-    'post_type'      => 'post',
+    'post_type' => 'post',
     'posts_per_page' => 8,
-    'paged'          => $paged,
+    'paged' => $paged,
 ];
 
 if ($current_cat) {
@@ -29,8 +29,8 @@ $blog_query = new WP_Query($args);
     <!-- ═══════════════════════════════════════
          HEADER
     ═══════════════════════════════════════ -->
-    <section class="pt-20 pb-10 text-center px-4" data-aos="fade-up">
-        <h1 class="heading-2 max-w-3xl mx-auto md:text-6xl text-4xl">
+    <section class="pt-20 pb-10 text-center px-4" data-aos="fade-down">
+        <h1 class="heading-2 text-dark max-w-3xl mx-auto md:text-6xl text-4xl">
             Travel insights to inspire your<br>next journey
         </h1>
         <p class="mt-8 text-dark max-w-2xl mx-auto font-light">
@@ -39,14 +39,15 @@ $blog_query = new WP_Query($args);
     </section>
 
     <!-- ── Filter Pills ─────────────────────────────────────────────────────────── -->
-    <div class="flex flex-wrap justify-center gap-2 px-4 pb-10 max-w-5xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+    <div class="flex flex-wrap justify-center gap-2 px-4 pb-10 max-w-5xl mx-auto" data-aos="fade-down"
+        data-aos-delay="100">
         <a href="<?php echo get_permalink(); ?>"
             class="filter-pill <?php echo !$current_cat ? 'active' : ''; ?> text-sm font-body font-normal px-5 py-2 rounded-full">
             All
         </a>
         <?php
         $categories = get_categories(['hide_empty' => true]);
-        foreach ($categories as $cat) :
+        foreach ($categories as $cat):
             $cat_posts_check = new WP_Query([
                 'post_type' => 'post',
                 'post_status' => 'publish',
@@ -58,7 +59,7 @@ $blog_query = new WP_Query($args);
                 continue;
             }
             $is_active = ($current_cat === $cat->slug);
-        ?>
+            ?>
             <a href="<?php echo add_query_arg('category_name', $cat->slug, get_permalink()); ?>"
                 class="filter-pill <?php echo $is_active ? 'active' : ''; ?> text-sm font-body font-normal px-5 py-2 rounded-full">
                 <?php echo esc_html($cat->name); ?>
@@ -76,9 +77,10 @@ $blog_query = new WP_Query($args);
 
         <div id="blog-posts-container" class="news-grid">
             <?php
-            if ($blog_query->have_posts()) :
+            if ($blog_query->have_posts()):
                 $count = 0;
-                while ($blog_query->have_posts()) : $blog_query->the_post();
+                while ($blog_query->have_posts()):
+                    $blog_query->the_post();
                     $count++;
                     $pos = (($count - 1) % 10) + 1;
 
@@ -101,9 +103,7 @@ $blog_query = new WP_Query($args);
         <!-- ── See More Button ── -->
         <template x-if="page < maxPages">
             <div class="flex justify-center mt-12" data-aos="fade-up">
-                <button
-                    @click="loadMore()"
-                    :disabled="loading"
+                <button @click="loadMore()" :disabled="loading"
                     class="btn btn-outline px-10 py-3 rounded-full text-sm transition-all hover:bg-primary hover:text-cream hover:border-primary disabled:opacity-50">
                     <span x-show="!loading">See more</span>
                     <span x-show="loading">Loading...</span>
@@ -163,7 +163,7 @@ $blog_query = new WP_Query($args);
         });
     </script>
 
-    <?php if (!$blog_query->have_posts()) : ?>
+    <?php if (!$blog_query->have_posts()): ?>
         <div class="text-center py-20">
             <p class="body-medium text-dark/50">No posts found in this category.</p>
             <a href="<?php echo get_permalink(); ?>" class="btn btn-primary mt-6">View all posts</a>

@@ -97,6 +97,27 @@ export function initGallerySlider() {
     );
     viewportEl.addEventListener("touchcancel", resume, { passive: true });
 
+    // ── IntersectionObserver: reiniciar al entrar en viewport ──
+    let sectionVisible = true;
+    new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            sectionVisible = false;
+            return;
+          }
+          if (!sectionVisible) {
+            const as = getAutoScroll();
+            as?.stop();
+            emblaApi.scrollTo(0, true);
+            setTimeout(() => as?.play(), 50);
+          }
+          sectionVisible = true;
+        });
+      },
+      { threshold: 0 }
+    ).observe(viewportEl);
+
     // ── Botones prev / next (opcionales) ──
     const prevBtn = wrapper?.querySelector(".embla__prev");
     const nextBtn = wrapper?.querySelector(".embla__next");

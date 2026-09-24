@@ -89,9 +89,9 @@ $amenities = $args['amenities'] ?? [];
         </div>
 
         <!-- Description -->
-        <p class="font-body text-neutral-black text-sm md:text-[15px] font-light leading-relaxed mb-6 max-w-4xl">
-            <?php echo esc_html($description); ?>
-        </p>
+        <div class="font-body text-neutral-black text-sm md:text-[15px] font-light leading-relaxed mb-6 max-w-4xl [&_p]:mb-4 last:[&_p]:mb-0">
+            <?php echo wpautop(wp_kses_post($description)); ?>
+        </div>
 
         <!-- Video Link -->
         <!-- <?php if ($video_link && $video_link !== '#'): ?> -->

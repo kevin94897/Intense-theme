@@ -5,14 +5,18 @@ import Alpine from 'alpinejs'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import EmblaCarousel from 'embla-carousel'
+import flatpickr from 'flatpickr'
+import 'flatpickr/dist/flatpickr.min.css'
 
 window.AOS = AOS
 window.EmblaCarousel = EmblaCarousel
+window.flatpickr = flatpickr
 
 import { initFormularios } from './modules/formularios.js'
 import { initSliders } from './modules/slider.js'
 import { initGallerySlider } from './modules/slider-gallery.js'
 import bookingForm from './modules/bookingForm.js'
+import { registerMegaMenu } from './modules/megamenu.js'
 
 // ── AOS — Inicializar una sola vez ───────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,6 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 // ── Alpine.js ─────────────────────────────────────────────────────────────────
+import collapse from '@alpinejs/collapse'
+
 window.Alpine = Alpine
+Alpine.plugin(collapse)
 Alpine.data('bookingForm', bookingForm)
+registerMegaMenu()
 Alpine.start()

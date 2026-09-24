@@ -8,55 +8,54 @@
 get_header();
 
 // Fallback if used outside the loop
-if (! have_posts()) {
+if (!have_posts()) {
     wp_redirect(get_post_type_archive_link('post'));
     exit;
 }
 
-while (have_posts()) : the_post();
+while (have_posts()):
+    the_post();
 
-    $categories     = get_the_category();
-    $primary_cat    = $categories ? $categories[0] : null;
-    $reading_time   = ceil(str_word_count(strip_tags(get_the_content())) / 200);
-    $featured_img   = get_the_post_thumbnail_url(get_the_ID(), 'full');
-    $author_id      = get_the_author_meta('ID');
-    $author_name    = get_the_author_meta('display_name');
-    $author_bio     = get_the_author_meta('description');
-    $author_avatar  = get_avatar_url($author_id, ['size' => 80]);
-    $author_url     = get_author_posts_url($author_id);
+    $categories = get_the_category();
+    $primary_cat = $categories ? $categories[0] : null;
+    $reading_time = ceil(str_word_count(strip_tags(get_the_content())) / 200);
+    $featured_img = get_the_post_thumbnail_url(get_the_ID(), 'full');
+    $author_id = get_the_author_meta('ID');
+    $author_name = get_the_author_meta('display_name');
+    $author_bio = get_the_author_meta('description');
+    $author_avatar = get_avatar_url($author_id, ['size' => 80]);
+    $author_url = get_author_posts_url($author_id);
 
     // Related posts (same category, exclude current)
     $related_args = [
-        'post_type'           => 'post',
-        'posts_per_page'      => 3,
-        'post__not_in'        => [get_the_ID()],
-        'orderby'             => 'rand',
+        'post_type' => 'post',
+        'posts_per_page' => 3,
+        'post__not_in' => [get_the_ID()],
+        'orderby' => 'rand',
     ];
     if ($primary_cat) {
         $related_args['category__in'] = [$primary_cat->term_id];
     }
     $related_query = new WP_Query($related_args);
 
-?>
+    ?>
 
     <main class="min-h-screen bg-cream">
 
         <!-- ═══════════════════════════════════════
          HERO BANNER
     ═══════════════════════════════════════ -->
-        <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20 overflow-hidden" data-aos="fade-in">
+        <section class="relative h-screen min-h-[600px] flex items-center justify-center pt-20 overflow-hidden"
+            data-aos="fade-in">
 
             <!-- Background: featured image or fallback -->
             <div class="absolute inset-0 z-0 overflow-hidden">
-                <?php if ($featured_img) : ?>
-                    <img src="<?php echo esc_url($featured_img); ?>"
-                        alt="<?php the_title_attribute(); ?>"
-                        class="w-full h-full object-cover"
-                        style="animation: heroZoom 8s ease-out forwards;" />
-                <?php else : ?>
+                <?php if ($featured_img): ?>
+                    <img src="<?php echo esc_url($featured_img); ?>" alt="<?php the_title_attribute(); ?>"
+                        class="w-full h-full object-cover" style="animation: heroZoom 8s ease-out forwards;" />
+                <?php else: ?>
                     <img src="<?php echo get_template_directory_uri(); ?>/assets/images/intense_banner_destinations.webp"
-                        alt="<?php the_title_attribute(); ?>"
-                        class="w-full h-full object-cover" />
+                        alt="<?php the_title_attribute(); ?>" class="w-full h-full object-cover" />
                 <?php endif; ?>
                 <div class="absolute inset-0 bg-neutral-black/40"></div>
             </div>
@@ -64,7 +63,7 @@ while (have_posts()) : the_post();
             <!-- Content -->
             <div class="container-site relative z-10 text-center px-4">
 
-                <!-- <?php if ($primary_cat) : ?>
+                <!-- <?php if ($primary_cat): ?>
                     <a href="<?php echo add_query_arg('category_name', $primary_cat->slug, get_post_type_archive_link('post')); ?>"
                         class="inline-block mb-5 text-xs font-body font-semibold tracking-widest uppercase text-white border border-white px-4 py-1.5 rounded-full hover:bg-white hover:text-dark transition-all duration-300"
                         data-aos="fade-up" data-aos-delay="50">
@@ -77,7 +76,7 @@ while (have_posts()) : the_post();
                     <?php the_title(); ?>
                 </h1>
 
-                <!-- <?php if (has_excerpt()) : ?>
+                <!-- <?php if (has_excerpt()): ?>
                     <p class="font-body text-white text-lg md:text-xl font-light max-w-2xl mx-auto mb-10"
                         data-aos="fade-up" data-aos-delay="200">
                         <?php the_excerpt(); ?>
@@ -159,16 +158,7 @@ while (have_posts()) : the_post();
                 </aside> -->
 
                 <!-- ── Main Article ────────────────────────────────────────────── -->
-                <article id="post-<?php the_ID(); ?>"
-                    class="flex-1 min-w-0 max-w-4xl"
-                    data-aos="fade-up">
-
-                    <!-- Excerpt / standfirst -->
-                    <?php if (has_excerpt()) : ?>
-                        <p class="text-xl md:text-2xl font-body font-light text-dark/70 leading-relaxed mb-10 pb-10 border-b border-dark/10">
-                            <?php the_excerpt(); ?>
-                        </p>
-                    <?php endif; ?>
+                <article id="post-<?php the_ID(); ?>" class="flex-1 min-w-0 max-w-4xl" data-aos="fade-up">
 
                     <!-- Post body -->
                     <div class="prose-blog">
@@ -178,10 +168,10 @@ while (have_posts()) : the_post();
                     <!-- Tags -->
                     <?php
                     $tags = get_the_tags();
-                    if ($tags) :
-                    ?>
+                    if ($tags):
+                        ?>
                         <div class="flex flex-wrap gap-2 mt-12 pt-10 border-t border-dark/10">
-                            <?php foreach ($tags as $tag) : ?>
+                            <?php foreach ($tags as $tag): ?>
                                 <a href="<?php echo get_tag_link($tag->term_id); ?>"
                                     class="text-xs font-body font-medium px-4 py-1.5 rounded-full bg-dark/5 text-dark/60 hover:bg-dark hover:text-cream transition-all duration-300">
                                     #<?php echo esc_html($tag->name); ?>
@@ -197,14 +187,16 @@ while (have_posts()) : the_post();
                             target="_blank" rel="noopener"
                             class="w-9 h-9 rounded-full border border-dark/15 flex items-center justify-center hover:bg-dark hover:text-cream hover:border-dark transition-all duration-300 text-dark/60">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                             </svg>
                         </a>
                         <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo urlencode(get_permalink()); ?>"
                             target="_blank" rel="noopener"
                             class="w-9 h-9 rounded-full border border-dark/15 flex items-center justify-center hover:bg-dark hover:text-cream hover:border-dark transition-all duration-300 text-dark/60">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                             </svg>
                         </a>
                     </div>
@@ -218,17 +210,17 @@ while (have_posts()) : the_post();
         <!-- ═══════════════════════════════════════
          AUTHOR BIO
     ═══════════════════════════════════════ -->
-        <?php if ($author_bio) : ?>
+        <?php if ($author_bio): ?>
             <section class="border-t border-dark/10 py-14" data-aos="fade-up">
                 <div class="container mx-auto px-4 max-w-3xl">
                     <div class="flex gap-6 items-start">
                         <a href="<?php echo esc_url($author_url); ?>">
-                            <img src="<?php echo esc_url($author_avatar); ?>"
-                                alt="<?php echo esc_attr($author_name); ?>"
+                            <img src="<?php echo esc_url($author_avatar); ?>" alt="<?php echo esc_attr($author_name); ?>"
                                 class="w-16 h-16 rounded-full object-cover shrink-0" />
                         </a>
                         <div>
-                            <p class="text-xs font-body font-semibold tracking-widest uppercase text-dark/40 mb-1">Written by</p>
+                            <p class="text-xs font-body font-semibold tracking-widest uppercase text-dark/40 mb-1">Written by
+                            </p>
                             <a href="<?php echo esc_url($author_url); ?>"
                                 class="font-body font-semibold text-dark hover:text-primary transition-colors text-lg">
                                 <?php echo esc_html($author_name); ?>
@@ -280,29 +272,31 @@ while (have_posts()) : the_post();
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-left">
                         <?php
                         $related_query = new WP_Query([
-                            'post_type'      => 'journey',
+                            'post_type' => 'journey',
                             'posts_per_page' => 3,
-                            'orderby'        => 'rand',
+                            'orderby' => 'rand',
                         ]);
                         $r_index = 0;
-                        while ($related_query->have_posts()) : $related_query->the_post();
-                            $r_features    = get_field('features');
+                        while ($related_query->have_posts()):
+                            $related_query->the_post();
+                            $r_features = get_field('features');
                             $r_information = get_field('information');
-                            $r_days_val    = (int) ($r_information['days'] ?? 0);
-                            $r_price_val   = $r_features['price'] ?? '';
-                        ?>
+                            $r_days_val = (int) ($r_information['days'] ?? 0);
+                            $r_price_val = $r_features['price'] ?? '';
+                            ?>
                             <?php get_template_part('template-parts/components/card-itinerary', null, [
-                                'image'        => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_template_directory_uri() . '/assets/images/intense_02.webp',
-                                'title'        => get_the_title(),
-                                'price'        => $r_price_val ? 'USD ' . number_format($r_price_val) : '',
-                                'duration'     => $r_days_val ? $r_days_val . ' Days' : '',
-                                'post_id'      => get_the_ID(),
-                                'link'         => get_permalink(),
-                                'link_text'    => 'Explore itineraries',
-                                'aos_delay'    => ($r_index * 100) + 200,
-                                'badges'       => get_field('badges') ?: [],
+                                'image' => get_the_post_thumbnail_url(get_the_ID(), 'large') ?: get_template_directory_uri() . '/assets/images/intense_02.webp',
+                                'title' => get_the_title(),
+                                'price' => $r_price_val ? 'USD ' . number_format($r_price_val) : '',
+                                'duration' => $r_days_val ? $r_days_val . ' Days' : '',
+                                'post_id' => get_the_ID(),
+                                'link' => get_permalink(),
+                                'link_text' => 'Explore itineraries',
+                                'aos_delay' => ($r_index * 100) + 200,
+                                'badges' => get_field('badges') ?: [],
                             ]); ?>
-                        <?php $r_index++; endwhile; wp_reset_postdata(); ?>
+                            <?php $r_index++; endwhile;
+                        wp_reset_postdata(); ?>
                     </div>
                 </div>
         </section>
@@ -450,6 +444,65 @@ while (have_posts()) : the_post();
             padding: 0;
         }
 
+        /* ── Classic Editor: Gallery grid ────────────────────────── */
+        .prose-blog .gallery {
+            display: grid;
+            gap: 0.75rem;
+            margin: 2em 0;
+        }
+
+        .prose-blog .gallery-columns-1 { grid-template-columns: 1fr; }
+        .prose-blog .gallery-columns-2 { grid-template-columns: repeat(2, 1fr); }
+        .prose-blog .gallery-columns-3 { grid-template-columns: repeat(3, 1fr); }
+        .prose-blog .gallery-columns-4 { grid-template-columns: repeat(4, 1fr); }
+        .prose-blog .gallery-columns-5 { grid-template-columns: repeat(5, 1fr); }
+        .prose-blog .gallery-columns-6 { grid-template-columns: repeat(6, 1fr); }
+        .prose-blog .gallery-columns-7 { grid-template-columns: repeat(7, 1fr); }
+        .prose-blog .gallery-columns-8 { grid-template-columns: repeat(8, 1fr); }
+        .prose-blog .gallery-columns-9 { grid-template-columns: repeat(9, 1fr); }
+
+        /* Resetear figure/img del prose dentro de gallery */
+        .prose-blog .gallery .gallery-item {
+            margin: 0;
+        }
+
+        .prose-blog .gallery .gallery-icon img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 0;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* thumbnail: forzar cuadrado */
+        .prose-blog .gallery-size-thumbnail .gallery-icon img {
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+
+        .prose-blog .gallery .gallery-caption {
+            font-size: 0.75rem;
+            text-align: center;
+            color: rgba(26, 26, 26, .5);
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive: ≥3 cols colapsan a 2 en móvil */
+        @media (max-width: 640px) {
+            .prose-blog .gallery-columns-1 { grid-template-columns: 1fr; }
+            .prose-blog .gallery-columns-2 { grid-template-columns: repeat(2, 1fr); }
+            .prose-blog .gallery-columns-3,
+            .prose-blog .gallery-columns-4,
+            .prose-blog .gallery-columns-5,
+            .prose-blog .gallery-columns-6,
+            .prose-blog .gallery-columns-7,
+            .prose-blog .gallery-columns-8,
+            .prose-blog .gallery-columns-9 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         /* ── TOC links ───────────────────────────────────────────── */
         .toc-link {
             display: block;
@@ -481,7 +534,7 @@ while (have_posts()) : the_post();
 
     <script>
         // ── Reading progress bar ──────────────────────────────────────────────────
-        (function() {
+        (function () {
             const bar = document.createElement('div');
             bar.id = 'reading-progress';
             document.body.prepend(bar);

@@ -52,6 +52,7 @@ if (empty($days)) {
         <?php if ($image): ?>
             <a href="<?php echo esc_url($link); ?>" tabindex="-1" class="block w-full h-full">
                 <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($title); ?>"
+                    width="600" height="750"
                     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy">
             </a>

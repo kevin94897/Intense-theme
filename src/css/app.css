@@ -1,8 +1,43 @@
-/* Google Fonts — Rubik (debe ir antes de cualquier @layer o @import con layers) */
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap');
-
 /* Tailwind v4: una directiva reemplaza las tres de v3 */
 @import 'tailwindcss';
+
+/* Rubik — self-hosted (variable woff2, subsets latin / latin-ext de Google Fonts v31).
+   El navegador solo descarga el subset y el estilo que la pagina realmente usa. */
+@font-face {
+  font-family: 'Rubik';
+  src: url('../fonts/rubik-latin-normal.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('../fonts/rubik-latin-italic.woff2') format('woff2');
+  font-weight: 300 500;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('../fonts/rubik-latin-ext-normal.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('../fonts/rubik-latin-ext-italic.woff2') format('woff2');
+  font-weight: 300 500;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 
 /* HV Simplicite — fuente local (OTF) */
 @font-face {
@@ -674,7 +709,7 @@
     /* Alto aproximado */
     opacity: 1;
     overflow: hidden;
-    background: transparent;
+    background: #0000005c;
   }
 
   .site-header.scrolled .top-header {
@@ -1734,4 +1769,25 @@ figure.wp-block-gallery.has-nested-images {
       max-height: 88vh;
     }
   }
+}
+
+/* ── Flatpickr overrides ─────────────────────────────────────────────────── */
+.flatpickr-months .flatpickr-month {
+  height: 36px;
+}
+.flatpickr-current-month {
+  font-size: 13px !important;
+  padding-top: 6px;
+}
+.flatpickr-current-month .cur-month,
+.flatpickr-current-month input.cur-year {
+  font-size: 13px !important;
+  font-weight: 600;
+}
+.flatpickr-weekdays,
+span.flatpickr-weekday {
+  font-size: 11px;
+}
+.flatpickr-day {
+  font-size: 13px;
 }
