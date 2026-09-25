@@ -425,10 +425,11 @@ function intense_get_regions()
   return $regions;
 }
 
-// ── Megamenu JS + AJAX URL ────────────────────────────────────────────────────
+// ── Megamenu: AJAX URL ────────────────────────────────────────────────────────
+// El JS del megamenu va dentro del bundle de Vite (src/main.js). No se encola
+// src/modules/megamenu.js suelto: es un modulo ES y como <script> clasico falla.
 add_action('wp_enqueue_scripts', function () {
-  wp_enqueue_script('megamenu-js', get_template_directory_uri() . '/src/modules/megamenu.js', [], '1.0.0', true);
-  wp_localize_script('megamenu-js', 'megaMenuConfig', ['ajaxUrl' => admin_url('admin-ajax.php')]);
+  wp_localize_script('intense-nerd-js', 'megaMenuConfig', ['ajaxUrl' => admin_url('admin-ajax.php')]);
 });
 
 // ── Megamenu: Journeys ────────────────────────────────────────────────────────
@@ -513,7 +514,9 @@ add_action('wp_ajax_nopriv_mega_destinations', 'intense_mega_destinations');
 
 function intense_mega_destinations()
 {
-  $posts = get_posts(['post_type' => 'destination', 'posts_per_page' => 6, 'orderby' => 'date', 'order' => 'DESC']);
+  // Los 9 destinos, en el mismo orden que la grilla del home.
+  $posts = get_posts(['post_type' => 'destination', 'posts_per_page' => 9, 'orderby' => 'menu_order', 'order' => 'ASC']);
+  $placeholder = get_template_directory_uri() . '/assets/images/intense_01.webp';
 
   $out = $mobile_cards = $mobile_list = '';
   foreach ($posts as $p) {
@@ -521,11 +524,11 @@ function intense_mega_destinations()
     $url = esc_url(get_permalink($p));
     $name = esc_html($p->post_title);
 
-    $out .= '<div>';
-    $out .= $img
-      ? '<a href="' . $url . '" class="block mb-3 relative group"><div class="w-full h-[300px] shrink-0 bg-cover bg-center bg-no-repeat relative overflow-hidden group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img) . '\');"></div></a>'
-      : '<a href="' . $url . '" class="block mb-2"><div class="w-full h-[300px] shrink-0 bg-dark/10 relative overflow-hidden"></div></a>';
-    $out .= '<a href="' . $url . '" class="text-xs font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline line-clamp-2 leading-snug">' . $name . '</a>';
+    // Slide del carrusel desktop (Embla): ~3.4 visibles en lg y ~6.5 en xl, para que
+    // la ultima card quede cortada y se entienda que hay mas.
+    $out .= '<div class="shrink-0 grow-0 basis-[29%] xl:basis-[15.4%] min-w-0 pl-4">';
+    $out .= '<a href="' . $url . '" class="block mb-3 relative group overflow-hidden" draggable="false"><div class="w-full h-[220px] xl:h-[300px] shrink-0 bg-cover bg-center bg-no-repeat relative group-hover:scale-105 transition-transform duration-500" style="background-image: url(\'' . esc_url($img ?: $placeholder) . '\');"></div></a>';
+    $out .= '<a href="' . $url . '" class="text-xs font-body text-dark hover:text-primary transition-colors underline-offset-2 hover:underline line-clamp-2 leading-snug" draggable="false">' . $name . '</a>';
     $out .= '</div>';
 
     $mobile_cards .= '<a href="' . $url . '" class="group block">';

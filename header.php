@@ -574,8 +574,25 @@
             x-transition:leave-end="opacity-0 -translate-y-2"
             class="mega-panel absolute left-0 right-0 bg-white shadow-2xl border-t border-gray-100 z-40"
             @mouseenter="cancelClose()" @mouseleave="scheduleClose()">
-            <div class="container-site-wide py-4 md:py-10">
-                <div class="flex justify-end mb-2">
+            <div class="container-site-wide py-4 md:py-10" id="mega-destination-carousel">
+                <div class="flex items-center justify-between gap-8 mb-2">
+                    <!-- Flechas del carrusel (mismo estilo que los demás sliders del tema) -->
+                    <div class="flex items-center gap-6 text-dark">
+                        <button type="button" data-mega-dest-prev disabled aria-label="Previous destinations"
+                            class="group cursor-pointer hover:text-primary disabled:opacity-20 disabled:cursor-not-allowed transition">
+                            <svg class="w-12 h-4" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <line x1="95" y1="12" x2="10" y2="12"></line>
+                                <polyline points="20 4 10 12 20 20" class="transition-all duration-300 group-hover:-translate-x-1"></polyline>
+                            </svg>
+                        </button>
+                        <button type="button" data-mega-dest-next disabled aria-label="Next destinations"
+                            class="group cursor-pointer hover:text-primary disabled:opacity-20 disabled:cursor-not-allowed transition">
+                            <svg class="w-12 h-4" viewBox="0 0 100 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <line x1="5" y1="12" x2="90" y2="12"></line>
+                                <polyline points="80 4 90 12 80 20" class="transition-all duration-300 group-hover:translate-x-1"></polyline>
+                            </svg>
+                        </button>
+                    </div>
                     <a href="<?php echo esc_url(home_url('/destinations/')); ?>"
                         class="flex items-center gap-2 text-sm font-body text-dark hover:text-primary transition-colors">
                         See All
@@ -584,13 +601,16 @@
                         </svg>
                     </a>
                 </div>
-                <div class="grid grid-cols-3 xl:grid-cols-6 gap-4" id="mega-destination-cards">
-                    <?php for ($i = 0; $i < 6; $i++): ?>
-                        <div class="animate-pulse">
-                            <div class="w-full h-[220px] xl:h-[300px] bg-dark/10 rounded-lg mb-2"></div>
-                            <div class="h-3 bg-dark/10 rounded w-3/4"></div>
-                        </div>
-                    <?php endfor; ?>
+                <!-- Carrusel Embla: el viewport recorta, el contenedor se desplaza -->
+                <div class="overflow-hidden" data-mega-dest-viewport>
+                    <div class="flex -ml-4 touch-pan-y" id="mega-destination-cards">
+                        <?php for ($i = 0; $i < 6; $i++): ?>
+                            <div class="shrink-0 grow-0 basis-[29%] xl:basis-[15.4%] min-w-0 pl-4 animate-pulse">
+                                <div class="w-full h-[220px] xl:h-[300px] bg-dark/10 rounded-lg mb-2"></div>
+                                <div class="h-3 bg-dark/10 rounded w-3/4"></div>
+                            </div>
+                        <?php endfor; ?>
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,6 +7,36 @@
  * ══════════════════════════════════════════════════════════
  */
 
+import EmblaCarousel from "embla-carousel";
+
+// ── Carrusel de destinos (desktop) ──────────────────────────────
+// Se inicia cuando llegan las cards por AJAX. Embla recalcula solo
+// (ResizeObserver) cuando el panel pasa de oculto a visible.
+function initDestinationsCarousel() {
+  const root = document.getElementById("mega-destination-carousel");
+  const viewport = root?.querySelector("[data-mega-dest-viewport]");
+  if (!viewport || viewport._embla) return;
+
+  const embla = EmblaCarousel(viewport, {
+    align: "start",
+    containScroll: "trimSnaps",
+    slidesToScroll: "auto",
+  });
+  viewport._embla = embla;
+
+  const prev = root.querySelector("[data-mega-dest-prev]");
+  const next = root.querySelector("[data-mega-dest-next]");
+  const sync = () => {
+    prev.disabled = !embla.canScrollPrev();
+    next.disabled = !embla.canScrollNext();
+  };
+
+  prev.addEventListener("click", () => embla.scrollPrev());
+  next.addEventListener("click", () => embla.scrollNext());
+  embla.on("init", sync).on("reInit", sync).on("select", sync);
+  sync();
+}
+
 export function registerMegaMenu() {
   // ── Store compartido (header ↔ portal) ────────────────────────
   Alpine.store("mega", {
@@ -107,6 +137,7 @@ export function registerMegaMenu() {
           }
           if (key === "destinations") {
             this._set("mega-destination-cards", data.cards);
+            initDestinationsCarousel();
           }
           if (key === "blog") {
             this._set("mega-blog-list", data.list);
